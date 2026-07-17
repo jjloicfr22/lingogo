@@ -1,0 +1,190 @@
+{
+  "name": "Japan",
+  "flag": "🇯🇵",
+  "subtitle": "Your Japanese travel companion",
+  "lang": "ja-JP",
+  "phrases": [
+    {
+      "id": "ja-001",
+      "category": "General",
+      "english": "I don't speak Japanese. Do you speak English?",
+      "local": "日本語が話せません。英語を話せますか？",
+      "roman": "Nihongo ga hanasemasen. Eigo o hanasemasu ka?"
+    },
+    {
+      "id": "ja-002",
+      "category": "General",
+      "english": "Please speak slowly.",
+      "local": "ゆっくり話してください。",
+      "roman": "Yukkuri hanashite kudasai."
+    },
+    {
+      "id": "ja-003",
+      "category": "General",
+      "english": "Thank you.",
+      "local": "ありがとうございます。",
+      "roman": "Arigatou gozaimasu."
+    },
+    {
+      "id": "ja-004",
+      "category": "General",
+      "english": "Excuse me.",
+      "local": "すみません。",
+      "roman": "Sumimasen."
+    },
+    {
+      "id": "ja-005",
+      "category": "General",
+      "english": "I'm sorry.",
+      "local": "ごめんなさい。",
+      "roman": "Gomen nasai."
+    },
+    {
+      "id": "ja-006",
+      "category": "Food",
+      "english": "A bottle of water, please.",
+      "local": "水を一本お願いします。",
+      "roman": "Mizu o ippon onegaishimasu."
+    },
+    {
+      "id": "ja-007",
+      "category": "Food",
+      "english": "This one, please.",
+      "local": "これをお願いします。",
+      "roman": "Kore o onegaishimasu."
+    },
+    {
+      "id": "ja-008",
+      "category": "Food",
+      "english": "Can we pay by card?",
+      "local": "カードで払えますか？",
+      "roman": "Kaado de haraemasu ka?"
+    },
+    {
+      "id": "ja-009",
+      "category": "Food",
+      "english": "Not spicy, please.",
+      "local": "辛くしないでください。",
+      "roman": "Karakushinaide kudasai."
+    },
+    {
+      "id": "ja-010",
+      "category": "Food",
+      "english": "Do you have a vegetarian option?",
+      "local": "ベジタリアンのメニューはありますか？",
+      "roman": "Bejitarian no menyuu wa arimasu ka?"
+    },
+    {
+      "id": "ja-011",
+      "category": "Cafe",
+      "english": "One iced coffee, please.",
+      "local": "アイスコーヒーを一つお願いします。",
+      "roman": "Aisu koohii o hitotsu onegaishimasu."
+    },
+    {
+      "id": "ja-012",
+      "category": "Cafe",
+      "english": "For here, please.",
+      "local": "店内でお願いします。",
+      "roman": "Tennai de onegaishimasu."
+    },
+    {
+      "id": "ja-013",
+      "category": "Transport",
+      "english": "Where is the station?",
+      "local": "駅はどこですか？",
+      "roman": "Eki wa doko desu ka?"
+    },
+    {
+      "id": "ja-014",
+      "category": "Transport",
+      "english": "Which platform is it?",
+      "local": "何番線ですか？",
+      "roman": "Nanbansen desu ka?"
+    },
+    {
+      "id": "ja-015",
+      "category": "Transport",
+      "english": "Does this train go to Tokyo Station?",
+      "local": "この電車は東京駅に行きますか？",
+      "roman": "Kono densha wa Tokyo-eki ni ikimasu ka?"
+    },
+    {
+      "id": "ja-016",
+      "category": "Transport",
+      "english": "Please take me here.",
+      "local": "ここまでお願いします。",
+      "roman": "Koko made onegaishimasu."
+    },
+    {
+      "id": "ja-017",
+      "category": "Hotel",
+      "english": "I have a reservation.",
+      "local": "予約しています。",
+      "roman": "Yoyaku shiteimasu."
+    },
+    {
+      "id": "ja-018",
+      "category": "Hotel",
+      "english": "Can I leave my luggage here?",
+      "local": "荷物を預けてもいいですか？",
+      "roman": "Nimotsu o azukete mo ii desu ka?"
+    },
+    {
+      "id": "ja-019",
+      "category": "Hotel",
+      "english": "Could I get another towel?",
+      "local": "タオルをもう一枚いただけますか？",
+      "roman": "Taoru o mou ichimai itadakemasu ka?"
+    },
+    {
+      "id": "ja-020",
+      "category": "Shopping",
+      "english": "How much is this?",
+      "local": "これはいくらですか？",
+      "roman": "Kore wa ikura desu ka?"
+    },
+    {
+      "id": "ja-021",
+      "category": "Shopping",
+      "english": "Do you have a larger size?",
+      "local": "もっと大きいサイズはありますか？",
+      "roman": "Motto ookii saizu wa arimasu ka?"
+    },
+    {
+      "id": "ja-022",
+      "category": "Shopping",
+      "english": "Can I get a tax refund?",
+      "local": "免税できますか？",
+      "roman": "Menzei dekimasu ka?"
+    },
+    {
+      "id": "ja-023",
+      "category": "Emergency",
+      "english": "Help!",
+      "local": "助けてください！",
+      "roman": "Tasukete kudasai!"
+    },
+    {
+      "id": "ja-024",
+      "category": "Emergency",
+      "english": "Please call the police.",
+      "local": "警察を呼んでください。",
+      "roman": "Keisatsu o yonde kudasai."
+    },
+    {
+      "id": "ja-025",
+      "category": "Emergency",
+      "english": "I need a doctor.",
+      "local": "医者が必要です。",
+      "roman": "Isha ga hitsuyou desu."
+    },
+    {
+      "id": "ja-026",
+      "category": "Emergency",
+      "english": "Where is the toilet?",
+      "local": "トイレはどこですか？",
+      "roman": "Toire wa doko desu ka?"
+    }
+  ]
+}
