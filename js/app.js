@@ -9,7 +9,15 @@ const state = {
   revealed: false,
   category: "all",
   saved: JSON.parse(localStorage.getItem("lingogo_saved") || "{}"),
-  xp: Number(localStorage.getItem("lingogo_xp") || 0)
+  xp: Number(localStorage.getItem("lingogo_xp") || 0),
+  backTarget: "home",
+  quizActive: false,
+  quizIndex: 0,
+  quizScore: 0,
+  quizQuestions: [],
+  quizAnswered: false,
+  quizAnswerCorrect: null,
+  quizSelectedAnswer: null
 };
 
 const countryFiles = { japan:"data/japan.json", korea:"data/korea.json" };
@@ -27,6 +35,7 @@ async function loadCountry(country){
   localStorage.setItem("lingogo_country", country);
   state.screen = "home";
   state.cardIndex = 0;
+  resetQuizState();
   render();
 }
 
@@ -54,24 +63,55 @@ function addXP(amount){
   showToast(`+${amount} XP`);
 }
 
+function generateQuizQuestions(phrases, count=10){
+  if(phrases.length<4) return [];
+  const questions=[];
+  const usedIds=new Set();
+  while(questions.length<Math.min(count,phrases.length)){
+    const correct=phrases[Math.floor(Math.random()*phrases.length)];
+    if(usedIds.has(correct.id)) continue;
+    usedIds.add(correct.id);
+    const wrong=[...phrases].filter(p=>p.id!==correct.id).sort(()=>Math.random()-0.5).slice(0,3);
+    const answers=[correct,...wrong].sort(()=>Math.random()-0.5);
+    questions.push({phraseId:correct.id,english:correct.english,correctId:correct.id,answers:answers.map(a=>({id:a.id,local:a.local,roman:a.roman}))});
+  }
+  return questions;
+}
+
+function navigate(to,backTarget="home"){
+  state.backTarget=backTarget;
+  state.screen=to;
+  render();
+}
+
+function resetQuizState(){
+  state.quizActive=false;
+  state.quizIndex=0;
+  state.quizScore=0;
+  state.quizQuestions=[];
+  state.quizAnswered=false;
+  state.quizAnswerCorrect=null;
+  state.quizSelectedAnswer=null;
+}
+
 function shell(content, active="home"){
   const d=state.data;
   return `<main class="shell">
     <div class="topbar">
-      <button class="icon-btn" data-action="destinations">←</button>
+      <button class="icon-btn" data-action="back">←</button>
       <div class="country-title"><h1>${d.flag} ${d.name}</h1><p>${d.subtitle}</p></div>
     </div>
     ${content}
   </main>
   <nav class="bottom-nav"><div class="bottom-inner">
-    ${navButton("home","⌂","Home",active)}
-    ${navButton("learn","◫","Learn",active)}
-    ${navButton("show","▣","Show",active)}
-    ${navButton("saved","♥","Saved",active)}
+    ${navButton("home","⌂","Home",active,true)}
+    ${navButton("learn","◫","Learn",active,true)}
+    ${navButton("show","▣","Show",active,true)}
+    ${navButton("saved","♥","Saved",active,true)}
   </div></nav>`;
 }
-function navButton(screen,icon,label,active){
-  return `<button class="nav-btn ${active===screen?"active":""}" data-screen="${screen}"><strong>${icon}</strong>${label}</button>`
+function navButton(screen,icon,label,active,isNav=false){
+  return `<button class="nav-btn ${active===screen?"active":""}" data-screen="${screen}" ${isNav?'data-nav="bottom"':''}><strong>${icon}</strong>${label}</button>`
 }
 
 function renderDestinations(){
@@ -103,7 +143,7 @@ function renderHome(){
         <h2>Before Your Trip</h2>
         <p>Learn the essentials in just 10 minutes a day.</p>
       </button>
-      <button class="trip-card during-trip" data-screen="show">
+      <button class="trip-card during-trip" data-screen="during">
         <div class="trip-card-emoji">🌏</div>
         <h2>During Your Trip</h2>
         <p>Show phrases instantly and communicate with confidence.</p>
@@ -113,6 +153,16 @@ function renderHome(){
       <button class="situation-button" data-screen="situations"><div class="emoji">🧭</div><h3>Situation Mode</h3><p>Eat, travel, shop, stay.</p></button>
     </section>
   `,"home");
+}
+
+function renderQuiz(){
+  if(!state.quizActive||state.quizQuestions.length===0) return state.screen="before",render();
+  const q=state.quizQuestions[state.quizIndex];
+  const correctAnswer=q.answers.find(a=>a.id===q.correctId);
+  const incorrectFeedback=state.quizAnswerCorrect?"":`<div class="quiz-feedback incorrect">Not quite — the correct answer is:<div class="quiz-correct-answer"><div class="quiz-correct-local">${correctAnswer.local}</div><div class="quiz-correct-roman">${correctAnswer.roman}</div></div></div>`;
+  const correctFeedback=state.quizAnswerCorrect?`<div class="quiz-feedback correct">✓ Correct!</div>`:"";
+  const feedback=state.quizAnswered?`${correctFeedback}${incorrectFeedback}`:"";
+  app.innerHTML=shell(`<div class="section-title"><h2>Quiz</h2><small>${state.quizIndex+1} / ${state.quizQuestions.length}</small></div><div class="quiz-container"><div class="quiz-question"><h2>${q.english}</h2></div><div class="quiz-answers">${q.answers.map(a=>`<div class="answer-choice ${state.quizAnswered?(a.id===q.correctId?"correct":a.id===state.quizSelectedAnswer?"incorrect":"muted"):(a.id===state.quizSelectedAnswer?"selected":"")}"><button class="answer-select" data-answer-id="${a.id}" ${state.quizAnswered?'aria-disabled="true"':""}><div class="answer-local">${a.local}</div><div class="answer-roman">${a.roman}</div></button><button class="quiz-option-audio" data-action="speak-quiz-option" data-answer-id="${a.id}" aria-label="Hear this answer">🔊</button></div>`).join("")}</div>${feedback}${state.quizAnswered?`<div class="quiz-actions"><button class="btn" data-action="quiz-next">${state.quizIndex+1>=state.quizQuestions.length?"See Results":"Next Question"}</button><button class="btn secondary" data-action="end-quiz">End Quiz</button></div>`:""}</div>`,"quiz");
 }
 
 function renderLearn(){
@@ -141,12 +191,19 @@ function renderShow(){
   const filtered=state.category==="all"?state.data.phrases:state.data.phrases.filter(p=>p.category===state.category);
   app.innerHTML=shell(`
     <div class="section-title"><h2>Show to Local</h2><small>Tap to speak</small></div>
-    <div class="quick"><button class="chip" data-category="all">All</button>${categories().map(c=>`<button class="chip" data-category="${c}">${c}</button>`).join("")}</div>
+    <div class="quick"><button class="chip${state.category==="all"?" active":""}" data-category="all" ${state.category==="all"?'aria-current="true"':""}>All</button>${categories().map(c=>`<button class="chip${state.category===c?" active":""}" data-category="${c}" ${state.category===c?'aria-current="true"':""} >${c}</button>`).join("")}</div>
     <div class="list" style="margin-top:14px">${filtered.map(p=>`<article class="phrase">
       <div class="en">${p.english}</div><div class="local">${p.local}</div><div class="roman">${p.roman}</div>
       <div class="row"><button class="btn" data-speak="${encodeURIComponent(p.local)}">🔊 Play</button><button class="btn secondary" data-save="${p.id}">${isSaved(p)?"♥ Saved":"♡ Save"}</button></div>
     </article>`).join("")}</div>
   `,"show");
+  requestAnimationFrame(()=>{
+    const activeChip=app.querySelector('.quick [aria-current="true"]');
+    if(activeChip){
+      const reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+      activeChip.scrollIntoView({behavior:reducedMotion?"auto":"smooth",block:"nearest",inline:"center"});
+    }
+  });
 }
 function renderSituations(){
   const icons={General:"💬",Food:"🍜",Transport:"🚆",Hotel:"🏨",Shopping:"🛍️",Emergency:"🆘",Cafe:"☕"};
@@ -161,42 +218,169 @@ function renderSaved(){
   const d=state.data;
   const savedCount=Object.values(state.saved).filter(Boolean).length;
   app.innerHTML=shell(`
-    <div class="section-title"><h2>Before Your Trip</h2><p>Prepare with our curated learning experience.</p></div>
-    <section class="progress-summary">
-      <div class="progress-stat"><b>${state.xp}</b><span>XP Earned</span></div>
-      <div class="progress-stat"><b>${d.phrases.length}</b><span>Phrases Available</span></div>
-      <div class="progress-stat"><b>${savedCount}</b><span>Saved</span></div>
-    </section>
-    <section class="before-hub-cards">
-      <button class="hub-card" data-screen="learn">
-        <div class="hub-emoji">🧠</div>
+    <div class="before-header">
+      <h2>Before Your Trip</h2>
+      <p>Build confidence before you arrive.</p>
+    </div>
+    <div class="before-progress">
+      <p class="before-progress-main">You have ${d.phrases.length} phrases ready to practice.</p>
+      <p class="before-progress-meta">${state.xp} XP earned · ${savedCount} phrase${savedCount!==1?'s':''} saved</p>
+    </div>
+    <section class="before-learning">
+      <button class="learning-featured" data-screen="learn">
+        <div class="learning-label">CONTINUE LEARNING</div>
         <h3>Must Know 50</h3>
-        <p>Fast active-recall cards to build fluency.</p>
+        <p>Build your essential travel vocabulary.</p>
+        <div class="learning-meta">
+          <span>${d.phrases.length} phrases</span>
+          <span class="learning-arrow">→</span>
+        </div>
       </button>
-      <button class="hub-card coming-soon">
-        <div class="hub-emoji">✓</div>
-        <h3>Quiz</h3>
-        <p>Quick challenges are coming soon.</p>
+    </section>
+    <section class="before-actions">
+      <button class="before-action-card before-action-quiz" data-action="start-quiz">
+        <div class="action-content">
+          <h4>Quiz</h4>
+          <p>Test what you remember.</p>
+          <div class="before-action-meta">10 quick questions</div>
+        </div>
+        <span class="action-arrow">→</span>
       </button>
-      <button class="hub-card" data-screen="saved">
-        <div class="hub-emoji">♥</div>
-        <h3>Saved Phrases</h3>
-        <p>Review your personal phrase collection.</p>
+      <button class="before-action-card before-action-saved" data-screen="saved">
+        <div class="action-content">
+          <h4>Saved Phrases</h4>
+          <p>Review your personal collection.</p>
+          <div class="before-action-meta">${savedCount} saved phrase${savedCount!==1?'s':''}</div>
+        </div>
+        <span class="action-arrow">→</span>
       </button>
     </section>
   `,"before");
-}function render(){
+}
+function renderDuring(){
+  const savedCount=Object.values(state.saved).filter(Boolean).length;
+  app.innerHTML=shell(`
+    <div class="during-header">
+      <h2>During Your Trip</h2>
+      <p>Find the right phrase, fast.</p>
+    </div>
+    <section class="during-featured">
+      <button class="during-show-card" data-situation="all">
+        <div class="during-show-content">
+          <div class="during-show-label">SHOW TO LOCAL</div>
+          <h3>Browse every phrase and show it clearly.</h3>
+        </div>
+        <span class="during-show-arrow">→</span>
+      </button>
+    </section>
+    <section class="during-categories">
+      <h4 class="during-section-heading">Browse by situation</h4>
+      <div class="during-cat-grid">
+        <button class="during-cat-btn" data-situation="Food">Food</button>
+        <button class="during-cat-btn" data-situation="Transport">Transport</button>
+        <button class="during-cat-btn" data-situation="Hotel">Hotel</button>
+        <button class="during-cat-btn" data-situation="Shopping">Shopping</button>
+        <button class="during-cat-btn" data-situation="Cafe">Cafe</button>
+        <button class="during-cat-btn" data-situation="Emergency">Emergency</button>
+        <button class="during-cat-btn" data-situation="General">General</button>
+      </div>
+    </section>
+    <section class="during-support">
+      <button class="during-support-card" data-screen="saved">
+        <div class="during-support-content">
+          <h4>Saved Phrases</h4>
+          <p>Your personal phrase collection.</p>
+          <div class="during-support-meta">${savedCount} saved phrase${savedCount!==1?'s':''}</div>
+        </div>
+        <span class="during-support-arrow">→</span>
+      </button>
+    </section>
+  `,"home");
+}
+function renderQuizResults(){
+  const xpEarned=state.quizScore*5;
+  const percent=Math.round((state.quizScore/state.quizQuestions.length)*100);
+  const message=percent===100?"Perfect! 🏆":percent>=80?"Excellent! 🎉":percent>=60?"Great job! 👍":percent>=40?"Good effort! 📚":"Keep practicing! 💪";
+  app.innerHTML=shell(`<div class="section-title"><h2>Quiz Complete</h2></div><div class="quiz-results"><div class="results-message">${message}</div><div class="results-score"><span class="score-label">Your Score</span><span class="score-value">${state.quizScore} / ${state.quizQuestions.length}</span></div><div class="results-xp">+${xpEarned} XP</div><button class="btn" data-action="quiz-again">Try Again</button><button class="btn secondary" data-action="back-to-before">Back to Learning</button></div>`,"before");
+}
+function render(){
   if(!state.country||!state.data) return renderDestinations();
-  ({home:renderHome,before:renderBefore,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved}[state.screen]||renderHome)();
+  ({home:renderHome,before:renderBefore,during:renderDuring,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved,quiz:renderQuiz,"quiz-results":renderQuizResults}[state.screen]||renderHome)();
 }
 
 document.addEventListener("click",e=>{
   const country=e.target.closest("[data-country]")?.dataset.country;
   if(country) return loadCountry(country);
-  const screen=e.target.closest("[data-screen]")?.dataset.screen;
-  if(screen){state.screen=screen;return render()}
+
+  // Bottom navigation — fixed parent rules
+  const navBtn=e.target.closest("[data-nav='bottom']");
+  if(navBtn){
+    const navScreen=navBtn.dataset.screen;
+    if(state.screen==="quiz"||state.screen==="quiz-results") resetQuizState();
+    if(navScreen==="home"){state.backTarget="home";state.screen="home";render();}
+    else if(navScreen==="learn") navigate("learn","before");
+    else if(navScreen==="show") navigate("show","home");
+    else if(navScreen==="saved") navigate("saved","home");
+    return;
+  }
+
+  // Hub/screen buttons — explicit hierarchy
+  const screenBtn=e.target.closest("[data-screen]");
+  if(screenBtn){
+    const to=screenBtn.dataset.screen;
+    if(state.screen==="quiz"||state.screen==="quiz-results") resetQuizState();
+    if(to==="before")     return navigate("before","home");
+    if(to==="during")     return navigate("during","home");
+    if(to==="learn")      return navigate("learn","before");
+    if(to==="situations"){
+      const parent=state.screen==="during"?"during":"home";
+      return navigate("situations",parent);
+    }
+    if(to==="saved"){
+      const parent=["before","during"].includes(state.screen)?state.screen:"home";
+      return navigate("saved",parent);
+    }
+    state.screen=to; render(); return;
+  }
+
   const action=e.target.closest("[data-action]")?.dataset.action;
+
+  // Back
+  if(action==="back"){
+    if(state.screen==="home"){
+      state.country=null;state.data=null;
+      localStorage.removeItem("lingogo_country");
+      return render();
+    }
+    if(state.screen==="quiz"||state.screen==="quiz-results"){
+      resetQuizState();
+      state.screen="before";state.backTarget="home";render();return;
+    }
+    const target=state.backTarget;
+    state.screen=target;
+    if(target==="before"||target==="during") state.backTarget="home";
+    else if(target==="learn") state.backTarget="before";
+    else state.backTarget="home";
+    render();return;
+  }
+
   if(action==="destinations"){state.country=null;state.data=null;localStorage.removeItem("lingogo_country");return render()}
+  if(action==="speak-quiz-option"){
+    const answerId=e.target.closest("[data-answer-id]").dataset.answerId;
+    const q=state.quizQuestions[state.quizIndex];
+    const answer=q.answers.find(a=>a.id===answerId);
+    if(answer) speak(answer.local,state.data.lang);
+  }
+  const answerSelectBtn=e.target.closest(".answer-select");
+  if(answerSelectBtn&&state.quizActive&&!state.quizAnswered){
+    const answerId=answerSelectBtn.dataset.answerId;
+    const q=state.quizQuestions[state.quizIndex];
+    state.quizSelectedAnswer=answerId;
+    state.quizAnswered=true;
+    state.quizAnswerCorrect=answerId===q.correctId;
+    if(state.quizAnswerCorrect) addXP(5),state.quizScore++;
+    render();
+  }
   if(action==="reveal"){state.revealed=true;render();const p=state.data.phrases[state.cardIndex%state.data.phrases.length];setTimeout(()=>speak(p.local,state.data.lang),100)}
   if(action==="again"){state.revealed=false;state.cardIndex=(state.cardIndex+1)%state.data.phrases.length;render()}
   if(action==="gotit"){addXP(10);state.revealed=false;state.cardIndex=(state.cardIndex+1)%state.data.phrases.length;render()}
@@ -209,7 +393,53 @@ document.addEventListener("click",e=>{
   const cat=e.target.closest("[data-category]")?.dataset.category;
   if(cat){state.category=cat;render()}
   const sit=e.target.closest("[data-situation]")?.dataset.situation;
-  if(sit){state.category=sit;state.screen="show";render()}
+  if(sit){state.category=sit;navigate("show","during");}
+  if(action==="start-quiz"){
+    state.quizQuestions=generateQuizQuestions(state.data.phrases,10);
+    if(state.quizQuestions.length<1) return showToast("Not enough phrases for quiz");
+    state.quizActive=true;
+    state.quizIndex=0;
+    state.quizScore=0;
+    state.quizAnswered=false;
+    state.quizSelectedAnswer=null;
+    state.quizAnswerCorrect=null;
+    state.backTarget="before";
+    state.screen="quiz";
+    render();
+  }
+  if(action==="quiz-next"){
+    if(state.quizIndex+1>=state.quizQuestions.length){
+      state.screen="quiz-results";
+    }else{
+      state.quizIndex++;
+      state.quizAnswered=false;
+      state.quizSelectedAnswer=null;
+      state.quizAnswerCorrect=null;
+    }
+    render();
+  }
+  if(action==="quiz-again"){
+    const questions=generateQuizQuestions(state.data.phrases,10);
+    if(questions.length<1) return showToast("Not enough phrases for quiz");
+    resetQuizState();
+    state.quizActive=true;
+    state.quizQuestions=questions;
+    state.backTarget="before";
+    state.screen="quiz";
+    render();
+  }
+  if(action==="back-to-before"){
+    resetQuizState();
+    state.backTarget="home";
+    state.screen="before";
+    render();
+  }
+  if(action==="end-quiz"){
+    resetQuizState();
+    state.backTarget="home";
+    state.screen="before";
+    render();
+  }
 });
 
 if("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js");
