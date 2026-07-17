@@ -97,10 +97,20 @@ function renderHome(){
       <div class="stat"><b>${Object.values(state.saved).filter(Boolean).length}</b><span>Saved</span></div>
       <div class="stat"><b>${d.phrases.length}</b><span>Phrases</span></div>
     </section>
-    <section class="actions">
-      <button class="action primary" data-screen="show"><div class="emoji">📱</div><h3>Show to Local</h3><p>Big, clear phrases for real conversations.</p></button>
-      <button class="action" data-screen="learn"><div class="emoji">🧠</div><h3>Must Know 50</h3><p>Fast active-recall cards.</p></button>
-      <button class="action" data-screen="situations"><div class="emoji">🧭</div><h3>Situation Mode</h3><p>Eat, travel, shop, stay.</p></button>
+    <section class="trip-phases">
+      <button class="trip-card before-trip" data-screen="before">
+        <div class="trip-card-emoji">✈️</div>
+        <h2>Before Your Trip</h2>
+        <p>Learn the essentials in just 10 minutes a day.</p>
+      </button>
+      <button class="trip-card during-trip" data-screen="show">
+        <div class="trip-card-emoji">🌏</div>
+        <h2>During Your Trip</h2>
+        <p>Show phrases instantly and communicate with confidence.</p>
+      </button>
+    </section>
+    <section class="additional-options">
+      <button class="situation-button" data-screen="situations"><div class="emoji">🧭</div><h3>Situation Mode</h3><p>Eat, travel, shop, stay.</p></button>
     </section>
   `,"home");
 }
@@ -147,10 +157,37 @@ function renderSaved(){
   const phrases=state.data.phrases.filter(isSaved);
   app.innerHTML=shell(`<div class="section-title"><h2>Saved phrases</h2><small>${phrases.length}</small></div>
   ${phrases.length?`<div class="list">${phrases.map(p=>`<article class="phrase"><div class="en">${p.english}</div><div class="local">${p.local}</div><div class="roman">${p.roman}</div><div class="row"><button class="btn" data-speak="${encodeURIComponent(p.local)}">🔊 Play</button><button class="btn secondary" data-save="${p.id}">Remove</button></div></article>`).join("")}</div>`:`<div class="empty">Your saved travel phrases will appear here.</div>`}`,"saved");
-}
-function render(){
+}function renderBefore(){
+  const d=state.data;
+  const savedCount=Object.values(state.saved).filter(Boolean).length;
+  app.innerHTML=shell(`
+    <div class="section-title"><h2>Before Your Trip</h2><p>Prepare with our curated learning experience.</p></div>
+    <section class="progress-summary">
+      <div class="progress-stat"><b>${state.xp}</b><span>XP Earned</span></div>
+      <div class="progress-stat"><b>${d.phrases.length}</b><span>Phrases Available</span></div>
+      <div class="progress-stat"><b>${savedCount}</b><span>Saved</span></div>
+    </section>
+    <section class="before-hub-cards">
+      <button class="hub-card" data-screen="learn">
+        <div class="hub-emoji">🧠</div>
+        <h3>Must Know 50</h3>
+        <p>Fast active-recall cards to build fluency.</p>
+      </button>
+      <button class="hub-card coming-soon">
+        <div class="hub-emoji">✓</div>
+        <h3>Quiz</h3>
+        <p>Quick challenges are coming soon.</p>
+      </button>
+      <button class="hub-card" data-screen="saved">
+        <div class="hub-emoji">♥</div>
+        <h3>Saved Phrases</h3>
+        <p>Review your personal phrase collection.</p>
+      </button>
+    </section>
+  `,"before");
+}function render(){
   if(!state.country||!state.data) return renderDestinations();
-  ({home:renderHome,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved}[state.screen]||renderHome)();
+  ({home:renderHome,before:renderBefore,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved}[state.screen]||renderHome)();
 }
 
 document.addEventListener("click",e=>{
