@@ -215,6 +215,14 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .trip-readiness-meter::-moz-progress-bar{background:var(--accent);border-radius:999px}
 .trip-readiness-meta{font-size:12px;color:var(--muted);line-height:1.4}
 .continue-learning-card{margin-bottom:14px}
+.daily-review-card{margin-bottom:14px}
+.daily-review-card p{margin-bottom:12px}
+.review-complete{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;padding:24px 0}
+.review-next-message{font-size:14px;color:var(--muted);line-height:1.45}
+.review-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:18px 0}
+.review-empty h2{margin:0;font-size:28px;letter-spacing:-1px}
+.review-empty p{margin:0;font-size:15px;color:var(--muted);line-height:1.5}
+.review-empty-actions{display:grid;grid-template-columns:1fr;gap:10px;width:100%;margin-top:6px}
 .lesson-item-progress{display:block;font-size:12px;line-height:1.4;color:var(--muted)}
 .lesson-item-badge{display:inline-flex;align-self:flex-start;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;line-height:1;background:var(--color-surface-soft);color:var(--muted)}
 .lesson-item.is-reviewed{border-color:rgba(140,170,150,.28);background:rgba(140,170,150,.06)}
@@ -311,7 +319,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-@media(min-width:650px){.grid.destinations{grid-template-columns:1fr 1fr}.hero h1{font-size:56px}.trip-phases{grid-template-columns:1fr 1fr}.trip-card{min-height:180px;border-radius:32px;padding:28px}.trip-card h2{font-size:26px}.trip-card p{font-size:16px}.before-header h2{font-size:40px}.before-header{margin-bottom:40px}.before-progress{margin-bottom:44px;padding-bottom:24px}.before-progress-main{font-size:20px}.before-progress-meta{font-size:15px}.before-learning{margin-bottom:32px}.learning-featured{padding:32px}.learning-featured h3{font-size:28px;margin-bottom:10px}.learning-featured p{font-size:16px;margin-bottom:18px}.learning-label{font-size:12px;margin-bottom:10px}.before-actions{grid-template-columns:1fr 1fr;gap:14px}.before-action-card{padding:22px}.before-action-card h4{font-size:20px}.before-action-card p{font-size:15px}.situation-button{padding:24px}.before-summary{margin-bottom:22px}.trip-readiness{padding:20px}.trip-readiness-percent{font-size:32px}.continue-learning-card h3{font-size:28px}.lesson-list{grid-template-columns:repeat(2,minmax(0,1fr))}.lesson-complete-actions{grid-template-columns:repeat(2,minmax(0,240px));justify-content:center}.lesson-complete{padding:32px 0}}
+@media(min-width:650px){.grid.destinations{grid-template-columns:1fr 1fr}.hero h1{font-size:56px}.trip-phases{grid-template-columns:1fr 1fr}.trip-card{min-height:180px;border-radius:32px;padding:28px}.trip-card h2{font-size:26px}.trip-card p{font-size:16px}.before-header h2{font-size:40px}.before-header{margin-bottom:40px}.before-progress{margin-bottom:44px;padding-bottom:24px}.before-progress-main{font-size:20px}.before-progress-meta{font-size:15px}.before-learning{margin-bottom:32px}.learning-featured{padding:32px}.learning-featured h3{font-size:28px;margin-bottom:10px}.learning-featured p{font-size:16px;margin-bottom:18px}.learning-label{font-size:12px;margin-bottom:10px}.before-actions{grid-template-columns:1fr 1fr;gap:14px}.before-action-card{padding:22px}.before-action-card h4{font-size:20px}.before-action-card p{font-size:15px}.situation-button{padding:24px}.before-summary{margin-bottom:22px}.trip-readiness{padding:20px}.trip-readiness-percent{font-size:32px}.continue-learning-card{margin-bottom:16px}.daily-review-card{padding:32px;margin-bottom:16px}.daily-review-card h3{font-size:28px}.lesson-list{grid-template-columns:repeat(2,minmax(0,1fr))}.lesson-complete-actions{grid-template-columns:repeat(2,minmax(0,240px));justify-content:center}.lesson-complete{padding:32px 0}.review-complete{padding:32px 0}.review-empty{padding:24px 0}.review-empty-actions{grid-template-columns:repeat(2,minmax(0,220px));justify-content:center}}
 /* Accessibility: Reduced Motion */
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{

@@ -3,6 +3,35 @@ const app = document.querySelector("#app");
 const toast = document.querySelector("#toast");
 const learningProgressKey = "lingogo_learningProgress_v1";
 
+function getCurrentTimestampIso(){
+  return new Date().toISOString();
+}
+
+function parseIsoTimestamp(value){
+  if(typeof value !== "string") return null;
+  const isoPattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+  if(!isoPattern.test(value)) return null;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? new Date(parsed).toISOString() : null;
+}
+
+function addDaysToIso(isoTimestamp, days){
+  const parsed = Date.parse(isoTimestamp);
+  if(!Number.isFinite(parsed) || !Number.isFinite(days) || days < 0) return null;
+  return new Date(parsed + (Math.floor(days) * 86400000)).toISOString();
+}
+
+function getNextReviewIntervalDays(currentDays, outcome){
+  if(outcome === "again") return 1;
+  if(outcome !== "gotit") return null;
+  if(currentDays <= 0) return 1;
+  if(currentDays < 1) return 1;
+  if(currentDays < 3) return 3;
+  if(currentDays < 7) return 7;
+  if(currentDays < 14) return 14;
+  return 30;
+}
+
 function isPlainObject(value){
   return !!value && typeof value === "object" && !Array.isArray(value);
 }
@@ -34,7 +63,11 @@ function normalizePhraseProgress(record){
     againCount: toSafeCount(record.againCount),
     mastered: record.mastered === true,
     firstSeenAt: typeof record.firstSeenAt === "string" ? record.firstSeenAt : null,
-    lastSeenAt: typeof record.lastSeenAt === "string" ? record.lastSeenAt : null
+    lastSeenAt: typeof record.lastSeenAt === "string" ? record.lastSeenAt : null,
+    lastOutcome: record.lastOutcome === "again" || record.lastOutcome === "gotit" ? record.lastOutcome : null,
+    nextReviewAt: parseIsoTimestamp(record.nextReviewAt),
+    reviewIntervalDays: toSafeCount(record.reviewIntervalDays),
+    reviewCount: toSafeCount(record.reviewCount)
   };
 }
 
@@ -68,7 +101,7 @@ function normalizeCountryProgress(record){
 }
 
 function normalizeLearningProgress(raw){
-  const normalized = { version: 1, countries: {} };
+  const normalized = { version: 2, countries: {} };
   if(!isPlainObject(raw) || !isPlainObject(raw.countries)) return normalized;
   for(const [country, countryRecord] of Object.entries(raw.countries)){
     if(!isPlainObject(countryRecord)) continue;
@@ -82,7 +115,7 @@ function loadLearningProgress(){
     const parsed = JSON.parse(localStorage.getItem(learningProgressKey) || "null");
     return normalizeLearningProgress(parsed);
   }catch{
-    return { version: 1, countries: {} };
+    return { version: 2, countries: {} };
   }
 }
 
@@ -92,6 +125,12 @@ function saveLearningProgress(){
   }catch{
     // Ignore storage failures.
   }
+}
+
+function readPhraseProgress(country, phraseId){
+  const countryProgress = state.learningProgress.countries[country];
+  const phraseRecord = countryProgress?.phrases?.[phraseId];
+  return isPlainObject(phraseRecord) ? phraseRecord : null;
 }
 
 function ensureCountryProgress(country = state.country){
@@ -131,7 +170,11 @@ function ensurePhraseProgress(country, phraseId){
       againCount: 0,
       mastered: false,
       firstSeenAt: null,
-      lastSeenAt: null
+      lastSeenAt: null,
+      lastOutcome: null,
+      nextReviewAt: null,
+      reviewIntervalDays: 0,
+      reviewCount: 0
     };
   }
   return countryProgress.phrases[phraseId];
@@ -170,6 +213,113 @@ function getMasteredPhraseCount(country = state.country){
   return Object.entries(countryProgress.phrases).reduce((count, [phraseId, record]) => {
     return count + (validPhraseIds.has(phraseId) && isPlainObject(record) && record.mastered ? 1 : 0);
   }, 0);
+}
+
+function formatDuePhraseCount(dueCount){
+  return dueCount === 1 ? "1 phrase due" : `${dueCount} phrases due`;
+}
+
+function isPhraseDue(record, nowIso = getCurrentTimestampIso()){
+  if(!isPlainObject(record)) return false;
+  if(!record.nextReviewAt) return false;
+  const parsedNext = Date.parse(record.nextReviewAt);
+  const parsedNow = Date.parse(nowIso);
+  return Number.isFinite(parsedNext) && Number.isFinite(parsedNow) && parsedNext <= parsedNow;
+}
+
+function getDuePhraseCount(country = state.country){
+  const nowIso = getCurrentTimestampIso();
+  return (state.data?.phrases || []).reduce((count, phrase) => {
+    const progress = readPhraseProgress(country, phrase.id);
+    return count + (progress && progress.seenCount > 0 && isPhraseDue(progress, nowIso) ? 1 : 0);
+  }, 0);
+}
+
+function getEarliestNextReviewAt(country = state.country){
+  const nowIso = getCurrentTimestampIso();
+  const timestamps = (state.data?.phrases || [])
+    .map(phrase => readPhraseProgress(country, phrase.id))
+    .filter(progress => progress && progress.seenCount > 0 && progress.nextReviewAt && Number.isFinite(Date.parse(progress.nextReviewAt)) && Date.parse(progress.nextReviewAt) > Date.parse(nowIso))
+    .map(progress => progress.nextReviewAt)
+    .sort((a, b) => Date.parse(a) - Date.parse(b));
+  return timestamps[0] || null;
+}
+
+function formatNextReviewMessage(country = state.country, nowIso = getCurrentTimestampIso()){
+  if(getDuePhraseCount(country) > 0){
+    return "More review is available now.";
+  }
+  const earliest = getEarliestNextReviewAt(country);
+  if(!earliest) return "Your next scheduled review is soon.";
+  const diffMs = Date.parse(earliest) - Date.parse(nowIso);
+  if(!Number.isFinite(diffMs) || diffMs <= 0) return "Your next scheduled review is soon.";
+  const days = Math.max(1, Math.ceil(diffMs / 86400000));
+  return days === 1 ? "Your next scheduled review is in about 1 day." : `Your next scheduled review is in about ${days} days.`;
+}
+
+function buildDailyReviewQueue(country = state.country, maxCount = 10){
+  const nowIso = getCurrentTimestampIso();
+  const seen = new Set();
+  const dueAgain = [];
+  const dueOther = [];
+  const savedSeen = [];
+  const seenPhrases = [];
+  for(const phrase of state.data?.phrases || []){
+    const progress = readPhraseProgress(country, phrase.id);
+    if(!progress || progress.seenCount <= 0) continue;
+    const saved = !!state.saved[savedKey(phrase)];
+    const due = progress.nextReviewAt && Number.isFinite(Date.parse(progress.nextReviewAt)) && Date.parse(progress.nextReviewAt) <= Date.parse(nowIso);
+    if(progress.lastOutcome === "again" && due) dueAgain.push(phrase);
+    else if(due) dueOther.push(phrase);
+    else if(saved) savedSeen.push(phrase);
+    else seenPhrases.push(phrase);
+  }
+  const sortByDue = (a, b) => (Date.parse(readPhraseProgress(country, a.id)?.nextReviewAt || "") || Infinity) - (Date.parse(readPhraseProgress(country, b.id)?.nextReviewAt || "") || Infinity) || a.id.localeCompare(b.id);
+  const sortBySeen = (a, b) => (Date.parse(readPhraseProgress(country, b.id)?.lastSeenAt || "") || 0) - (Date.parse(readPhraseProgress(country, a.id)?.lastSeenAt || "") || 0) || a.id.localeCompare(b.id);
+  const ordered = [...dueAgain.sort(sortByDue), ...dueOther.sort(sortByDue), ...savedSeen.sort(sortBySeen), ...seenPhrases.sort(sortBySeen)];
+  const queue = [];
+  for(const phrase of ordered){
+    if(seen.has(phrase.id)) continue;
+    seen.add(phrase.id);
+    queue.push(phrase.id);
+    if(queue.length >= maxCount) break;
+  }
+  return queue;
+}
+
+function getReviewStatusText(country = state.country){
+  const dueCount = getDuePhraseCount(country);
+  if(dueCount > 0) return formatDuePhraseCount(dueCount);
+  const queue = buildDailyReviewQueue(country, 10);
+  if(queue.length > 0) return "Practice available";
+  return "No review phrases yet";
+}
+
+function recordPhraseOutcome(phrase, outcome, options = {}){
+  if(!state.country || !phrase?.id) return false;
+  if(outcome !== "again" && outcome !== "gotit") return false;
+  const progress = ensurePhraseProgress(state.country, phrase.id);
+  if(!progress) return false;
+  const nowIso = options.nowIso || getCurrentTimestampIso();
+  if(!progress.firstSeenAt) progress.firstSeenAt = nowIso;
+  progress.lastSeenAt = nowIso;
+  progress.lastOutcome = outcome;
+  progress.reviewCount = toSafeCount(progress.reviewCount) + 1;
+  if(outcome === "again"){
+    progress.againCount = toSafeCount(progress.againCount) + 1;
+    progress.reviewIntervalDays = 1;
+    progress.nextReviewAt = addDaysToIso(nowIso, 1);
+  }else{
+    progress.gotItCount = toSafeCount(progress.gotItCount) + 1;
+    progress.mastered = true;
+    progress.reviewIntervalDays = getNextReviewIntervalDays(progress.reviewIntervalDays, "gotit");
+    progress.nextReviewAt = addDaysToIso(nowIso, progress.reviewIntervalDays || 1);
+  }
+  if(options.awardXP){
+    addXP(options.awardXP);
+  }
+  saveLearningProgress();
+  return true;
 }
 
 function getReadinessLabel(percent){
@@ -301,7 +451,16 @@ const state = {
   lessonAnswering: false,
   learnSeenRecordedPhraseId: null,
   lessonSeenRecordedPhraseId: null,
-  learnAnswering: false
+  learnAnswering: false,
+  reviewQueueIds: [],
+  reviewIndex: 0,
+  reviewRevealed: false,
+  reviewAnswering: false,
+  reviewCompleted: false,
+  reviewSessionXp: 0,
+  reviewEncounterCount: 0,
+  reviewEncounteredIds: new Set(),
+  reviewRequeuedIds: new Set()
 };
 
 const countryFiles = { japan:"data/japan.json", korea:"data/korea.json" };
@@ -411,6 +570,18 @@ function resetLessonState(){
   state.lessonSeenRecordedPhraseId=null;
 }
 
+function resetReviewState(){
+  state.reviewQueueIds=[];
+  state.reviewIndex=0;
+  state.reviewRevealed=false;
+  state.reviewAnswering=false;
+  state.reviewCompleted=false;
+  state.reviewSessionXp=0;
+  state.reviewEncounterCount=0;
+  state.reviewEncounteredIds=new Set();
+  state.reviewRequeuedIds=new Set();
+}
+
 function getCurrentLesson(){
   return getLessonById(state.activeLessonId);
 }
@@ -429,6 +600,53 @@ function returnToBeforeWithLessonUnavailable(){
   state.screen="before";
   render();
   showToast("Lesson unavailable.");
+}
+
+function getCurrentReviewPhrase(){
+  while(state.reviewIndex < state.reviewQueueIds.length){
+    const phrase = getPhraseById(state.reviewQueueIds[state.reviewIndex]);
+    if(phrase) return phrase;
+    state.reviewIndex += 1;
+  }
+  return null;
+}
+
+function startDailyReview(){
+  resetLessonState();
+  resetReviewState();
+  state.reviewQueueIds=buildDailyReviewQueue(state.country,10);
+  state.backTarget="before";
+  state.screen=state.reviewQueueIds.length ? "review" : "review-empty";
+  render();
+}
+
+function advanceReviewCard(outcome){
+  if(state.reviewCompleted || state.reviewAnswering || !state.reviewRevealed) return;
+  const phrase = getCurrentReviewPhrase();
+  if(!phrase) return;
+  state.reviewAnswering=true;
+  const didRecord = recordPhraseOutcome(phrase, outcome, { awardXP: outcome === "gotit" ? 10 : 0 });
+  if(!didRecord){
+    state.reviewAnswering=false;
+    return;
+  }
+  if(outcome === "gotit"){
+    state.reviewSessionXp += 10;
+  }
+  state.reviewEncounterCount += 1;
+  state.reviewEncounteredIds.add(phrase.id);
+  if(outcome === "again" && !state.reviewRequeuedIds.has(phrase.id)){
+    state.reviewRequeuedIds.add(phrase.id);
+    state.reviewQueueIds.push(phrase.id);
+  }
+  state.reviewRevealed=false;
+  state.reviewIndex += 1;
+  state.reviewAnswering=false;
+  if(state.reviewIndex >= state.reviewQueueIds.length){
+    state.reviewCompleted=true;
+    state.screen="review-complete";
+  }
+  render();
 }
 
 function persistCurrentLessonPosition(){
@@ -495,23 +713,14 @@ function advanceLesson(outcome){
   const phrase = getCurrentLessonPhrase();
   if(!lesson || !phrase) return;
   state.lessonAnswering=true;
-  const phraseProgress = getPhraseProgress(state.country, phrase.id);
-  if(!phraseProgress){
+  const didRecord = recordPhraseOutcome(phrase, outcome, { awardXP: outcome === "gotit" ? 10 : 0 });
+  if(!didRecord){
     state.lessonAnswering=false;
     return;
   }
-  const now = new Date().toISOString();
-  if(outcome==="again"){
-    phraseProgress.againCount = toSafeCount(phraseProgress.againCount) + 1;
-  }else{
-    phraseProgress.gotItCount = toSafeCount(phraseProgress.gotItCount) + 1;
-    phraseProgress.mastered = true;
-    addXP(10);
+  if(outcome==="gotit"){
     state.lessonXpEarned += 10;
   }
-  if(!phraseProgress.firstSeenAt) phraseProgress.firstSeenAt = now;
-  phraseProgress.lastSeenAt = now;
-  saveLearningProgress();
   const nextIndex=state.lessonCardIndex+1;
   if(nextIndex>=phrases.length){
     completeLessonProgress();
@@ -535,20 +744,12 @@ function answerLearnCard(outcome){
   if(outcome!=="again" && outcome!=="gotit") return;
   const phrase=state.data.phrases[state.cardIndex % state.data.phrases.length];
   if(!phrase) return;
-  const phraseProgress = getPhraseProgress(state.country, phrase.id);
-  if(!phraseProgress) return;
   state.learnAnswering=true;
-  const now = new Date().toISOString();
-  if(outcome==="again"){
-    phraseProgress.againCount = toSafeCount(phraseProgress.againCount) + 1;
-  }else{
-    phraseProgress.gotItCount = toSafeCount(phraseProgress.gotItCount) + 1;
-    phraseProgress.mastered = true;
-    addXP(10);
+  const didRecord = recordPhraseOutcome(phrase, outcome, { awardXP: outcome === "gotit" ? 10 : 0 });
+  if(!didRecord){
+    state.learnAnswering=false;
+    return;
   }
-  if(!phraseProgress.firstSeenAt) phraseProgress.firstSeenAt = now;
-  phraseProgress.lastSeenAt = now;
-  saveLearningProgress();
   state.revealed=false;
   state.cardIndex=(state.cardIndex+1)%state.data.phrases.length;
   state.learnSeenRecordedPhraseId=null;
@@ -673,6 +874,63 @@ function renderLessonComplete(){
   `,"learn");
 }
 
+function renderReviewEmpty(){
+  app.innerHTML=shell(`
+    <div class="review-empty">
+      <div class="lesson-complete-kicker">Daily Review</div>
+      <h2>Nothing to review yet</h2>
+      <p>Complete your first lesson or explore Must Know 50 to build your review list.</p>
+      <div class="review-empty-actions">
+        <button class="btn" data-action="review-start-lesson-1">Start Lesson 1</button>
+        <button class="btn secondary" data-action="review-open-learn">Open Must Know 50</button>
+      </div>
+    </div>
+  `,"before");
+}
+
+function renderReview(){
+  if(state.reviewCompleted) return renderReviewComplete();
+  const phrase = getCurrentReviewPhrase();
+  if(!phrase){
+    state.reviewCompleted=true;
+    state.screen="review-complete";
+    return renderReviewComplete();
+  }
+  const answer = state.reviewRevealed ? `<div class="answer"><div class="local">${phrase.local}</div><div class="roman">${phrase.roman}</div></div>` : "";
+  app.innerHTML=shell(`
+    <div class="section-title lesson-title"><h2>Daily Review</h2><small>${state.reviewIndex+1} / ${state.reviewQueueIds.length}</small></div>
+    <p class="lesson-progress">${state.reviewIndex+1} of ${state.reviewQueueIds.length}</p>
+    <div class="card-stage"><article class="flashcard">
+      <div class="label">Daily Review</div>
+      <div><h2>${phrase.english}</h2>${answer}</div>
+      <div>
+        ${state.reviewRevealed ? `<div class="row" style="justify-content:center">
+          <button class="btn secondary" data-action="review-speak" data-text="${encodeURIComponent(phrase.local)}" aria-label="Listen to this phrase">🔊 Listen</button>
+          <button class="btn ghost" data-action="review-save-current">${isSaved(phrase)?"♥ Saved":"♡ Save"}</button>
+        </div>` : `<button class="btn" data-action="review-reveal">Reveal</button>`}
+      </div>
+    </article></div>
+    ${state.reviewRevealed ? `<div class="review-actions"><button class="btn secondary" data-action="review-again">Again</button><button class="btn" data-action="review-gotit">Got it</button></div>` : ""}
+  `,"before");
+}
+
+function renderReviewComplete(){
+  const message = formatNextReviewMessage(state.country);
+  app.innerHTML=shell(`
+    <div class="review-complete">
+      <div class="lesson-complete-kicker">Review complete</div>
+      <h2>Review complete</h2>
+      <p>${state.reviewEncounteredIds.size} unique phrases reviewed${state.reviewEncounterCount > state.reviewEncounteredIds.size ? ` · ${state.reviewEncounterCount} card encounters` : ""}</p>
+      ${state.reviewSessionXp ? `<div class="lesson-complete-xp">+${state.reviewSessionXp} XP earned</div>` : ""}
+      <div class="review-next-message">${message}</div>
+      <div class="lesson-complete-actions">
+        <button class="btn" data-action="review-back-to-before">Back to Before</button>
+        <button class="btn secondary" data-action="review-again-session">Review Again</button>
+      </div>
+    </div>
+  `,"before");
+}
+
 function renderQuiz(){
   if(!state.quizActive||state.quizQuestions.length===0) return state.screen="before",render();
   const q=state.quizQuestions[state.quizIndex];
@@ -738,6 +996,7 @@ function renderSaved(){
   const lessons=getLessons();
   const readiness=getTripReadiness(state.country);
   const continuePlan=getContinueLearningPlan(state.country);
+  const reviewStatusText=getReviewStatusText(state.country);
   app.innerHTML=shell(`
     <div class="before-header">
       <h2>Before Your Trip</h2>
@@ -768,6 +1027,15 @@ function renderSaved(){
         <p>${continuePlan.description}</p>
         <div class="learning-meta">
           <span>${continuePlan.action==="lesson" && continuePlan.lessonId ? "Resume your lesson" : "Open the full phrase deck"}</span>
+          <span class="learning-arrow">→</span>
+        </div>
+      </button>
+      <button class="learning-featured daily-review-card" data-action="daily-review">
+        <div class="learning-label">DAILY REVIEW</div>
+        <h3>Daily Review</h3>
+        <p>${reviewStatusText}</p>
+        <div class="learning-meta">
+          <span>${reviewStatusText}</span>
           <span class="learning-arrow">→</span>
         </div>
       </button>
@@ -874,7 +1142,7 @@ function renderQuizResults(){
 }
 function render(){
   if(!state.country||!state.data) return renderDestinations();
-  ({home:renderHome,before:renderBefore,during:renderDuring,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved,quiz:renderQuiz,"quiz-results":renderQuizResults,lesson:renderLesson,"lesson-complete":renderLessonComplete}[state.screen]||renderHome)();
+  ({home:renderHome,before:renderBefore,during:renderDuring,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved,quiz:renderQuiz,"quiz-results":renderQuizResults,lesson:renderLesson,"lesson-complete":renderLessonComplete,review:renderReview,"review-empty":renderReviewEmpty,"review-complete":renderReviewComplete}[state.screen]||renderHome)();
 }
 
 document.addEventListener("click",e=>{
@@ -886,6 +1154,7 @@ document.addEventListener("click",e=>{
   if(navBtn){
     const navScreen=navBtn.dataset.screen;
     if(state.screen==="quiz"||state.screen==="quiz-results") resetQuizState();
+    if(state.screen==="review"||state.screen==="review-empty"||state.screen==="review-complete") resetReviewState();
     if(navScreen==="home"){state.backTarget="home";state.screen="home";render();}
     else if(navScreen==="learn") navigate("learn","before");
     else if(navScreen==="show") navigate("show","home");
@@ -898,6 +1167,7 @@ document.addEventListener("click",e=>{
   if(screenBtn){
     const to=screenBtn.dataset.screen;
     if(state.screen==="quiz"||state.screen==="quiz-results") resetQuizState();
+    if(state.screen==="review"||state.screen==="review-empty"||state.screen==="review-complete") resetReviewState();
     if(to==="before")     return navigate("before","home");
     if(to==="during")     return navigate("during","home");
     if(to==="learn")      return navigate("learn","before");
@@ -914,6 +1184,7 @@ document.addEventListener("click",e=>{
 
   const lessonBtn=e.target.closest("[data-action='open-lesson']");
   if(lessonBtn){
+    if(state.screen==="review"||state.screen==="review-empty"||state.screen==="review-complete") resetReviewState();
     const lessonProgress=getLessonProgress(state.country, lessonBtn.dataset.lessonId);
     startLesson(lessonBtn.dataset.lessonId, { resume: !!lessonProgress?.startedAt && !lessonProgress?.completedAt });
     return;
@@ -923,9 +1194,17 @@ document.addEventListener("click",e=>{
 
   // Back
   if(action==="back"){
+    if(state.screen==="review"||state.screen==="review-empty"||state.screen==="review-complete"){
+      resetReviewState();
+      state.backTarget="home";
+      state.screen="before";
+      render();
+      return;
+    }
     if(state.screen==="home"){
       state.country=null;state.data=null;
       resetLessonState();
+      resetReviewState();
       localStorage.removeItem("lingogo_country");
       return render();
     }
@@ -948,14 +1227,43 @@ document.addEventListener("click",e=>{
     render();return;
   }
 
-  if(action==="destinations"){state.country=null;state.data=null;localStorage.removeItem("lingogo_country");return render()}
+  if(action==="destinations"){state.country=null;state.data=null;resetReviewState();localStorage.removeItem("lingogo_country");return render()}
   if(action==="continue-learning"){
     const plan=getContinueLearningPlan(state.country);
     if(plan.action==="lesson" && plan.lessonId){
+      if(state.screen==="review"||state.screen==="review-empty"||state.screen==="review-complete") resetReviewState();
       startLesson(plan.lessonId, { resume: plan.resume });
       return;
     }
     state.screen="learn";
+    render();
+    return;
+  }
+  if(action==="daily-review"){
+    startDailyReview();
+    return;
+  }
+  if(action==="review-back-to-before"){
+    resetReviewState();
+    state.backTarget="home";
+    state.screen="before";
+    render();
+    return;
+  }
+  if(action==="review-again-session"){
+    startDailyReview();
+    return;
+  }
+  if(action==="review-start-lesson-1"){
+    resetReviewState();
+    const firstLesson=getLessons()[0];
+    if(firstLesson) startLesson(firstLesson.id,{resume:false});
+    return;
+  }
+  if(action==="review-open-learn"){
+    resetReviewState();
+    state.screen="learn";
+    state.backTarget="before";
     render();
     return;
   }
@@ -966,6 +1274,19 @@ document.addEventListener("click",e=>{
     render();
     return;
   }
+  if(action==="review-reveal"){
+    state.reviewRevealed=true;
+    render();
+    return;
+  }
+  if(action==="review-speak"){
+    const text=e.target.closest("[data-text]")?.dataset.text;
+    if(text)speak(decodeURIComponent(text),state.data.lang);
+    return;
+  }
+  if(action==="review-save-current"){const phrase=getCurrentReviewPhrase();if(phrase)toggleSaved(phrase);return}
+  if(action==="review-again"){advanceReviewCard("again");return}
+  if(action==="review-gotit"){advanceReviewCard("gotit");return}
   if(action==="lesson-speak"){
     const text=e.target.closest("[data-text]")?.dataset.text;
     if(text)speak(decodeURIComponent(text),state.data.lang);
