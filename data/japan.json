@@ -10,7 +10,13 @@
       "title": "Greetings & Politeness",
       "description": "Essential greetings and courteous expressions.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-027", "ja-028", "ja-003", "ja-004", "ja-005"]
+      "phraseIds": [
+        "ja-027",
+        "ja-028",
+        "ja-003",
+        "ja-004",
+        "ja-005"
+      ]
     },
     {
       "id": "ja-l02",
@@ -18,7 +24,13 @@
       "title": "Basic Conversation",
       "description": "Simple replies for everyday back-and-forth.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-001", "ja-002", "ja-029", "ja-030", "ja-031"]
+      "phraseIds": [
+        "ja-001",
+        "ja-002",
+        "ja-029",
+        "ja-030",
+        "ja-031"
+      ]
     },
     {
       "id": "ja-l03",
@@ -26,7 +38,13 @@
       "title": "Everyday Essentials",
       "description": "Helpful phrases for toilets, writing, showing, and simple requests.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-026", "ja-032", "ja-033", "ja-006", "ja-007"]
+      "phraseIds": [
+        "ja-026",
+        "ja-032",
+        "ja-033",
+        "ja-006",
+        "ja-007"
+      ]
     },
     {
       "id": "ja-l04",
@@ -34,7 +52,13 @@
       "title": "Getting Around & Finding Places",
       "description": "Ask for stations, directions, and exact destinations.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-013", "ja-034", "ja-035", "ja-016", "ja-049"]
+      "phraseIds": [
+        "ja-013",
+        "ja-034",
+        "ja-035",
+        "ja-016",
+        "ja-049"
+      ]
     },
     {
       "id": "ja-l05",
@@ -42,7 +66,13 @@
       "title": "Trains, Taxis & Directions",
       "description": "Move smoothly by rail, taxi, and street directions.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-014", "ja-015", "ja-036", "ja-037", "ja-038"]
+      "phraseIds": [
+        "ja-014",
+        "ja-015",
+        "ja-036",
+        "ja-037",
+        "ja-038"
+      ]
     },
     {
       "id": "ja-l06",
@@ -50,7 +80,13 @@
       "title": "Restaurants & Cafés",
       "description": "Order food and drinks with confidence.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-011", "ja-012", "ja-043", "ja-039", "ja-008"]
+      "phraseIds": [
+        "ja-011",
+        "ja-012",
+        "ja-043",
+        "ja-039",
+        "ja-008"
+      ]
     },
     {
       "id": "ja-l07",
@@ -58,7 +94,13 @@
       "title": "Dietary Needs",
       "description": "Clearly explain allergies and food restrictions.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-009", "ja-010", "ja-040", "ja-041", "ja-042"]
+      "phraseIds": [
+        "ja-009",
+        "ja-010",
+        "ja-040",
+        "ja-041",
+        "ja-042"
+      ]
     },
     {
       "id": "ja-l08",
@@ -66,7 +108,13 @@
       "title": "Hotels",
       "description": "Handle check-in, requests, and checkout details.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-017", "ja-018", "ja-019", "ja-044", "ja-045"]
+      "phraseIds": [
+        "ja-017",
+        "ja-018",
+        "ja-019",
+        "ja-044",
+        "ja-045"
+      ]
     },
     {
       "id": "ja-l09",
@@ -74,7 +122,13 @@
       "title": "Shopping & Payments",
       "description": "Ask prices, sizes, and payment questions while shopping.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-020", "ja-021", "ja-022", "ja-046", "ja-047"]
+      "phraseIds": [
+        "ja-020",
+        "ja-021",
+        "ja-022",
+        "ja-046",
+        "ja-047"
+      ]
     },
     {
       "id": "ja-l10",
@@ -82,7 +136,13 @@
       "title": "Emergencies & Essential Help",
       "description": "Get urgent help and ask for critical assistance fast.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ja-023", "ja-024", "ja-025", "ja-048", "ja-050"]
+      "phraseIds": [
+        "ja-023",
+        "ja-024",
+        "ja-025",
+        "ja-048",
+        "ja-050"
+      ]
     }
   ],
   "phrases": [
@@ -91,182 +151,600 @@
       "category": "General",
       "english": "I don't speak Japanese. Do you speak English?",
       "local": "日本語が話せません。英語を話せますか？",
-      "roman": "Nihongo ga hanasemasen. Eigo o hanasemasu ka?"
+      "roman": "Nihongo ga hanasemasen. Eigo o hanasemasu ka?",
+      "translations": {
+        "en": "I don't speak Japanese. Do you speak English?",
+        "fr": "Je ne parle pas japonais. Parlez-vous anglais ?",
+        "es": "No hablo japones. Habla ingles?"
+      }
     },
     {
       "id": "ja-002",
       "category": "General",
       "english": "Please speak slowly.",
       "local": "ゆっくり話してください。",
-      "roman": "Yukkuri hanashite kudasai."
+      "roman": "Yukkuri hanashite kudasai.",
+      "translations": {
+        "en": "Please speak slowly.",
+        "fr": "Parlez lentement, s'il vous plait.",
+        "es": "Hable despacio, por favor."
+      }
     },
     {
       "id": "ja-003",
       "category": "General",
       "english": "Thank you.",
       "local": "ありがとうございます。",
-      "roman": "Arigatou gozaimasu."
+      "roman": "Arigatou gozaimasu.",
+      "translations": {
+        "en": "Thank you.",
+        "fr": "Merci.",
+        "es": "Gracias."
+      }
     },
     {
       "id": "ja-004",
       "category": "General",
       "english": "Excuse me.",
       "local": "すみません。",
-      "roman": "Sumimasen."
+      "roman": "Sumimasen.",
+      "translations": {
+        "en": "Excuse me.",
+        "fr": "Excusez-moi.",
+        "es": "Perdon."
+      }
     },
     {
       "id": "ja-005",
       "category": "General",
       "english": "I'm sorry.",
       "local": "ごめんなさい。",
-      "roman": "Gomen nasai."
+      "roman": "Gomen nasai.",
+      "translations": {
+        "en": "I'm sorry.",
+        "fr": "Je suis desole.",
+        "es": "Lo siento."
+      }
     },
     {
       "id": "ja-006",
       "category": "Food",
       "english": "A bottle of water, please.",
       "local": "水を一本お願いします。",
-      "roman": "Mizu o ippon onegaishimasu."
+      "roman": "Mizu o ippon onegaishimasu.",
+      "translations": {
+        "en": "A bottle of water, please.",
+        "fr": "Une bouteille d'eau, s'il vous plait.",
+        "es": "Una botella de agua, por favor."
+      }
     },
     {
       "id": "ja-007",
       "category": "Food",
       "english": "This one, please.",
       "local": "これをお願いします。",
-      "roman": "Kore o onegaishimasu."
+      "roman": "Kore o onegaishimasu.",
+      "translations": {
+        "en": "This one, please.",
+        "fr": "Celui-ci, s'il vous plait.",
+        "es": "Este, por favor."
+      }
     },
     {
       "id": "ja-008",
       "category": "Food",
       "english": "Can we pay by card?",
       "local": "カードで払えますか？",
-      "roman": "Kaado de haraemasu ka?"
+      "roman": "Kaado de haraemasu ka?",
+      "translations": {
+        "en": "Can we pay by card?",
+        "fr": "Peut-on payer par carte ?",
+        "es": "Podemos pagar con tarjeta?"
+      }
     },
     {
       "id": "ja-009",
       "category": "Food",
       "english": "Not spicy, please.",
       "local": "辛くしないでください。",
-      "roman": "Karakushinaide kudasai."
+      "roman": "Karakushinaide kudasai.",
+      "translations": {
+        "en": "Not spicy, please.",
+        "fr": "Pas epice, s'il vous plait.",
+        "es": "No picante, por favor."
+      }
     },
     {
       "id": "ja-010",
       "category": "Food",
       "english": "Do you have a vegetarian option?",
       "local": "ベジタリアンのメニューはありますか？",
-      "roman": "Bejitarian no menyuu wa arimasu ka?"
+      "roman": "Bejitarian no menyuu wa arimasu ka?",
+      "translations": {
+        "en": "Do you have a vegetarian option?",
+        "fr": "Avez-vous une option vegetarienne ?",
+        "es": "Tiene opcion vegetariana?"
+      }
     },
     {
       "id": "ja-011",
       "category": "Cafe",
       "english": "One iced coffee, please.",
       "local": "アイスコーヒーを一つお願いします。",
-      "roman": "Aisu koohii o hitotsu onegaishimasu."
+      "roman": "Aisu koohii o hitotsu onegaishimasu.",
+      "translations": {
+        "en": "One iced coffee, please.",
+        "fr": "Un cafe glace, s'il vous plait.",
+        "es": "Un cafe helado, por favor."
+      }
     },
     {
       "id": "ja-012",
       "category": "Cafe",
       "english": "For here, please.",
       "local": "店内でお願いします。",
-      "roman": "Tennai de onegaishimasu."
+      "roman": "Tennai de onegaishimasu.",
+      "translations": {
+        "en": "For here, please.",
+        "fr": "Sur place, s'il vous plait.",
+        "es": "Para aqui, por favor."
+      }
     },
     {
       "id": "ja-013",
       "category": "Transport",
       "english": "Where is the station?",
       "local": "駅はどこですか？",
-      "roman": "Eki wa doko desu ka?"
+      "roman": "Eki wa doko desu ka?",
+      "translations": {
+        "en": "Where is the station?",
+        "fr": "Ou est la gare ?",
+        "es": "Donde esta la estacion?"
+      }
     },
     {
       "id": "ja-014",
       "category": "Transport",
       "english": "Which platform is it?",
       "local": "何番線ですか？",
-      "roman": "Nanbansen desu ka?"
+      "roman": "Nanbansen desu ka?",
+      "translations": {
+        "en": "Which platform is it?",
+        "fr": "Quel quai ?",
+        "es": "Que anden es?"
+      }
     },
     {
       "id": "ja-015",
       "category": "Transport",
       "english": "Does this train go to Tokyo Station?",
       "local": "この電車は東京駅に行きますか？",
-      "roman": "Kono densha wa Tokyo-eki ni ikimasu ka?"
+      "roman": "Kono densha wa Tokyo-eki ni ikimasu ka?",
+      "translations": {
+        "en": "Does this train go to Tokyo Station?",
+        "fr": "Ce train va-t-il a la gare de Tokyo ?",
+        "es": "Este tren va a la estacion de Tokio?"
+      }
     },
     {
       "id": "ja-016",
       "category": "Transport",
       "english": "Please take me here.",
       "local": "ここまでお願いします。",
-      "roman": "Koko made onegaishimasu."
+      "roman": "Koko made onegaishimasu.",
+      "translations": {
+        "en": "Please take me here.",
+        "fr": "Emmenez-moi ici, s'il vous plait.",
+        "es": "Lleveme aqui, por favor."
+      }
     },
     {
       "id": "ja-017",
       "category": "Hotel",
       "english": "I have a reservation.",
       "local": "予約しています。",
-      "roman": "Yoyaku shiteimasu."
+      "roman": "Yoyaku shiteimasu.",
+      "translations": {
+        "en": "I have a reservation.",
+        "fr": "J'ai une reservation.",
+        "es": "Tengo una reserva."
+      }
     },
     {
       "id": "ja-018",
       "category": "Hotel",
       "english": "Can I leave my luggage here?",
       "local": "荷物を預けてもいいですか？",
-      "roman": "Nimotsu o azukete mo ii desu ka?"
+      "roman": "Nimotsu o azukete mo ii desu ka?",
+      "translations": {
+        "en": "Can I leave my luggage here?",
+        "fr": "Puis-je laisser mes bagages ici ?",
+        "es": "Puedo dejar mi equipaje aqui?"
+      }
     },
     {
       "id": "ja-019",
       "category": "Hotel",
       "english": "Could I get another towel?",
       "local": "タオルをもう一枚いただけますか？",
-      "roman": "Taoru o mou ichimai itadakemasu ka?"
+      "roman": "Taoru o mou ichimai itadakemasu ka?",
+      "translations": {
+        "en": "Could I get another towel?",
+        "fr": "Puis-je avoir une autre serviette ?",
+        "es": "Me puede dar otra toalla?"
+      }
     },
     {
       "id": "ja-020",
       "category": "Shopping",
       "english": "How much is this?",
       "local": "これはいくらですか？",
-      "roman": "Kore wa ikura desu ka?"
+      "roman": "Kore wa ikura desu ka?",
+      "translations": {
+        "en": "How much is this?",
+        "fr": "Combien ca coute ?",
+        "es": "Cuanto cuesta esto?"
+      }
     },
     {
       "id": "ja-021",
       "category": "Shopping",
       "english": "Do you have a larger size?",
       "local": "もっと大きいサイズはありますか？",
-      "roman": "Motto ookii saizu wa arimasu ka?"
+      "roman": "Motto ookii saizu wa arimasu ka?",
+      "translations": {
+        "en": "Do you have a larger size?",
+        "fr": "Avez-vous une taille plus grande ?",
+        "es": "Tiene una talla mas grande?"
+      }
     },
     {
       "id": "ja-022",
       "category": "Shopping",
       "english": "Can I get a tax refund?",
       "local": "免税できますか？",
-      "roman": "Menzei dekimasu ka?"
+      "roman": "Menzei dekimasu ka?",
+      "translations": {
+        "en": "Can I get a tax refund?",
+        "fr": "Puis-je obtenir un remboursement de taxe ?",
+        "es": "Puedo obtener devolucion de impuestos?"
+      }
     },
-    { "id": "ja-023", "category": "Emergency", "english": "Help!", "local": "助けてください！", "roman": "Tasukete kudasai!" },
-    { "id": "ja-024", "category": "Emergency", "english": "Please call the police.", "local": "警察を呼んでください。", "roman": "Keisatsu o yonde kudasai." },
-    { "id": "ja-025", "category": "Emergency", "english": "I need a doctor.", "local": "医者が必要です。", "roman": "Isha ga hitsuyou desu." },
-    { "id": "ja-026", "category": "General", "english": "Where is the toilet?", "local": "トイレはどこですか？", "roman": "Toire wa doko desu ka?" },
-    { "id": "ja-027", "category": "General", "english": "Hello.", "local": "こんにちは。", "roman": "Konnichiwa." },
-    { "id": "ja-028", "category": "General", "english": "Good morning.", "local": "おはようございます。", "roman": "Ohayou gozaimasu." },
-    { "id": "ja-029", "category": "General", "english": "Yes.", "local": "はい。", "roman": "Hai." },
-    { "id": "ja-030", "category": "General", "english": "No.", "local": "いいえ。", "roman": "Iie." },
-    { "id": "ja-031", "category": "General", "english": "I don't understand.", "local": "わかりません。", "roman": "Wakarimasen." },
-    { "id": "ja-032", "category": "General", "english": "Can you write it down?", "local": "書いてもらえますか？", "roman": "Kaite moraemasu ka?" },
-    { "id": "ja-033", "category": "General", "english": "Can you show me?", "local": "見せてもらえますか？", "roman": "Misete moraemasu ka?" },
-    { "id": "ja-034", "category": "Transport", "english": "Where is the airport?", "local": "空港はどこですか？", "roman": "Kuukou wa doko desu ka?" },
-    { "id": "ja-035", "category": "Transport", "english": "How do I get to...?", "local": "…はどうやって行けばいいですか？", "roman": "...wa douyatte ikeba ii desu ka?" },
-    { "id": "ja-036", "category": "Transport", "english": "Turn left.", "local": "左に曲がってください。", "roman": "Hidari ni magatte kudasai." },
-    { "id": "ja-037", "category": "Transport", "english": "Turn right.", "local": "右に曲がってください。", "roman": "Migi ni magatte kudasai." },
-    { "id": "ja-038", "category": "Transport", "english": "Go straight ahead.", "local": "まっすぐ行ってください。", "roman": "Massugu itte kudasai." },
-    { "id": "ja-039", "category": "Food", "english": "The bill, please.", "local": "お会計をお願いします。", "roman": "Okaikei o onegaishimasu." },
-    { "id": "ja-040", "category": "Food", "english": "I'm allergic to nuts.", "local": "ナッツアレルギーがあります。", "roman": "Nattsu arerugii ga arimasu." },
-    { "id": "ja-041", "category": "Food", "english": "I'm allergic to shellfish.", "local": "貝類アレルギーがあります。", "roman": "Kairui arerugii ga arimasu." },
-    { "id": "ja-042", "category": "Food", "english": "No dairy, please.", "local": "乳製品なしでお願いします。", "roman": "Nyuuseihin nashi de onegaishimasu." },
-    { "id": "ja-043", "category": "Cafe", "english": "To go, please.", "local": "テイクアウトでお願いします。", "roman": "Teikauto de onegaishimasu." },
-    { "id": "ja-044", "category": "Hotel", "english": "What is the WiFi password?", "local": "ワイファイのパスワードは何ですか？", "roman": "Waifai no pasuwaado wa nan desu ka?" },
-    { "id": "ja-045", "category": "Hotel", "english": "What time is checkout?", "local": "チェックアウトは何時ですか？", "roman": "Chekkuauto wa nanji desu ka?" },
-    { "id": "ja-046", "category": "Shopping", "english": "I'm just looking, thank you.", "local": "見ているだけです。ありがとうございます。", "roman": "Mite iru dake desu. Arigatou gozaimasu." },
-    { "id": "ja-047", "category": "Shopping", "english": "Do you have a smaller size?", "local": "もっと小さいサイズはありますか？", "roman": "Motto chiisai saizu wa arimasu ka?" },
-    { "id": "ja-048", "category": "Emergency", "english": "Please call an ambulance.", "local": "救急車を呼んでください。", "roman": "Kyuukyuusha o yonde kudasai." },
-    { "id": "ja-049", "category": "Emergency", "english": "Where is a pharmacy?", "local": "薬局はどこですか？", "roman": "Yakkyoku wa doko desu ka?" },
-    { "id": "ja-050", "category": "Emergency", "english": "I've lost my passport.", "local": "パスポートを失くしました。", "roman": "Pasupooto o nakushimashita." }
+    {
+      "id": "ja-023",
+      "category": "Emergency",
+      "english": "Help!",
+      "local": "助けてください！",
+      "roman": "Tasukete kudasai!",
+      "translations": {
+        "en": "Help!",
+        "fr": "A l'aide !",
+        "es": "Ayuda!"
+      }
+    },
+    {
+      "id": "ja-024",
+      "category": "Emergency",
+      "english": "Please call the police.",
+      "local": "警察を呼んでください。",
+      "roman": "Keisatsu o yonde kudasai.",
+      "translations": {
+        "en": "Please call the police.",
+        "fr": "Veuillez appeler la police.",
+        "es": "Llame a la policia, por favor."
+      }
+    },
+    {
+      "id": "ja-025",
+      "category": "Emergency",
+      "english": "I need a doctor.",
+      "local": "医者が必要です。",
+      "roman": "Isha ga hitsuyou desu.",
+      "translations": {
+        "en": "I need a doctor.",
+        "fr": "J'ai besoin d'un medecin.",
+        "es": "Necesito un medico."
+      }
+    },
+    {
+      "id": "ja-026",
+      "category": "General",
+      "english": "Where is the toilet?",
+      "local": "トイレはどこですか？",
+      "roman": "Toire wa doko desu ka?",
+      "translations": {
+        "en": "Where is the toilet?",
+        "fr": "Ou sont les toilettes ?",
+        "es": "Donde esta el bano?"
+      }
+    },
+    {
+      "id": "ja-027",
+      "category": "General",
+      "english": "Hello.",
+      "local": "こんにちは。",
+      "roman": "Konnichiwa.",
+      "translations": {
+        "en": "Hello.",
+        "fr": "Bonjour.",
+        "es": "Hola."
+      }
+    },
+    {
+      "id": "ja-028",
+      "category": "General",
+      "english": "Good morning.",
+      "local": "おはようございます。",
+      "roman": "Ohayou gozaimasu.",
+      "translations": {
+        "en": "Good morning.",
+        "fr": "Bonjour.",
+        "es": "Buenos dias."
+      }
+    },
+    {
+      "id": "ja-029",
+      "category": "General",
+      "english": "Yes.",
+      "local": "はい。",
+      "roman": "Hai.",
+      "translations": {
+        "en": "Yes.",
+        "fr": "Oui.",
+        "es": "Si."
+      }
+    },
+    {
+      "id": "ja-030",
+      "category": "General",
+      "english": "No.",
+      "local": "いいえ。",
+      "roman": "Iie.",
+      "translations": {
+        "en": "No.",
+        "fr": "Non.",
+        "es": "No."
+      }
+    },
+    {
+      "id": "ja-031",
+      "category": "General",
+      "english": "I don't understand.",
+      "local": "わかりません。",
+      "roman": "Wakarimasen.",
+      "translations": {
+        "en": "I don't understand.",
+        "fr": "Je ne comprends pas.",
+        "es": "No entiendo."
+      }
+    },
+    {
+      "id": "ja-032",
+      "category": "General",
+      "english": "Can you write it down?",
+      "local": "書いてもらえますか？",
+      "roman": "Kaite moraemasu ka?",
+      "translations": {
+        "en": "Can you write it down?",
+        "fr": "Pouvez-vous l'ecrire ?",
+        "es": "Puede escribirlo?"
+      }
+    },
+    {
+      "id": "ja-033",
+      "category": "General",
+      "english": "Can you show me?",
+      "local": "見せてもらえますか？",
+      "roman": "Misete moraemasu ka?",
+      "translations": {
+        "en": "Can you show me?",
+        "fr": "Pouvez-vous me montrer ?",
+        "es": "Me puede mostrar?"
+      }
+    },
+    {
+      "id": "ja-034",
+      "category": "Transport",
+      "english": "Where is the airport?",
+      "local": "空港はどこですか？",
+      "roman": "Kuukou wa doko desu ka?",
+      "translations": {
+        "en": "Where is the airport?",
+        "fr": "Ou est l'aeroport ?",
+        "es": "Donde esta el aeropuerto?"
+      }
+    },
+    {
+      "id": "ja-035",
+      "category": "Transport",
+      "english": "How do I get to...?",
+      "local": "…はどうやって行けばいいですか？",
+      "roman": "...wa douyatte ikeba ii desu ka?",
+      "translations": {
+        "en": "How do I get to...?",
+        "fr": "Comment aller a... ?",
+        "es": "Como llego a...?"
+      }
+    },
+    {
+      "id": "ja-036",
+      "category": "Transport",
+      "english": "Turn left.",
+      "local": "左に曲がってください。",
+      "roman": "Hidari ni magatte kudasai.",
+      "translations": {
+        "en": "Turn left.",
+        "fr": "Tournez a gauche.",
+        "es": "Gire a la izquierda."
+      }
+    },
+    {
+      "id": "ja-037",
+      "category": "Transport",
+      "english": "Turn right.",
+      "local": "右に曲がってください。",
+      "roman": "Migi ni magatte kudasai.",
+      "translations": {
+        "en": "Turn right.",
+        "fr": "Tournez a droite.",
+        "es": "Gire a la derecha."
+      }
+    },
+    {
+      "id": "ja-038",
+      "category": "Transport",
+      "english": "Go straight ahead.",
+      "local": "まっすぐ行ってください。",
+      "roman": "Massugu itte kudasai.",
+      "translations": {
+        "en": "Go straight ahead.",
+        "fr": "Allez tout droit.",
+        "es": "Siga recto."
+      }
+    },
+    {
+      "id": "ja-039",
+      "category": "Food",
+      "english": "The bill, please.",
+      "local": "お会計をお願いします。",
+      "roman": "Okaikei o onegaishimasu.",
+      "translations": {
+        "en": "The bill, please.",
+        "fr": "L'addition, s'il vous plait.",
+        "es": "La cuenta, por favor."
+      }
+    },
+    {
+      "id": "ja-040",
+      "category": "Food",
+      "english": "I'm allergic to nuts.",
+      "local": "ナッツアレルギーがあります。",
+      "roman": "Nattsu arerugii ga arimasu.",
+      "translations": {
+        "en": "I'm allergic to nuts.",
+        "fr": "Je suis allergique aux noix.",
+        "es": "Soy alergico a los frutos secos."
+      }
+    },
+    {
+      "id": "ja-041",
+      "category": "Food",
+      "english": "I'm allergic to shellfish.",
+      "local": "貝類アレルギーがあります。",
+      "roman": "Kairui arerugii ga arimasu.",
+      "translations": {
+        "en": "I'm allergic to shellfish.",
+        "fr": "Je suis allergique aux fruits de mer.",
+        "es": "Soy alergico al marisco."
+      }
+    },
+    {
+      "id": "ja-042",
+      "category": "Food",
+      "english": "No dairy, please.",
+      "local": "乳製品なしでお願いします。",
+      "roman": "Nyuuseihin nashi de onegaishimasu.",
+      "translations": {
+        "en": "No dairy, please.",
+        "fr": "Sans produits laitiers, s'il vous plait.",
+        "es": "Sin lacteos, por favor."
+      }
+    },
+    {
+      "id": "ja-043",
+      "category": "Cafe",
+      "english": "To go, please.",
+      "local": "テイクアウトでお願いします。",
+      "roman": "Teikauto de onegaishimasu.",
+      "translations": {
+        "en": "To go, please.",
+        "fr": "A emporter, s'il vous plait.",
+        "es": "Para llevar, por favor."
+      }
+    },
+    {
+      "id": "ja-044",
+      "category": "Hotel",
+      "english": "What is the WiFi password?",
+      "local": "ワイファイのパスワードは何ですか？",
+      "roman": "Waifai no pasuwaado wa nan desu ka?",
+      "translations": {
+        "en": "What is the WiFi password?",
+        "fr": "Quel est le mot de passe Wi-Fi ?",
+        "es": "Cual es la contrasena de Wi-Fi?"
+      }
+    },
+    {
+      "id": "ja-045",
+      "category": "Hotel",
+      "english": "What time is checkout?",
+      "local": "チェックアウトは何時ですか？",
+      "roman": "Chekkuauto wa nanji desu ka?",
+      "translations": {
+        "en": "What time is checkout?",
+        "fr": "A quelle heure est le depart ?",
+        "es": "A que hora es el check-out?"
+      }
+    },
+    {
+      "id": "ja-046",
+      "category": "Shopping",
+      "english": "I'm just looking, thank you.",
+      "local": "見ているだけです。ありがとうございます。",
+      "roman": "Mite iru dake desu. Arigatou gozaimasu.",
+      "translations": {
+        "en": "I'm just looking, thank you.",
+        "fr": "Je regarde seulement, merci.",
+        "es": "Solo estoy mirando, gracias."
+      }
+    },
+    {
+      "id": "ja-047",
+      "category": "Shopping",
+      "english": "Do you have a smaller size?",
+      "local": "もっと小さいサイズはありますか？",
+      "roman": "Motto chiisai saizu wa arimasu ka?",
+      "translations": {
+        "en": "Do you have a smaller size?",
+        "fr": "Avez-vous une taille plus petite ?",
+        "es": "Tiene una talla mas pequena?"
+      }
+    },
+    {
+      "id": "ja-048",
+      "category": "Emergency",
+      "english": "Please call an ambulance.",
+      "local": "救急車を呼んでください。",
+      "roman": "Kyuukyuusha o yonde kudasai.",
+      "translations": {
+        "en": "Please call an ambulance.",
+        "fr": "Veuillez appeler une ambulance.",
+        "es": "Llame a una ambulancia, por favor."
+      }
+    },
+    {
+      "id": "ja-049",
+      "category": "Emergency",
+      "english": "Where is a pharmacy?",
+      "local": "薬局はどこですか？",
+      "roman": "Yakkyoku wa doko desu ka?",
+      "translations": {
+        "en": "Where is a pharmacy?",
+        "fr": "Ou est une pharmacie ?",
+        "es": "Donde hay una farmacia?"
+      }
+    },
+    {
+      "id": "ja-050",
+      "category": "Emergency",
+      "english": "I've lost my passport.",
+      "local": "パスポートを失くしました。",
+      "roman": "Pasupooto o nakushimashita.",
+      "translations": {
+        "en": "I've lost my passport.",
+        "fr": "J'ai perdu mon passeport.",
+        "es": "He perdido mi pasaporte."
+      }
+    }
   ]
 }

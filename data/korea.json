@@ -10,7 +10,13 @@
       "title": "Greetings & Politeness",
       "description": "Essential greetings and courteous expressions.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-027", "ko-028", "ko-003", "ko-004", "ko-005"]
+      "phraseIds": [
+        "ko-027",
+        "ko-028",
+        "ko-003",
+        "ko-004",
+        "ko-005"
+      ]
     },
     {
       "id": "ko-l02",
@@ -18,7 +24,13 @@
       "title": "Basic Conversation",
       "description": "Simple replies for everyday back-and-forth.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-001", "ko-002", "ko-029", "ko-030", "ko-031"]
+      "phraseIds": [
+        "ko-001",
+        "ko-002",
+        "ko-029",
+        "ko-030",
+        "ko-031"
+      ]
     },
     {
       "id": "ko-l03",
@@ -26,7 +38,13 @@
       "title": "Everyday Essentials",
       "description": "Helpful phrases for toilets, writing, showing, and simple requests.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-026", "ko-032", "ko-033", "ko-006", "ko-007"]
+      "phraseIds": [
+        "ko-026",
+        "ko-032",
+        "ko-033",
+        "ko-006",
+        "ko-007"
+      ]
     },
     {
       "id": "ko-l04",
@@ -34,7 +52,13 @@
       "title": "Getting Around & Finding Places",
       "description": "Ask for stations, directions, and exact destinations.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-013", "ko-034", "ko-035", "ko-016", "ko-049"]
+      "phraseIds": [
+        "ko-013",
+        "ko-034",
+        "ko-035",
+        "ko-016",
+        "ko-049"
+      ]
     },
     {
       "id": "ko-l05",
@@ -42,7 +66,13 @@
       "title": "Trains, Taxis & Directions",
       "description": "Move smoothly by rail, taxi, and street directions.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-014", "ko-015", "ko-036", "ko-037", "ko-038"]
+      "phraseIds": [
+        "ko-014",
+        "ko-015",
+        "ko-036",
+        "ko-037",
+        "ko-038"
+      ]
     },
     {
       "id": "ko-l06",
@@ -50,7 +80,13 @@
       "title": "Restaurants & Cafés",
       "description": "Order food and drinks with confidence.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-011", "ko-012", "ko-043", "ko-039", "ko-008"]
+      "phraseIds": [
+        "ko-011",
+        "ko-012",
+        "ko-043",
+        "ko-039",
+        "ko-008"
+      ]
     },
     {
       "id": "ko-l07",
@@ -58,7 +94,13 @@
       "title": "Dietary Needs",
       "description": "Clearly explain allergies and food restrictions.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-009", "ko-010", "ko-040", "ko-041", "ko-042"]
+      "phraseIds": [
+        "ko-009",
+        "ko-010",
+        "ko-040",
+        "ko-041",
+        "ko-042"
+      ]
     },
     {
       "id": "ko-l08",
@@ -66,7 +108,13 @@
       "title": "Hotels",
       "description": "Handle check-in, requests, and checkout details.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-017", "ko-018", "ko-019", "ko-044", "ko-045"]
+      "phraseIds": [
+        "ko-017",
+        "ko-018",
+        "ko-019",
+        "ko-044",
+        "ko-045"
+      ]
     },
     {
       "id": "ko-l09",
@@ -74,7 +122,13 @@
       "title": "Shopping & Payments",
       "description": "Ask prices, sizes, and payment questions while shopping.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-020", "ko-021", "ko-022", "ko-046", "ko-047"]
+      "phraseIds": [
+        "ko-020",
+        "ko-021",
+        "ko-022",
+        "ko-046",
+        "ko-047"
+      ]
     },
     {
       "id": "ko-l10",
@@ -82,7 +136,13 @@
       "title": "Emergencies & Essential Help",
       "description": "Get urgent help and ask for critical assistance fast.",
       "estimatedMinutes": 3,
-      "phraseIds": ["ko-023", "ko-024", "ko-025", "ko-048", "ko-050"]
+      "phraseIds": [
+        "ko-023",
+        "ko-024",
+        "ko-025",
+        "ko-048",
+        "ko-050"
+      ]
     }
   ],
   "phrases": [
@@ -91,182 +151,600 @@
       "category": "General",
       "english": "I don't speak Korean. Do you speak English?",
       "local": "한국어를 못해요. 영어 하세요?",
-      "roman": "Hangugeoreul mothaeyo. Yeongeo haseyo?"
+      "roman": "Hangugeoreul mothaeyo. Yeongeo haseyo?",
+      "translations": {
+        "en": "I don't speak Korean. Do you speak English?",
+        "fr": "Je ne parle pas coreen. Parlez-vous anglais ?",
+        "es": "No hablo coreano. Habla ingles?"
+      }
     },
     {
       "id": "ko-002",
       "category": "General",
       "english": "Please speak slowly.",
       "local": "천천히 말해 주세요.",
-      "roman": "Cheoncheonhi malhae juseyo."
+      "roman": "Cheoncheonhi malhae juseyo.",
+      "translations": {
+        "en": "Please speak slowly.",
+        "fr": "Parlez lentement, s'il vous plait.",
+        "es": "Hable despacio, por favor."
+      }
     },
     {
       "id": "ko-003",
       "category": "General",
       "english": "Thank you.",
       "local": "감사합니다.",
-      "roman": "Gamsahamnida."
+      "roman": "Gamsahamnida.",
+      "translations": {
+        "en": "Thank you.",
+        "fr": "Merci.",
+        "es": "Gracias."
+      }
     },
     {
       "id": "ko-004",
       "category": "General",
       "english": "Excuse me.",
       "local": "실례합니다.",
-      "roman": "Sillyehamnida."
+      "roman": "Sillyehamnida.",
+      "translations": {
+        "en": "Excuse me.",
+        "fr": "Excusez-moi.",
+        "es": "Perdon."
+      }
     },
     {
       "id": "ko-005",
       "category": "General",
       "english": "I'm sorry.",
       "local": "죄송합니다.",
-      "roman": "Joesonghamnida."
+      "roman": "Joesonghamnida.",
+      "translations": {
+        "en": "I'm sorry.",
+        "fr": "Je suis desole.",
+        "es": "Lo siento."
+      }
     },
     {
       "id": "ko-006",
       "category": "Food",
       "english": "A bottle of water, please.",
       "local": "물 한 병 주세요.",
-      "roman": "Mul han byeong juseyo."
+      "roman": "Mul han byeong juseyo.",
+      "translations": {
+        "en": "A bottle of water, please.",
+        "fr": "Une bouteille d'eau, s'il vous plait.",
+        "es": "Una botella de agua, por favor."
+      }
     },
     {
       "id": "ko-007",
       "category": "Food",
       "english": "This one, please.",
       "local": "이거 주세요.",
-      "roman": "Igeo juseyo."
+      "roman": "Igeo juseyo.",
+      "translations": {
+        "en": "This one, please.",
+        "fr": "Celui-ci, s'il vous plait.",
+        "es": "Este, por favor."
+      }
     },
     {
       "id": "ko-008",
       "category": "Food",
       "english": "Can we pay by card?",
       "local": "카드로 결제할 수 있어요?",
-      "roman": "Kadeuro gyeoljehal su isseoyo?"
+      "roman": "Kadeuro gyeoljehal su isseoyo?",
+      "translations": {
+        "en": "Can we pay by card?",
+        "fr": "Peut-on payer par carte ?",
+        "es": "Podemos pagar con tarjeta?"
+      }
     },
     {
       "id": "ko-009",
       "category": "Food",
       "english": "Not spicy, please.",
       "local": "안 맵게 해 주세요.",
-      "roman": "An maepge hae juseyo."
+      "roman": "An maepge hae juseyo.",
+      "translations": {
+        "en": "Not spicy, please.",
+        "fr": "Pas epice, s'il vous plait.",
+        "es": "No picante, por favor."
+      }
     },
     {
       "id": "ko-010",
       "category": "Food",
       "english": "Do you have a vegetarian option?",
       "local": "채식 메뉴가 있어요?",
-      "roman": "Chaesik menyuga isseoyo?"
+      "roman": "Chaesik menyuga isseoyo?",
+      "translations": {
+        "en": "Do you have a vegetarian option?",
+        "fr": "Avez-vous une option vegetarienne ?",
+        "es": "Tiene opcion vegetariana?"
+      }
     },
     {
       "id": "ko-011",
       "category": "Cafe",
       "english": "One iced Americano, please.",
       "local": "아이스 아메리카노 한 잔 주세요.",
-      "roman": "Aiseu amerikano han jan juseyo."
+      "roman": "Aiseu amerikano han jan juseyo.",
+      "translations": {
+        "en": "One iced Americano, please.",
+        "fr": "Un Americano glace, s'il vous plait.",
+        "es": "Un americano helado, por favor."
+      }
     },
     {
       "id": "ko-012",
       "category": "Cafe",
       "english": "For here, please.",
       "local": "먹고 갈게요.",
-      "roman": "Meokgo galgeyo."
+      "roman": "Meokgo galgeyo.",
+      "translations": {
+        "en": "For here, please.",
+        "fr": "Sur place, s'il vous plait.",
+        "es": "Para aqui, por favor."
+      }
     },
     {
       "id": "ko-013",
       "category": "Transport",
       "english": "Where is the subway station?",
       "local": "지하철역이 어디예요?",
-      "roman": "Jihacheolyeogi eodiyeyo?"
+      "roman": "Jihacheolyeogi eodiyeyo?",
+      "translations": {
+        "en": "Where is the subway station?",
+        "fr": "Ou est la station de metro ?",
+        "es": "Donde esta la estacion de metro?"
+      }
     },
     {
       "id": "ko-014",
       "category": "Transport",
       "english": "Which platform is it?",
       "local": "몇 번 승강장이에요?",
-      "roman": "Myeot beon seunggangjangieyo?"
+      "roman": "Myeot beon seunggangjangieyo?",
+      "translations": {
+        "en": "Which platform is it?",
+        "fr": "Quel quai ?",
+        "es": "Que anden es?"
+      }
     },
     {
       "id": "ko-015",
       "category": "Transport",
       "english": "Does this train go to Seoul Station?",
       "local": "이 열차가 서울역에 가요?",
-      "roman": "I yeolchaga Seoulyeoge gayo?"
+      "roman": "I yeolchaga Seoulyeoge gayo?",
+      "translations": {
+        "en": "Does this train go to Seoul Station?",
+        "fr": "Ce train va-t-il a la gare de Seoul ?",
+        "es": "Este tren va a la estacion de Seul?"
+      }
     },
     {
       "id": "ko-016",
       "category": "Transport",
       "english": "Please take me here.",
       "local": "여기로 가 주세요.",
-      "roman": "Yeogiro ga juseyo."
+      "roman": "Yeogiro ga juseyo.",
+      "translations": {
+        "en": "Please take me here.",
+        "fr": "Emmenez-moi ici, s'il vous plait.",
+        "es": "Lleveme aqui, por favor."
+      }
     },
     {
       "id": "ko-017",
       "category": "Hotel",
       "english": "I have a reservation.",
       "local": "예약했어요.",
-      "roman": "Yeyakhaesseoyo."
+      "roman": "Yeyakhaesseoyo.",
+      "translations": {
+        "en": "I have a reservation.",
+        "fr": "J'ai une reservation.",
+        "es": "Tengo una reserva."
+      }
     },
     {
       "id": "ko-018",
       "category": "Hotel",
       "english": "Can I leave my luggage here?",
       "local": "짐을 여기 맡길 수 있어요?",
-      "roman": "Jimeul yeogi matgil su isseoyo?"
+      "roman": "Jimeul yeogi matgil su isseoyo?",
+      "translations": {
+        "en": "Can I leave my luggage here?",
+        "fr": "Puis-je laisser mes bagages ici ?",
+        "es": "Puedo dejar mi equipaje aqui?"
+      }
     },
     {
       "id": "ko-019",
       "category": "Hotel",
       "english": "Could I get another towel?",
       "local": "수건 하나 더 주세요.",
-      "roman": "Sugeon hana deo juseyo."
+      "roman": "Sugeon hana deo juseyo.",
+      "translations": {
+        "en": "Could I get another towel?",
+        "fr": "Puis-je avoir une autre serviette ?",
+        "es": "Me puede dar otra toalla?"
+      }
     },
     {
       "id": "ko-020",
       "category": "Shopping",
       "english": "How much is this?",
       "local": "이거 얼마예요?",
-      "roman": "Igeo eolmayeyo?"
+      "roman": "Igeo eolmayeyo?",
+      "translations": {
+        "en": "How much is this?",
+        "fr": "Combien ca coute ?",
+        "es": "Cuanto cuesta esto?"
+      }
     },
     {
       "id": "ko-021",
       "category": "Shopping",
       "english": "Do you have a larger size?",
       "local": "더 큰 사이즈 있어요?",
-      "roman": "Deo keun saijeu isseoyo?"
+      "roman": "Deo keun saijeu isseoyo?",
+      "translations": {
+        "en": "Do you have a larger size?",
+        "fr": "Avez-vous une taille plus grande ?",
+        "es": "Tiene una talla mas grande?"
+      }
     },
     {
       "id": "ko-022",
       "category": "Shopping",
       "english": "Can I get a tax refund?",
       "local": "택스 리펀드 돼요?",
-      "roman": "Taekseu ripeondeu dwaeyo?"
+      "roman": "Taekseu ripeondeu dwaeyo?",
+      "translations": {
+        "en": "Can I get a tax refund?",
+        "fr": "Puis-je obtenir un remboursement de taxe ?",
+        "es": "Puedo obtener devolucion de impuestos?"
+      }
     },
-    { "id": "ko-023", "category": "Emergency", "english": "Help!", "local": "도와주세요!", "roman": "Dowajuseyo!" },
-    { "id": "ko-024", "category": "Emergency", "english": "Please call the police.", "local": "경찰을 불러 주세요.", "roman": "Gyeongchareul bulleo juseyo." },
-    { "id": "ko-025", "category": "Emergency", "english": "I need a doctor.", "local": "의사가 필요해요.", "roman": "Uisaga piryohaeyo." },
-    { "id": "ko-026", "category": "General", "english": "Where is the toilet?", "local": "화장실이 어디예요?", "roman": "Hwajangsiri eodiyeyo?" },
-    { "id": "ko-027", "category": "General", "english": "Hello.", "local": "안녕하세요.", "roman": "Annyeonghaseyo." },
-    { "id": "ko-028", "category": "General", "english": "Goodbye.", "local": "안녕히 계세요.", "roman": "Annyeonghi gyeseyo." },
-    { "id": "ko-029", "category": "General", "english": "Yes.", "local": "네.", "roman": "Ne." },
-    { "id": "ko-030", "category": "General", "english": "No.", "local": "아니요.", "roman": "Aniyo." },
-    { "id": "ko-031", "category": "General", "english": "I don't understand.", "local": "잘 모르겠어요.", "roman": "Jal moreugesseoyo." },
-    { "id": "ko-032", "category": "General", "english": "Can you write it down?", "local": "써 주실 수 있어요?", "roman": "Sseo jusil su isseoyo?" },
-    { "id": "ko-033", "category": "General", "english": "Can you show me?", "local": "가리켜 주실 수 있어요?", "roman": "Garikyeo jusil su isseoyo?" },
-    { "id": "ko-034", "category": "Transport", "english": "Where is the airport?", "local": "공항이 어디예요?", "roman": "Gonghang-i eodiyeyo?" },
-    { "id": "ko-035", "category": "Transport", "english": "How do I get to...?", "local": "…에 어떻게 가요?", "roman": "...e eotteoke gayo?" },
-    { "id": "ko-036", "category": "Transport", "english": "Turn left.", "local": "좌회전해 주세요.", "roman": "Jwahoejeonhae juseyo." },
-    { "id": "ko-037", "category": "Transport", "english": "Turn right.", "local": "우회전해 주세요.", "roman": "Uhoejeonhae juseyo." },
-    { "id": "ko-038", "category": "Transport", "english": "Go straight ahead.", "local": "직진해 주세요.", "roman": "Jikjinhae juseyo." },
-    { "id": "ko-039", "category": "Food", "english": "The bill, please.", "local": "계산해 주세요.", "roman": "Gyesanhae juseyo." },
-    { "id": "ko-040", "category": "Food", "english": "I'm allergic to nuts.", "local": "견과류 알레르기가 있어요.", "roman": "Gyeongwaryu allereugi-ga isseoyo." },
-    { "id": "ko-041", "category": "Food", "english": "I'm allergic to shellfish.", "local": "조개류 알레르기가 있어요.", "roman": "Jogaeryu allereugi-ga isseoyo." },
-    { "id": "ko-042", "category": "Food", "english": "No dairy, please.", "local": "유제품 없이 해 주세요.", "roman": "Yujepum eopsi hae juseyo." },
-    { "id": "ko-043", "category": "Cafe", "english": "To go, please.", "local": "가져갈게요.", "roman": "Gajyeogalgeyo." },
-    { "id": "ko-044", "category": "Hotel", "english": "What is the WiFi password?", "local": "와이파이 비밀번호가 뭐예요?", "roman": "Waipai bimilbeonhoga mwoyeyo?" },
-    { "id": "ko-045", "category": "Hotel", "english": "What time is checkout?", "local": "체크아웃이 몇 시예요?", "roman": "Chekeuausi myeot siyeyo?" },
-    { "id": "ko-046", "category": "Shopping", "english": "I'm just looking, thank you.", "local": "그냥 구경하는 거예요. 감사해요.", "roman": "Geunyang gugyeonghaneun geoyeyo. Gamsahaeyo." },
-    { "id": "ko-047", "category": "Shopping", "english": "Do you have a smaller size?", "local": "더 작은 사이즈 있어요?", "roman": "Deo jageun saijeu isseoyo?" },
-    { "id": "ko-048", "category": "Emergency", "english": "Please call an ambulance.", "local": "구급차를 불러 주세요.", "roman": "Gugeupcareul bulleo juseyo." },
-    { "id": "ko-049", "category": "Emergency", "english": "Where is a pharmacy?", "local": "약국이 어디예요?", "roman": "Yakgugi eodiyeyo?" },
-    { "id": "ko-050", "category": "Emergency", "english": "I've lost my passport.", "local": "여권을 잃어버렸어요.", "roman": "Yeogwoneul ireobeoryeosseoyo." }
+    {
+      "id": "ko-023",
+      "category": "Emergency",
+      "english": "Help!",
+      "local": "도와주세요!",
+      "roman": "Dowajuseyo!",
+      "translations": {
+        "en": "Help!",
+        "fr": "A l'aide !",
+        "es": "Ayuda!"
+      }
+    },
+    {
+      "id": "ko-024",
+      "category": "Emergency",
+      "english": "Please call the police.",
+      "local": "경찰을 불러 주세요.",
+      "roman": "Gyeongchareul bulleo juseyo.",
+      "translations": {
+        "en": "Please call the police.",
+        "fr": "Veuillez appeler la police.",
+        "es": "Llame a la policia, por favor."
+      }
+    },
+    {
+      "id": "ko-025",
+      "category": "Emergency",
+      "english": "I need a doctor.",
+      "local": "의사가 필요해요.",
+      "roman": "Uisaga piryohaeyo.",
+      "translations": {
+        "en": "I need a doctor.",
+        "fr": "J'ai besoin d'un medecin.",
+        "es": "Necesito un medico."
+      }
+    },
+    {
+      "id": "ko-026",
+      "category": "General",
+      "english": "Where is the toilet?",
+      "local": "화장실이 어디예요?",
+      "roman": "Hwajangsiri eodiyeyo?",
+      "translations": {
+        "en": "Where is the toilet?",
+        "fr": "Ou sont les toilettes ?",
+        "es": "Donde esta el bano?"
+      }
+    },
+    {
+      "id": "ko-027",
+      "category": "General",
+      "english": "Hello.",
+      "local": "안녕하세요.",
+      "roman": "Annyeonghaseyo.",
+      "translations": {
+        "en": "Hello.",
+        "fr": "Bonjour.",
+        "es": "Hola."
+      }
+    },
+    {
+      "id": "ko-028",
+      "category": "General",
+      "english": "Goodbye.",
+      "local": "안녕히 계세요.",
+      "roman": "Annyeonghi gyeseyo.",
+      "translations": {
+        "en": "Goodbye.",
+        "fr": "Au revoir.",
+        "es": "Adios."
+      }
+    },
+    {
+      "id": "ko-029",
+      "category": "General",
+      "english": "Yes.",
+      "local": "네.",
+      "roman": "Ne.",
+      "translations": {
+        "en": "Yes.",
+        "fr": "Oui.",
+        "es": "Si."
+      }
+    },
+    {
+      "id": "ko-030",
+      "category": "General",
+      "english": "No.",
+      "local": "아니요.",
+      "roman": "Aniyo.",
+      "translations": {
+        "en": "No.",
+        "fr": "Non.",
+        "es": "No."
+      }
+    },
+    {
+      "id": "ko-031",
+      "category": "General",
+      "english": "I don't understand.",
+      "local": "잘 모르겠어요.",
+      "roman": "Jal moreugesseoyo.",
+      "translations": {
+        "en": "I don't understand.",
+        "fr": "Je ne comprends pas.",
+        "es": "No entiendo."
+      }
+    },
+    {
+      "id": "ko-032",
+      "category": "General",
+      "english": "Can you write it down?",
+      "local": "써 주실 수 있어요?",
+      "roman": "Sseo jusil su isseoyo?",
+      "translations": {
+        "en": "Can you write it down?",
+        "fr": "Pouvez-vous l'ecrire ?",
+        "es": "Puede escribirlo?"
+      }
+    },
+    {
+      "id": "ko-033",
+      "category": "General",
+      "english": "Can you show me?",
+      "local": "가리켜 주실 수 있어요?",
+      "roman": "Garikyeo jusil su isseoyo?",
+      "translations": {
+        "en": "Can you show me?",
+        "fr": "Pouvez-vous me montrer ?",
+        "es": "Me puede mostrar?"
+      }
+    },
+    {
+      "id": "ko-034",
+      "category": "Transport",
+      "english": "Where is the airport?",
+      "local": "공항이 어디예요?",
+      "roman": "Gonghang-i eodiyeyo?",
+      "translations": {
+        "en": "Where is the airport?",
+        "fr": "Ou est l'aeroport ?",
+        "es": "Donde esta el aeropuerto?"
+      }
+    },
+    {
+      "id": "ko-035",
+      "category": "Transport",
+      "english": "How do I get to...?",
+      "local": "…에 어떻게 가요?",
+      "roman": "...e eotteoke gayo?",
+      "translations": {
+        "en": "How do I get to...?",
+        "fr": "Comment aller a... ?",
+        "es": "Como llego a...?"
+      }
+    },
+    {
+      "id": "ko-036",
+      "category": "Transport",
+      "english": "Turn left.",
+      "local": "좌회전해 주세요.",
+      "roman": "Jwahoejeonhae juseyo.",
+      "translations": {
+        "en": "Turn left.",
+        "fr": "Tournez a gauche.",
+        "es": "Gire a la izquierda."
+      }
+    },
+    {
+      "id": "ko-037",
+      "category": "Transport",
+      "english": "Turn right.",
+      "local": "우회전해 주세요.",
+      "roman": "Uhoejeonhae juseyo.",
+      "translations": {
+        "en": "Turn right.",
+        "fr": "Tournez a droite.",
+        "es": "Gire a la derecha."
+      }
+    },
+    {
+      "id": "ko-038",
+      "category": "Transport",
+      "english": "Go straight ahead.",
+      "local": "직진해 주세요.",
+      "roman": "Jikjinhae juseyo.",
+      "translations": {
+        "en": "Go straight ahead.",
+        "fr": "Allez tout droit.",
+        "es": "Siga recto."
+      }
+    },
+    {
+      "id": "ko-039",
+      "category": "Food",
+      "english": "The bill, please.",
+      "local": "계산해 주세요.",
+      "roman": "Gyesanhae juseyo.",
+      "translations": {
+        "en": "The bill, please.",
+        "fr": "L'addition, s'il vous plait.",
+        "es": "La cuenta, por favor."
+      }
+    },
+    {
+      "id": "ko-040",
+      "category": "Food",
+      "english": "I'm allergic to nuts.",
+      "local": "견과류 알레르기가 있어요.",
+      "roman": "Gyeongwaryu allereugi-ga isseoyo.",
+      "translations": {
+        "en": "I'm allergic to nuts.",
+        "fr": "Je suis allergique aux noix.",
+        "es": "Soy alergico a los frutos secos."
+      }
+    },
+    {
+      "id": "ko-041",
+      "category": "Food",
+      "english": "I'm allergic to shellfish.",
+      "local": "조개류 알레르기가 있어요.",
+      "roman": "Jogaeryu allereugi-ga isseoyo.",
+      "translations": {
+        "en": "I'm allergic to shellfish.",
+        "fr": "Je suis allergique aux fruits de mer.",
+        "es": "Soy alergico al marisco."
+      }
+    },
+    {
+      "id": "ko-042",
+      "category": "Food",
+      "english": "No dairy, please.",
+      "local": "유제품 없이 해 주세요.",
+      "roman": "Yujepum eopsi hae juseyo.",
+      "translations": {
+        "en": "No dairy, please.",
+        "fr": "Sans produits laitiers, s'il vous plait.",
+        "es": "Sin lacteos, por favor."
+      }
+    },
+    {
+      "id": "ko-043",
+      "category": "Cafe",
+      "english": "To go, please.",
+      "local": "가져갈게요.",
+      "roman": "Gajyeogalgeyo.",
+      "translations": {
+        "en": "To go, please.",
+        "fr": "A emporter, s'il vous plait.",
+        "es": "Para llevar, por favor."
+      }
+    },
+    {
+      "id": "ko-044",
+      "category": "Hotel",
+      "english": "What is the WiFi password?",
+      "local": "와이파이 비밀번호가 뭐예요?",
+      "roman": "Waipai bimilbeonhoga mwoyeyo?",
+      "translations": {
+        "en": "What is the WiFi password?",
+        "fr": "Quel est le mot de passe Wi-Fi ?",
+        "es": "Cual es la contrasena de Wi-Fi?"
+      }
+    },
+    {
+      "id": "ko-045",
+      "category": "Hotel",
+      "english": "What time is checkout?",
+      "local": "체크아웃이 몇 시예요?",
+      "roman": "Chekeuausi myeot siyeyo?",
+      "translations": {
+        "en": "What time is checkout?",
+        "fr": "A quelle heure est le depart ?",
+        "es": "A que hora es el check-out?"
+      }
+    },
+    {
+      "id": "ko-046",
+      "category": "Shopping",
+      "english": "I'm just looking, thank you.",
+      "local": "그냥 구경하는 거예요. 감사해요.",
+      "roman": "Geunyang gugyeonghaneun geoyeyo. Gamsahaeyo.",
+      "translations": {
+        "en": "I'm just looking, thank you.",
+        "fr": "Je regarde seulement, merci.",
+        "es": "Solo estoy mirando, gracias."
+      }
+    },
+    {
+      "id": "ko-047",
+      "category": "Shopping",
+      "english": "Do you have a smaller size?",
+      "local": "더 작은 사이즈 있어요?",
+      "roman": "Deo jageun saijeu isseoyo?",
+      "translations": {
+        "en": "Do you have a smaller size?",
+        "fr": "Avez-vous une taille plus petite ?",
+        "es": "Tiene una talla mas pequena?"
+      }
+    },
+    {
+      "id": "ko-048",
+      "category": "Emergency",
+      "english": "Please call an ambulance.",
+      "local": "구급차를 불러 주세요.",
+      "roman": "Gugeupcareul bulleo juseyo.",
+      "translations": {
+        "en": "Please call an ambulance.",
+        "fr": "Veuillez appeler une ambulance.",
+        "es": "Llame a una ambulancia, por favor."
+      }
+    },
+    {
+      "id": "ko-049",
+      "category": "Emergency",
+      "english": "Where is a pharmacy?",
+      "local": "약국이 어디예요?",
+      "roman": "Yakgugi eodiyeyo?",
+      "translations": {
+        "en": "Where is a pharmacy?",
+        "fr": "Ou est une pharmacie ?",
+        "es": "Donde hay una farmacia?"
+      }
+    },
+    {
+      "id": "ko-050",
+      "category": "Emergency",
+      "english": "I've lost my passport.",
+      "local": "여권을 잃어버렸어요.",
+      "roman": "Yeogwoneul ireobeoryeosseoyo.",
+      "translations": {
+        "en": "I've lost my passport.",
+        "fr": "J'ai perdu mon passeport.",
+        "es": "He perdido mi pasaporte."
+      }
+    }
   ]
 }

@@ -4,6 +4,157 @@ const toast = document.querySelector("#toast");
 const learningProgressKey = "lingogo_learningProgress_v1";
 const publicShareUrl = "https://jjloicfr22.github.io/lingogo/";
 const publicShareText = "Practice essential Japanese and Korean travel phrases, even offline.";
+const uiLanguageKey = "lingogo_uiLanguage";
+
+function normalizeUILanguage(value){
+  return value === "fr" || value === "es" ? value : "en";
+}
+
+const translations = {
+  en: {
+    navHome: "Home", navLearn: "Learn", navShow: "Show", navSaved: "Saved",
+    language: "Language", languageEnglish: "English", languageFrench: "Français", languageSpanish: "Español", languagePanelTitle: "Choose app language", toggleLanguageAria: "Choose app language",
+    brandTagline: "Travel smarter. Speak local.",
+    destinationTitle: "Where are you going?", destinationSubtitle: "Pick a destination and get the right words, right when you need them.",
+    destinationKoreaName: "South Korea", destinationKoreaDesc: "Korean essentials for real travel", destinationJapanName: "Japan", destinationJapanDesc: "Japanese essentials for real travel",
+    countrySubtitle_japan: "Your Japanese travel companion", countrySubtitle_korea: "Your Korean travel companion",
+    homeTitle: "Ready when you are.", homeSubtitle: "Learn before you go. Speak when it matters.",
+    beforeTripTitle: "Before Your Trip", beforeTripDesc: "Learn the essentials in just 10 minutes a day.",
+    duringTripTitle: "During Your Trip", duringTripDesc: "Show phrases instantly and communicate with confidence.",
+    tripReadiness: "Trip readiness", progressSummaryTitle: "Progress Summary", progressMasteredPhrases: "Mastered phrases", progressTotalXP: "Total XP", progressCompletedLessons: "Completed lessons", progressReviewedLessons: "Reviewed lessons", progressDue: "Daily Review due", progressSaved: "Saved phrases",
+    continueLearning: "CONTINUE LEARNING", resumeLessonHint: "Resume your lesson", openDeckHint: "Open the full phrase deck", dailyReviewLabel: "DAILY REVIEW", dailyReviewTitleShort: "Daily Review", fullPhraseDeck: "FULL PHRASE DECK", mustKnowDesc: "Review all 50 essential phrases.", quickQuestions: "10 quick questions", savedPhrases: "Saved Phrases", savedCollectionDesc: "Review your personal collection.", browseBySituation: "Browse by situation", personalCollection: "Your personal phrase collection.",
+    situationModeTitle: "Situation Mode", situationModeDesc: "Eat, travel, shop, stay.",
+    shareTitle: "Share LingoGo", shareDesc: "Send the public app link.", shareAria: "Share LingoGo with a public link", sharePublicUrlLabel: "Public URL", copyLink: "Copy Link",
+    statXP: "XP", statSaved: "Saved", statPhrases: "Phrases",
+    savedToast: "Saved ✓", removedToast: "Removed", copyToast: "Link copied", xpToast: "+{amount} XP",
+    phraseDueOne: "1 phrase due", phraseDueMany: "{count} phrases due", practiceAvailable: "Practice available", noReviewPhrases: "No review phrases yet",
+    moreReviewNow: "More review is available now.", nextReviewSoon: "Your next scheduled review is soon.", nextReviewInOneDay: "Your next scheduled review is in about 1 day.", nextReviewInDays: "Your next scheduled review is in about {days} days.",
+    readLabel_complete: "Essential phrases complete", readLabel_almost: "Almost ready", readLabel_travelReady: "Travel ready", readLabel_footing: "Finding your footing", readLabel_building: "Building the basics", readLabel_starting: "Getting started", phraseSummary: "{mastered} of {total} essential phrases learned",
+    all: "All", showToLocal: "Show to Local", tapToSpeak: "Tap to speak", play: "Play", save: "Save", saved: "Saved", remove: "Remove", reveal: "Reveal", listen: "Listen", again: "Again", gotIt: "Got it",
+    whatAboutToDo: "What are you about to do?", savedEmpty: "Your saved travel phrases will appear here.",
+    reviewTitle: "Daily Review", reviewComplete: "Review complete", reviewEmptyTitle: "Nothing to review yet", reviewEmptyCopy: "Complete your first lesson or explore Must Know 50 to build your review list.",
+    startLessonOne: "Start Lesson 1", openMustKnow: "Open Must Know 50", backToBefore: "Back to Before", reviewAgain: "Review Again",
+    notQuite: "Not quite - the correct answer is:", correctMark: "Correct!", quiz: "Quiz", quizComplete: "Quiz Complete", yourScore: "Your Score", tryAgain: "Try Again", backToLearning: "Back to Learning", seeResults: "See Results", nextQuestion: "Next Question", endQuiz: "End Quiz", quizNotEnough: "Not enough phrases for quiz",
+    perfect: "Perfect!", excellent: "Excellent!", greatJob: "Great job!", goodEffort: "Good effort!", keepPracticing: "Keep practicing!",
+    mustKnow50: "Must Know 50", lessonUnavailable: "Lesson unavailable.",
+    lessonProgress: "{current} of {total}", lessonLabel: "Lesson {order}", lessonTime: "{minutes} min",
+    lessonMastered: "Mastered", lessonReviewed: "Reviewed", lessonMasteredCount: "{count}/5 mastered", lessonResumeAt: "Resume at {index}/5",
+    xpEarnedInline: "+{amount} XP earned", replayLesson: "Replay Lesson", backToLessons: "Back to Lessons",
+    reviewUniqueCount: "{count} unique phrases reviewed", reviewCardEncounters: "{count} card encounters",
+    beforeReadyCount: "You have {count} phrases ready to practice.", beforeMetaProgress: "{xp} XP earned · {saved} phrase{suffix} saved",
+    lessonListTitle: "Your 10 Lessons", lessonListMeta: "5 phrases · 3 min each", openLessonAria: "Open Lesson {order}, {title}", lessonsUnavailable: "Lessons are not available yet."
+    ,continueLessonLabel: "Continue Lesson {order}", startLessonLabel: "Start Lesson {order}", allLessonsReviewed: "All lessons reviewed", continueDeckDescription: "Continue the full phrase deck.", beginLesson: "Begin the lesson", resumeAtCard: "Resume at card {index}",
+    quizTeaser: "Test what you remember.", phrasesCountLabel: "{count} phrases", savedCountLabel: "{count} saved phrase{suffix}", masteredWithLabel: "{count} mastered · {label}", completedOfTotal: "{completed} of {total}"
+  },
+  fr: {
+    navHome: "Accueil", navLearn: "Apprendre", navShow: "Afficher", navSaved: "Favoris",
+    language: "Langue", languageEnglish: "English", languageFrench: "Français", languageSpanish: "Español", languagePanelTitle: "Choisir la langue", toggleLanguageAria: "Choisir la langue",
+    brandTagline: "Voyagez plus malin. Parlez local.",
+    destinationTitle: "Ou allez-vous ?", destinationSubtitle: "Choisissez une destination et obtenez les bonnes phrases au bon moment.",
+    destinationKoreaName: "Coree du Sud", destinationKoreaDesc: "Essentiels coreens pour voyager", destinationJapanName: "Japon", destinationJapanDesc: "Essentiels japonais pour voyager",
+    countrySubtitle_japan: "Votre compagnon de voyage en japonais", countrySubtitle_korea: "Votre compagnon de voyage en coreen",
+    homeTitle: "Pret quand vous l'etes.", homeSubtitle: "Apprenez avant de partir. Parlez quand c'est important.",
+    beforeTripTitle: "Avant votre voyage", beforeTripDesc: "Apprenez l'essentiel en 10 minutes par jour.",
+    duringTripTitle: "Pendant votre voyage", duringTripDesc: "Affichez des phrases instantanement et communiquez avec confiance.",
+    tripReadiness: "Preparation du voyage", progressSummaryTitle: "Resume", progressMasteredPhrases: "Phrases maitrisees", progressTotalXP: "XP total", progressCompletedLessons: "Lecons terminees", progressReviewedLessons: "Lecons revisees", progressDue: "Revisions du jour", progressSaved: "Phrases favorites",
+    continueLearning: "CONTINUER", resumeLessonHint: "Reprendre votre lecon", openDeckHint: "Ouvrir le pack complet", dailyReviewLabel: "REVISION QUOTIDIENNE", dailyReviewTitleShort: "Revision quotidienne", fullPhraseDeck: "PACK COMPLET", mustKnowDesc: "Revisez les 50 phrases essentielles.", quickQuestions: "10 questions rapides", savedPhrases: "Phrases favorites", savedCollectionDesc: "Revoyez votre collection personnelle.", browseBySituation: "Parcourir par situation", personalCollection: "Votre collection personnelle de phrases.",
+    situationModeTitle: "Mode Situation", situationModeDesc: "Manger, se deplacer, acheter, sejourner.",
+    shareTitle: "Partager LingoGo", shareDesc: "Envoyer le lien public de l'app.", shareAria: "Partager LingoGo", sharePublicUrlLabel: "URL publique", copyLink: "Copier le lien",
+    statXP: "XP", statSaved: "Favoris", statPhrases: "Phrases",
+    savedToast: "Enregistre ✓", removedToast: "Retire", copyToast: "Lien copie", xpToast: "+{amount} XP",
+    phraseDueOne: "1 phrase a reviser", phraseDueMany: "{count} phrases a reviser", practiceAvailable: "Revision disponible", noReviewPhrases: "Aucune phrase de revision",
+    moreReviewNow: "D'autres revisions sont disponibles maintenant.", nextReviewSoon: "Votre prochaine revision est bientot.", nextReviewInOneDay: "Votre prochaine revision est dans environ 1 jour.", nextReviewInDays: "Votre prochaine revision est dans environ {days} jours.",
+    readLabel_complete: "Phrases essentielles completes", readLabel_almost: "Presque pret", readLabel_travelReady: "Pret a voyager", readLabel_footing: "Vous prenez vos reperes", readLabel_building: "Bases en cours", readLabel_starting: "Demarrage", phraseSummary: "{mastered} sur {total} phrases essentielles apprises",
+    all: "Tout", showToLocal: "Montrer au local", tapToSpeak: "Touchez pour ecouter", play: "Lire", save: "Enregistrer", saved: "Enregistre", remove: "Retirer", reveal: "Reveler", listen: "Ecouter", again: "Encore", gotIt: "Je sais",
+    whatAboutToDo: "Que comptez-vous faire ?", savedEmpty: "Vos phrases favorites apparaitront ici.",
+    reviewTitle: "Revision quotidienne", reviewComplete: "Revision terminee", reviewEmptyTitle: "Rien a reviser pour l'instant", reviewEmptyCopy: "Terminez votre premiere lecon ou ouvrez Must Know 50 pour creer votre liste de revision.",
+    startLessonOne: "Commencer la lecon 1", openMustKnow: "Ouvrir Must Know 50", backToBefore: "Retour a Avant", reviewAgain: "Revoir encore",
+    notQuite: "Pas tout a fait - la bonne reponse est :", correctMark: "Correct !", quiz: "Quiz", quizComplete: "Quiz termine", yourScore: "Votre score", tryAgain: "Reessayer", backToLearning: "Retour a l'apprentissage", seeResults: "Voir les resultats", nextQuestion: "Question suivante", endQuiz: "Terminer le quiz", quizNotEnough: "Pas assez de phrases pour le quiz",
+    perfect: "Parfait !", excellent: "Excellent !", greatJob: "Tres bien !", goodEffort: "Bon effort !", keepPracticing: "Continuez a pratiquer !",
+    mustKnow50: "Must Know 50", lessonUnavailable: "Lecon indisponible.",
+    lessonProgress: "{current} sur {total}", lessonLabel: "Lecon {order}", lessonTime: "{minutes} min",
+    lessonMastered: "Maitrisee", lessonReviewed: "Revisee", lessonMasteredCount: "{count}/5 maitrisees", lessonResumeAt: "Reprendre a {index}/5",
+    xpEarnedInline: "+{amount} XP gagnes", replayLesson: "Rejouer la lecon", backToLessons: "Retour aux lecons",
+    reviewUniqueCount: "{count} phrases uniques revisees", reviewCardEncounters: "{count} passages",
+    beforeReadyCount: "Vous avez {count} phrases pretes a pratiquer.", beforeMetaProgress: "{xp} XP gagnes · {saved} phrase{suffix} enregistree{suffix}",
+    lessonListTitle: "Vos 10 lecons", lessonListMeta: "5 phrases · 3 min chacune", openLessonAria: "Ouvrir la lecon {order}, {title}", lessonsUnavailable: "Les lecons ne sont pas disponibles."
+    ,continueLessonLabel: "Continuer la lecon {order}", startLessonLabel: "Commencer la lecon {order}", allLessonsReviewed: "Toutes les lecons revisees", continueDeckDescription: "Continuez le pack complet.", beginLesson: "Commencer la lecon", resumeAtCard: "Reprendre a la carte {index}",
+    quizTeaser: "Testez ce dont vous vous souvenez.", phrasesCountLabel: "{count} phrases", savedCountLabel: "{count} phrase{suffix} favorite{suffix}", masteredWithLabel: "{count} maitrisees · {label}", completedOfTotal: "{completed} sur {total}"
+  },
+  es: {
+    navHome: "Inicio", navLearn: "Aprender", navShow: "Mostrar", navSaved: "Guardadas",
+    language: "Idioma", languageEnglish: "English", languageFrench: "Français", languageSpanish: "Español", languagePanelTitle: "Elegir idioma", toggleLanguageAria: "Elegir idioma",
+    brandTagline: "Viaja mejor. Habla local.",
+    destinationTitle: "Adonde vas?", destinationSubtitle: "Elige un destino y obten las frases correctas justo cuando las necesitas.",
+    destinationKoreaName: "Corea del Sur", destinationKoreaDesc: "Esenciales de coreano para viajar", destinationJapanName: "Japon", destinationJapanDesc: "Esenciales de japones para viajar",
+    countrySubtitle_japan: "Tu companero de viaje en japones", countrySubtitle_korea: "Tu companero de viaje en coreano",
+    homeTitle: "Listo cuando tu lo estes.", homeSubtitle: "Aprende antes de salir. Habla cuando importa.",
+    beforeTripTitle: "Antes de tu viaje", beforeTripDesc: "Aprende lo esencial en solo 10 minutos al dia.",
+    duringTripTitle: "Durante tu viaje", duringTripDesc: "Muestra frases al instante y comunicate con confianza.",
+    tripReadiness: "Preparacion del viaje", progressSummaryTitle: "Resumen", progressMasteredPhrases: "Frases dominadas", progressTotalXP: "XP total", progressCompletedLessons: "Lecciones completadas", progressReviewedLessons: "Lecciones repasadas", progressDue: "Repaso pendiente", progressSaved: "Frases guardadas",
+    continueLearning: "SEGUIR APRENDIENDO", resumeLessonHint: "Retomar tu leccion", openDeckHint: "Abrir el mazo completo", dailyReviewLabel: "REPASO DIARIO", dailyReviewTitleShort: "Repaso diario", fullPhraseDeck: "MAZO COMPLETO", mustKnowDesc: "Repasa las 50 frases esenciales.", quickQuestions: "10 preguntas rapidas", savedPhrases: "Frases guardadas", savedCollectionDesc: "Repasa tu coleccion personal.", browseBySituation: "Explorar por situacion", personalCollection: "Tu coleccion personal de frases.",
+    situationModeTitle: "Modo Situacion", situationModeDesc: "Comer, moverse, comprar, alojarse.",
+    shareTitle: "Compartir LingoGo", shareDesc: "Envia el enlace publico de la app.", shareAria: "Compartir LingoGo", sharePublicUrlLabel: "URL publica", copyLink: "Copiar enlace",
+    statXP: "XP", statSaved: "Guardadas", statPhrases: "Frases",
+    savedToast: "Guardada ✓", removedToast: "Eliminada", copyToast: "Enlace copiado", xpToast: "+{amount} XP",
+    phraseDueOne: "1 frase pendiente", phraseDueMany: "{count} frases pendientes", practiceAvailable: "Repaso disponible", noReviewPhrases: "Aun no hay frases de repaso",
+    moreReviewNow: "Hay mas repaso disponible ahora.", nextReviewSoon: "Tu proximo repaso es pronto.", nextReviewInOneDay: "Tu proximo repaso es en aproximadamente 1 dia.", nextReviewInDays: "Tu proximo repaso es en aproximadamente {days} dias.",
+    readLabel_complete: "Frases esenciales completas", readLabel_almost: "Casi listo", readLabel_travelReady: "Listo para viajar", readLabel_footing: "Tomando ritmo", readLabel_building: "Construyendo base", readLabel_starting: "Empezando", phraseSummary: "{mastered} de {total} frases esenciales aprendidas",
+    all: "Todas", showToLocal: "Mostrar al local", tapToSpeak: "Toca para escuchar", play: "Reproducir", save: "Guardar", saved: "Guardada", remove: "Quitar", reveal: "Revelar", listen: "Escuchar", again: "Otra vez", gotIt: "Lo se",
+    whatAboutToDo: "Que vas a hacer ahora?", savedEmpty: "Tus frases guardadas apareceran aqui.",
+    reviewTitle: "Repaso diario", reviewComplete: "Repaso completado", reviewEmptyTitle: "Aun no hay nada para repasar", reviewEmptyCopy: "Completa tu primera leccion o abre Must Know 50 para crear tu lista de repaso.",
+    startLessonOne: "Empezar leccion 1", openMustKnow: "Abrir Must Know 50", backToBefore: "Volver a Antes", reviewAgain: "Repasar de nuevo",
+    notQuite: "Casi - la respuesta correcta es:", correctMark: "Correcto!", quiz: "Quiz", quizComplete: "Quiz completado", yourScore: "Tu puntuacion", tryAgain: "Intentar de nuevo", backToLearning: "Volver al aprendizaje", seeResults: "Ver resultados", nextQuestion: "Siguiente pregunta", endQuiz: "Terminar quiz", quizNotEnough: "No hay suficientes frases para el quiz",
+    perfect: "Perfecto!", excellent: "Excelente!", greatJob: "Muy bien!", goodEffort: "Buen esfuerzo!", keepPracticing: "Sigue practicando!",
+    mustKnow50: "Must Know 50", lessonUnavailable: "Leccion no disponible.",
+    lessonProgress: "{current} de {total}", lessonLabel: "Leccion {order}", lessonTime: "{minutes} min",
+    lessonMastered: "Dominada", lessonReviewed: "Repasada", lessonMasteredCount: "{count}/5 dominadas", lessonResumeAt: "Retomar en {index}/5",
+    xpEarnedInline: "+{amount} XP ganados", replayLesson: "Repetir leccion", backToLessons: "Volver a lecciones",
+    reviewUniqueCount: "{count} frases unicas repasadas", reviewCardEncounters: "{count} intentos",
+    beforeReadyCount: "Tienes {count} frases listas para practicar.", beforeMetaProgress: "{xp} XP ganados · {saved} frase{suffix} guardada{suffix}",
+    lessonListTitle: "Tus 10 lecciones", lessonListMeta: "5 frases · 3 min cada una", openLessonAria: "Abrir leccion {order}, {title}", lessonsUnavailable: "Las lecciones no estan disponibles."
+    ,continueLessonLabel: "Continuar leccion {order}", startLessonLabel: "Empezar leccion {order}", allLessonsReviewed: "Todas las lecciones repasadas", continueDeckDescription: "Continua el mazo completo.", beginLesson: "Comenzar leccion", resumeAtCard: "Retomar en la tarjeta {index}",
+    quizTeaser: "Pon a prueba lo que recuerdas.", phrasesCountLabel: "{count} frases", savedCountLabel: "{count} frase{suffix} guardada{suffix}", masteredWithLabel: "{count} dominadas · {label}", completedOfTotal: "{completed} de {total}"
+  }
+};
+
+const categoryTranslations = {
+  General: { en: "General", fr: "General", es: "General" },
+  Food: { en: "Food", fr: "Repas", es: "Comida" },
+  Transport: { en: "Transport", fr: "Transport", es: "Transporte" },
+  Hotel: { en: "Hotel", fr: "Hotel", es: "Hotel" },
+  Shopping: { en: "Shopping", fr: "Achats", es: "Compras" },
+  Emergency: { en: "Emergency", fr: "Urgence", es: "Emergencia" },
+  Cafe: { en: "Cafe", fr: "Cafe", es: "Cafe" }
+};
+
+function interpolate(template, params = {}){
+  return String(template).replace(/\{(\w+)\}/g, (_, key) => {
+    return Object.prototype.hasOwnProperty.call(params, key) ? String(params[key]) : `{${key}}`;
+  });
+}
+
+function t(key, params = {}, language = state?.uiLanguage || "en"){
+  const selected = translations[language] || translations.en;
+  const fallback = translations.en[key] || key;
+  const template = selected[key] || fallback;
+  return interpolate(template, params);
+}
+
+function trCategory(category, language = state?.uiLanguage || "en"){
+  const map = categoryTranslations[category];
+  if(!map) return category;
+  return map[language] || map.en || category;
+}
+
+function getPhrasePrompt(phrase, language = state?.uiLanguage || "en"){
+  if(!phrase) return "";
+  if(isPlainObject(phrase.translations)){
+    if(typeof phrase.translations[language] === "string" && phrase.translations[language]) return phrase.translations[language];
+    if(typeof phrase.translations.en === "string" && phrase.translations.en) return phrase.translations.en;
+  }
+  return phrase.english || "";
+}
 
 function getCurrentTimestampIso(){
   return new Date().toISOString();
@@ -218,7 +369,7 @@ function getMasteredPhraseCount(country = state.country){
 }
 
 function formatDuePhraseCount(dueCount){
-  return dueCount === 1 ? "1 phrase due" : `${dueCount} phrases due`;
+  return dueCount === 1 ? t("phraseDueOne") : t("phraseDueMany", { count: dueCount });
 }
 
 function isPhraseDue(record, nowIso = getCurrentTimestampIso()){
@@ -249,14 +400,14 @@ function getEarliestNextReviewAt(country = state.country){
 
 function formatNextReviewMessage(country = state.country, nowIso = getCurrentTimestampIso()){
   if(getDuePhraseCount(country) > 0){
-    return "More review is available now.";
+    return t("moreReviewNow");
   }
   const earliest = getEarliestNextReviewAt(country);
-  if(!earliest) return "Your next scheduled review is soon.";
+  if(!earliest) return t("nextReviewSoon");
   const diffMs = Date.parse(earliest) - Date.parse(nowIso);
-  if(!Number.isFinite(diffMs) || diffMs <= 0) return "Your next scheduled review is soon.";
+  if(!Number.isFinite(diffMs) || diffMs <= 0) return t("nextReviewSoon");
   const days = Math.max(1, Math.ceil(diffMs / 86400000));
-  return days === 1 ? "Your next scheduled review is in about 1 day." : `Your next scheduled review is in about ${days} days.`;
+  return days === 1 ? t("nextReviewInOneDay") : t("nextReviewInDays", { days });
 }
 
 function buildDailyReviewQueue(country = state.country, maxCount = 10){
@@ -293,8 +444,8 @@ function getReviewStatusText(country = state.country){
   const dueCount = getDuePhraseCount(country);
   if(dueCount > 0) return formatDuePhraseCount(dueCount);
   const queue = buildDailyReviewQueue(country, 10);
-  if(queue.length > 0) return "Practice available";
-  return "No review phrases yet";
+  if(queue.length > 0) return t("practiceAvailable");
+  return t("noReviewPhrases");
 }
 
 function recordPhraseOutcome(phrase, outcome, options = {}){
@@ -325,12 +476,12 @@ function recordPhraseOutcome(phrase, outcome, options = {}){
 }
 
 function getReadinessLabel(percent){
-  if(percent >= 100) return "Essential phrases complete";
-  if(percent >= 80) return "Almost ready";
-  if(percent >= 60) return "Travel ready";
-  if(percent >= 40) return "Finding your footing";
-  if(percent >= 20) return "Building the basics";
-  return "Getting started";
+  if(percent >= 100) return t("readLabel_complete");
+  if(percent >= 80) return t("readLabel_almost");
+  if(percent >= 60) return t("readLabel_travelReady");
+  if(percent >= 40) return t("readLabel_footing");
+  if(percent >= 20) return t("readLabel_building");
+  return t("readLabel_starting");
 }
 
 function getTripReadiness(country = state.country){
@@ -342,7 +493,7 @@ function getTripReadiness(country = state.country){
     totalPhraseCount,
     percent,
     label: getReadinessLabel(percent),
-    summary: `${masteredCount} of ${totalPhraseCount} essential phrases learned`
+    summary: t("phraseSummary", { mastered: masteredCount, total: totalPhraseCount })
   };
 }
 
@@ -406,7 +557,7 @@ async function copyShareLink(){
   try{
     if(navigator.clipboard?.writeText){
       await navigator.clipboard.writeText(publicShareUrl);
-      showToast("Link copied");
+      showToast(t("copyToast"));
       state.shareFallbackVisible = false;
       render();
       return true;
@@ -433,7 +584,7 @@ async function copyShareLink(){
   }
   document.body.removeChild(textarea);
   if(didCopy){
-    showToast("Link copied");
+    showToast(t("copyToast"));
     state.shareFallbackVisible = false;
     render();
     return true;
@@ -483,8 +634,8 @@ function getContinueLearningPlan(country = state.country){
   const lessons = getLessons();
   if(!lessons.length){
     return {
-      label: "Must Know 50",
-      description: "Continue the full phrase deck.",
+      label: t("mustKnow50"),
+      description: t("continueDeckDescription"),
       action: "learn",
       lessonId: null,
       resume: false
@@ -497,8 +648,8 @@ function getContinueLearningPlan(country = state.country){
   if(activeLesson && activeProgress?.startedAt && !activeProgress.completedAt){
     const masteredCount = getLessonMasteryCount(country, activeLesson);
     return {
-      label: `Continue Lesson ${activeLesson.order}`,
-      description: `${masteredCount}/5 mastered · resume at card ${clampLessonIndex(activeProgress.lastCardIndex) + 1}`,
+      label: t("continueLessonLabel", { order: activeLesson.order }),
+      description: `${t("lessonMasteredCount", { count: masteredCount })} · ${t("resumeAtCard", { index: clampLessonIndex(activeProgress.lastCardIndex) + 1 })}`,
       action: "lesson",
       lessonId: activeLesson.id,
       resume: true
@@ -510,18 +661,18 @@ function getContinueLearningPlan(country = state.country){
     const started = !!firstProgress?.startedAt && !firstProgress?.completedAt;
     const masteredCount = getLessonMasteryCount(country, firstIncomplete);
     return {
-      label: started ? `Continue Lesson ${firstIncomplete.order}` : `Start Lesson ${firstIncomplete.order}`,
+      label: started ? t("continueLessonLabel", { order: firstIncomplete.order }) : t("startLessonLabel", { order: firstIncomplete.order }),
       description: started
-        ? `${masteredCount}/5 mastered · resume at card ${clampLessonIndex(firstProgress.lastCardIndex) + 1}`
-        : `${masteredCount}/5 mastered · begin the lesson`,
+        ? `${t("lessonMasteredCount", { count: masteredCount })} · ${t("resumeAtCard", { index: clampLessonIndex(firstProgress.lastCardIndex) + 1 })}`
+        : `${t("lessonMasteredCount", { count: masteredCount })} · ${t("beginLesson")}`,
       action: "lesson",
       lessonId: firstIncomplete.id,
       resume: started
     };
   }
   return {
-    label: "All lessons reviewed",
-    description: "Review Lesson 1 or revisit Must Know 50.",
+    label: t("allLessonsReviewed"),
+    description: t("continueDeckDescription"),
     action: "lesson",
     lessonId: lessons[0].id,
     resume: false
@@ -544,6 +695,8 @@ function recordPhraseSeenOnce(flow, phrase){
 }
 const state = {
   country: localStorage.getItem("lingogo_country") || null,
+  uiLanguage: normalizeUILanguage(localStorage.getItem(uiLanguageKey) || "en"),
+  languagePanelOpen: false,
   screen: "home",
   data: null,
   cardIndex: 0,
@@ -617,14 +770,21 @@ function toggleSaved(p){
   const key=savedKey(p);
   state.saved[key]=!state.saved[key];
   localStorage.setItem("lingogo_saved", JSON.stringify(state.saved));
-  showToast(state.saved[key] ? "Saved ✓" : "Removed");
+  showToast(state.saved[key] ? t("savedToast") : t("removedToast"));
   render();
 }
 
 function addXP(amount){
   state.xp += amount;
   localStorage.setItem("lingogo_xp", state.xp);
-  showToast(`+${amount} XP`);
+  showToast(t("xpToast", { amount }));
+}
+
+function setUILanguage(language){
+  const nextLanguage = normalizeUILanguage(language);
+  state.uiLanguage = nextLanguage;
+  localStorage.setItem(uiLanguageKey, nextLanguage);
+  render();
 }
 
 function triggerSuccessPulse(button){
@@ -645,7 +805,7 @@ function generateQuizQuestions(phrases, count=10){
     usedIds.add(correct.id);
     const wrong=[...phrases].filter(p=>p.id!==correct.id).sort(()=>Math.random()-0.5).slice(0,3);
     const answers=[correct,...wrong].sort(()=>Math.random()-0.5);
-    questions.push({phraseId:correct.id,english:correct.english,correctId:correct.id,answers:answers.map(a=>({id:a.id,local:a.local,roman:a.roman}))});
+    questions.push({phraseId:correct.id,english:correct.english,translations:isPlainObject(correct.translations)?correct.translations:null,correctId:correct.id,answers:answers.map(a=>({id:a.id,local:a.local,roman:a.roman}))});
   }
   return questions;
 }
@@ -726,7 +886,7 @@ function returnToBeforeWithLessonUnavailable(){
   state.backTarget="home";
   state.screen="before";
   render();
-  showToast("Lesson unavailable.");
+  showToast(t("lessonUnavailable"));
 }
 
 function getCurrentReviewPhrase(){
@@ -890,21 +1050,27 @@ function getCountryTheme(country){
   return "default";
 }
 
+function getCountrySubtitle(country = state.country){
+  if(country === "japan") return t("countrySubtitle_japan");
+  if(country === "korea") return t("countrySubtitle_korea");
+  return "";
+}
+
 function shell(content, active="home"){
   const d=state.data;
   const countryTheme=getCountryTheme(state.country);
   return `<main class="shell" data-country-theme="${countryTheme}" data-screen="${state.screen}">
     <div class="topbar">
       <button class="icon-btn" data-action="back">←</button>
-      <div class="country-title"><h1>${d.flag} ${d.name}</h1><p>${d.subtitle}</p></div>
+      <div class="country-title"><h1>${d.flag} ${d.name}</h1><p>${getCountrySubtitle()}</p></div>
     </div>
     <div class="screen-content">${content}</div>
   </main>
   <nav class="bottom-nav"><div class="bottom-inner">
-    ${navButton("home","⌂","Home",active,true)}
-    ${navButton("learn","◫","Learn",active,true)}
-    ${navButton("show","▣","Show",active,true)}
-    ${navButton("saved","♥","Saved",active,true)}
+    ${navButton("home","⌂",t("navHome"),active,true)}
+    ${navButton("learn","◫",t("navLearn"),active,true)}
+    ${navButton("show","▣",t("navShow"),active,true)}
+    ${navButton("saved","♥",t("navSaved"),active,true)}
   </div></nav>`;
 }
 function navButton(screen,icon,label,active,isNav=false){
@@ -913,11 +1079,11 @@ function navButton(screen,icon,label,active,isNav=false){
 
 function renderDestinations(){
   app.innerHTML=`<main class="shell">
-    <div class="brand"><div><div class="logo">LingoGo</div><div class="tag">Travel smarter. Speak local.</div></div><span>✦</span></div>
-    <section class="hero"><h1>Where are you going?</h1><p>Pick a destination and get the right words, right when you need them.</p></section>
+    <div class="brand"><div><div class="logo">LingoGo</div><div class="tag">${t("brandTagline")}</div></div><span>✦</span></div>
+    <section class="hero"><h1>${t("destinationTitle")}</h1><p>${t("destinationSubtitle")}</p></section>
     <section class="grid destinations">
-      ${destinationCard("korea","🇰🇷","South Korea","Korean essentials for real travel")}
-      ${destinationCard("japan","🇯🇵","Japan","Japanese essentials for real travel")}
+      ${destinationCard("korea","🇰🇷",t("destinationKoreaName"),t("destinationKoreaDesc"))}
+      ${destinationCard("japan","🇯🇵",t("destinationJapanName"),t("destinationJapanDesc"))}
     </section>
   </main>`;
 }
@@ -928,36 +1094,45 @@ function destinationCard(id,flag,name,desc){
 function renderHome(){
   const d=state.data;
   const savedCount=getSavedPhraseCount(state.country);
+  const uiLanguageLabel = state.uiLanguage === "fr" ? t("languageFrench") : state.uiLanguage === "es" ? t("languageSpanish") : t("languageEnglish");
   app.innerHTML=shell(`
-    <section class="hero"><h1>Ready when you are.</h1><p>Learn before you go. Speak when it matters.</p></section>
+    <section class="hero"><h1>${t("homeTitle")}</h1><p>${t("homeSubtitle")}</p></section>
+    <section class="language-tools">
+      <button class="btn secondary language-toggle" data-action="toggle-language-panel" aria-label="${t("toggleLanguageAria")}">${t("language")}: ${uiLanguageLabel}</button>
+      ${state.languagePanelOpen ? `<div class="language-panel" role="group" aria-label="${t("languagePanelTitle")}">
+        <button class="chip ${state.uiLanguage==="en"?"active":""}" data-action="set-language" data-lang="en">${t("languageEnglish")}</button>
+        <button class="chip ${state.uiLanguage==="fr"?"active":""}" data-action="set-language" data-lang="fr">${t("languageFrench")}</button>
+        <button class="chip ${state.uiLanguage==="es"?"active":""}" data-action="set-language" data-lang="es">${t("languageSpanish")}</button>
+      </div>` : ""}
+    </section>
     <section class="stats">
-      <button class="stat stat-pill" data-action="open-progress-home" aria-label="Open progress summary. ${state.xp} total XP."><b>${state.xp}</b><span>XP</span></button>
-      <button class="stat stat-pill" data-action="home-open-saved" aria-label="Open saved phrases. ${savedCount} saved."><b>${savedCount}</b><span>Saved</span></button>
-      <button class="stat stat-pill" data-action="home-open-learn" aria-label="Open Must Know 50 with ${d.phrases.length} phrases."><b>${d.phrases.length}</b><span>Phrases</span></button>
+      <button class="stat stat-pill" data-action="open-progress-home" aria-label="${state.xp} ${t("statXP")}"><b>${state.xp}</b><span>${t("statXP")}</span></button>
+      <button class="stat stat-pill" data-action="home-open-saved" aria-label="${savedCount} ${t("statSaved")}"><b>${savedCount}</b><span>${t("statSaved")}</span></button>
+      <button class="stat stat-pill" data-action="home-open-learn" aria-label="${d.phrases.length} ${t("statPhrases")}"><b>${d.phrases.length}</b><span>${t("statPhrases")}</span></button>
     </section>
     <section class="trip-phases">
       <button class="trip-card before-trip" data-screen="before">
         <div class="trip-card-emoji">✈️</div>
-        <h2>Before Your Trip</h2>
-        <p>Learn the essentials in just 10 minutes a day.</p>
+        <h2>${t("beforeTripTitle")}</h2>
+        <p>${t("beforeTripDesc")}</p>
       </button>
       <button class="trip-card during-trip" data-screen="during">
         <div class="trip-card-emoji">🌏</div>
-        <h2>During Your Trip</h2>
-        <p>Show phrases instantly and communicate with confidence.</p>
+        <h2>${t("duringTripTitle")}</h2>
+        <p>${t("duringTripDesc")}</p>
       </button>
     </section>
     <section class="additional-options">
-      <button class="situation-button" data-screen="situations"><div class="emoji">🧭</div><h3>Situation Mode</h3><p>Eat, travel, shop, stay.</p></button>
-      <button class="share-lingogo" data-action="share-lingogo" aria-label="Share LingoGo with a public link">
+      <button class="situation-button" data-screen="situations"><div class="emoji">🧭</div><h3>${t("situationModeTitle")}</h3><p>${t("situationModeDesc")}</p></button>
+      <button class="share-lingogo" data-action="share-lingogo" aria-label="${t("shareAria")}">
         <div class="emoji">🔗</div>
-        <h3>Share LingoGo</h3>
-        <p>Send the public app link.</p>
+        <h3>${t("shareTitle")}</h3>
+        <p>${t("shareDesc")}</p>
       </button>
       ${state.shareFallbackVisible ? `<div class="share-fallback" role="status" aria-live="polite">
-        <p>Public URL</p>
+        <p>${t("sharePublicUrlLabel")}</p>
         <input type="text" readonly value="${publicShareUrl}" aria-label="Public LingoGo URL" />
-        <button class="btn secondary" data-action="copy-share-url">Copy Link</button>
+        <button class="btn secondary" data-action="copy-share-url">${t("copyLink")}</button>
       </div>` : ""}
     </section>
   `,"home");
@@ -982,18 +1157,18 @@ function renderLesson(){
   const answer=state.lessonRevealed?`<div class="answer"><div class="local">${phrase.local}</div><div class="roman">${phrase.roman}</div></div>`:"";
   app.innerHTML=shell(`
     <div class="section-title lesson-title"><h2>${lesson.title}</h2><small>${state.lessonCardIndex+1} / ${phrases.length}</small></div>
-    <p class="lesson-progress">${state.lessonCardIndex+1} of ${phrases.length}</p>
+    <p class="lesson-progress">${t("lessonProgress", { current: state.lessonCardIndex+1, total: phrases.length })}</p>
     <div class="card-stage lesson-screen"><article class="flashcard">
-      <div class="label">Lesson ${lesson.order}</div>
-      <div><h2>${phrase.english}</h2>${answer}</div>
+      <div class="label">${t("lessonLabel", { order: lesson.order })}</div>
+      <div><h2>${getPhrasePrompt(phrase)}</h2>${answer}</div>
       <div>
         ${state.lessonRevealed?`<div class="row" style="justify-content:center">
-          <button class="btn secondary" data-action="lesson-speak" data-text="${encodeURIComponent(phrase.local)}" aria-label="Listen to this phrase">🔊 Listen</button>
-          <button class="btn ghost" data-action="lesson-save-current">${isSaved(phrase)?"♥ Saved":"♡ Save"}</button>
-        </div>`:`<button class="btn" data-action="lesson-reveal">Reveal</button>`}
+          <button class="btn secondary" data-action="lesson-speak" data-text="${encodeURIComponent(phrase.local)}" aria-label="${t("listen")}">🔊 ${t("listen")}</button>
+          <button class="btn ghost" data-action="lesson-save-current">${isSaved(phrase)?`♥ ${t("saved")}`:`♡ ${t("save")}`}</button>
+        </div>`:`<button class="btn" data-action="lesson-reveal">${t("reveal")}</button>`}
       </div>
     </article></div>
-    ${state.lessonRevealed?`<div class="review-actions"><button class="btn secondary" data-action="lesson-again">Again</button><button class="btn" data-action="lesson-gotit">Got it</button></div>`:""}
+    ${state.lessonRevealed?`<div class="review-actions"><button class="btn secondary" data-action="lesson-again">${t("again")}</button><button class="btn" data-action="lesson-gotit">${t("gotIt")}</button></div>`:""}
   `,"learn");
 }
 
@@ -1004,16 +1179,16 @@ function renderLessonComplete(){
     return;
   }
   const masteredCount=getLessonMasteryCount(state.country, lesson);
-  const completionLabel=masteredCount===5 ? "Mastered" : "Reviewed";
+  const completionLabel=masteredCount===5 ? t("lessonMastered") : t("lessonReviewed");
   app.innerHTML=shell(`
     <div class="lesson-complete">
       <div class="lesson-complete-kicker">${completionLabel}</div>
       <h2>${lesson.title}</h2>
-      <p>${masteredCount}/5 mastered · ${completionLabel}</p>
-      ${state.lessonXpEarned?`<div class="lesson-complete-xp">+${state.lessonXpEarned} XP earned</div>`:""}
+      <p>${t("lessonMasteredCount", { count: masteredCount })} · ${completionLabel}</p>
+      ${state.lessonXpEarned?`<div class="lesson-complete-xp">${t("xpEarnedInline", { amount: state.lessonXpEarned })}</div>`:""}
       <div class="lesson-complete-actions">
-        <button class="btn" data-action="lesson-replay">Replay Lesson</button>
-        <button class="btn secondary" data-action="lesson-back-to-list">Back to Lessons</button>
+        <button class="btn" data-action="lesson-replay">${t("replayLesson")}</button>
+        <button class="btn secondary" data-action="lesson-back-to-list">${t("backToLessons")}</button>
       </div>
     </div>
   `,"learn");
@@ -1022,12 +1197,12 @@ function renderLessonComplete(){
 function renderReviewEmpty(){
   app.innerHTML=shell(`
     <div class="review-empty">
-      <div class="lesson-complete-kicker">Daily Review</div>
-      <h2>Nothing to review yet</h2>
-      <p>Complete your first lesson or explore Must Know 50 to build your review list.</p>
+      <div class="lesson-complete-kicker">${t("reviewTitle")}</div>
+      <h2>${t("reviewEmptyTitle")}</h2>
+      <p>${t("reviewEmptyCopy")}</p>
       <div class="review-empty-actions">
-        <button class="btn" data-action="review-start-lesson-1">Start Lesson 1</button>
-        <button class="btn secondary" data-action="review-open-learn">Open Must Know 50</button>
+        <button class="btn" data-action="review-start-lesson-1">${t("startLessonOne")}</button>
+        <button class="btn secondary" data-action="review-open-learn">${t("openMustKnow")}</button>
       </div>
     </div>
   `,"before");
@@ -1043,34 +1218,35 @@ function renderReview(){
   }
   const answer = state.reviewRevealed ? `<div class="answer"><div class="local">${phrase.local}</div><div class="roman">${phrase.roman}</div></div>` : "";
   app.innerHTML=shell(`
-    <div class="section-title lesson-title"><h2>Daily Review</h2><small>${state.reviewIndex+1} / ${state.reviewQueueIds.length}</small></div>
+    <div class="section-title lesson-title"><h2>${t("reviewTitle")}</h2><small>${state.reviewIndex+1} / ${state.reviewQueueIds.length}</small></div>
     <p class="lesson-progress">${state.reviewIndex+1} of ${state.reviewQueueIds.length}</p>
     <div class="card-stage"><article class="flashcard">
-      <div class="label">Daily Review</div>
-      <div><h2>${phrase.english}</h2>${answer}</div>
+      <div class="label">${t("reviewTitle")}</div>
+      <div><h2>${getPhrasePrompt(phrase)}</h2>${answer}</div>
       <div>
         ${state.reviewRevealed ? `<div class="row" style="justify-content:center">
-          <button class="btn secondary" data-action="review-speak" data-text="${encodeURIComponent(phrase.local)}" aria-label="Listen to this phrase">🔊 Listen</button>
-          <button class="btn ghost" data-action="review-save-current">${isSaved(phrase)?"♥ Saved":"♡ Save"}</button>
-        </div>` : `<button class="btn" data-action="review-reveal">Reveal</button>`}
+          <button class="btn secondary" data-action="review-speak" data-text="${encodeURIComponent(phrase.local)}" aria-label="${t("listen")}">🔊 ${t("listen")}</button>
+          <button class="btn ghost" data-action="review-save-current">${isSaved(phrase)?`♥ ${t("saved")}`:`♡ ${t("save")}`}</button>
+        </div>` : `<button class="btn" data-action="review-reveal">${t("reveal")}</button>`}
       </div>
     </article></div>
-    ${state.reviewRevealed ? `<div class="review-actions"><button class="btn secondary" data-action="review-again">Again</button><button class="btn" data-action="review-gotit">Got it</button></div>` : ""}
+    ${state.reviewRevealed ? `<div class="review-actions"><button class="btn secondary" data-action="review-again">${t("again")}</button><button class="btn" data-action="review-gotit">${t("gotIt")}</button></div>` : ""}
   `,"before");
 }
 
 function renderReviewComplete(){
   const message = formatNextReviewMessage(state.country);
+  const encounterMeta = state.reviewEncounterCount > state.reviewEncounteredIds.size ? ` · ${t("reviewCardEncounters", { count: state.reviewEncounterCount })}` : "";
   app.innerHTML=shell(`
     <div class="review-complete">
-      <div class="lesson-complete-kicker">Review complete</div>
-      <h2>Review complete</h2>
-      <p>${state.reviewEncounteredIds.size} unique phrases reviewed${state.reviewEncounterCount > state.reviewEncounteredIds.size ? ` · ${state.reviewEncounterCount} card encounters` : ""}</p>
-      ${state.reviewSessionXp ? `<div class="lesson-complete-xp">+${state.reviewSessionXp} XP earned</div>` : ""}
+      <div class="lesson-complete-kicker">${t("reviewComplete")}</div>
+      <h2>${t("reviewComplete")}</h2>
+      <p>${t("reviewUniqueCount", { count: state.reviewEncounteredIds.size })}${encounterMeta}</p>
+      ${state.reviewSessionXp ? `<div class="lesson-complete-xp">${t("xpEarnedInline", { amount: state.reviewSessionXp })}</div>` : ""}
       <div class="review-next-message">${message}</div>
       <div class="lesson-complete-actions">
-        <button class="btn" data-action="review-back-to-before">Back to Before</button>
-        <button class="btn secondary" data-action="review-again-session">Review Again</button>
+        <button class="btn" data-action="review-back-to-before">${t("backToBefore")}</button>
+        <button class="btn secondary" data-action="review-again-session">${t("reviewAgain")}</button>
       </div>
     </div>
   `,"before");
@@ -1080,28 +1256,28 @@ function renderQuiz(){
   if(!state.quizActive||state.quizQuestions.length===0) return state.screen="before",render();
   const q=state.quizQuestions[state.quizIndex];
   const correctAnswer=q.answers.find(a=>a.id===q.correctId);
-  const incorrectFeedback=state.quizAnswerCorrect?"":`<div class="quiz-feedback incorrect">Not quite — the correct answer is:<div class="quiz-correct-answer"><div class="quiz-correct-local">${correctAnswer.local}</div><div class="quiz-correct-roman">${correctAnswer.roman}</div></div></div>`;
-  const correctFeedback=state.quizAnswerCorrect?`<div class="quiz-feedback correct">✓ Correct!</div>`:"";
+  const incorrectFeedback=state.quizAnswerCorrect?"":`<div class="quiz-feedback incorrect">${t("notQuite")}<div class="quiz-correct-answer"><div class="quiz-correct-local">${correctAnswer.local}</div><div class="quiz-correct-roman">${correctAnswer.roman}</div></div></div>`;
+  const correctFeedback=state.quizAnswerCorrect?`<div class="quiz-feedback correct">✓ ${t("correctMark")}</div>`:"";
   const feedback=state.quizAnswered?`${correctFeedback}${incorrectFeedback}`:"";
-  app.innerHTML=shell(`<div class="section-title"><h2>Quiz</h2><small>${state.quizIndex+1} / ${state.quizQuestions.length}</small></div><div class="quiz-container"><div class="quiz-question"><h2>${q.english}</h2></div><div class="quiz-answers">${q.answers.map(a=>`<div class="answer-choice ${state.quizAnswered?(a.id===q.correctId?"correct":a.id===state.quizSelectedAnswer?"incorrect":"muted"):(a.id===state.quizSelectedAnswer?"selected":"")}"><button class="answer-select" data-answer-id="${a.id}" ${state.quizAnswered?'aria-disabled="true"':""}><div class="answer-local">${a.local}</div><div class="answer-roman">${a.roman}</div></button><button class="quiz-option-audio" data-action="speak-quiz-option" data-answer-id="${a.id}" aria-label="Hear this answer">🔊</button></div>`).join("")}</div>${feedback}${state.quizAnswered?`<div class="quiz-actions"><button class="btn" data-action="quiz-next">${state.quizIndex+1>=state.quizQuestions.length?"See Results":"Next Question"}</button><button class="btn secondary" data-action="end-quiz">End Quiz</button></div>`:""}</div>`,"quiz");
+  app.innerHTML=shell(`<div class="section-title"><h2>${t("quiz")}</h2><small>${state.quizIndex+1} / ${state.quizQuestions.length}</small></div><div class="quiz-container"><div class="quiz-question"><h2>${getPhrasePrompt({ english: q.english, translations: q.translations || null })}</h2></div><div class="quiz-answers">${q.answers.map(a=>`<div class="answer-choice ${state.quizAnswered?(a.id===q.correctId?"correct":a.id===state.quizSelectedAnswer?"incorrect":"muted"):(a.id===state.quizSelectedAnswer?"selected":"")}"><button class="answer-select" data-answer-id="${a.id}" ${state.quizAnswered?'aria-disabled="true"':""}><div class="answer-local">${a.local}</div><div class="answer-roman">${a.roman}</div></button><button class="quiz-option-audio" data-action="speak-quiz-option" data-answer-id="${a.id}" aria-label="${t("listen")}">🔊</button></div>`).join("")}</div>${feedback}${state.quizAnswered?`<div class="quiz-actions"><button class="btn" data-action="quiz-next">${state.quizIndex+1>=state.quizQuestions.length?t("seeResults"):t("nextQuestion")}</button><button class="btn secondary" data-action="end-quiz">${t("endQuiz")}</button></div>`:""}</div>`,`quiz`);
 }
 
 function renderLearn(){
   const p=state.data.phrases[state.cardIndex % state.data.phrases.length];
   const answer=state.revealed?`<div class="answer"><div class="local">${p.local}</div><div class="roman">${p.roman}</div></div>`:"";
   app.innerHTML=shell(`
-    <div class="section-title"><h2>Must Know 50</h2><small>${state.cardIndex+1} / ${state.data.phrases.length}</small></div>
+    <div class="section-title"><h2>${t("mustKnow50")}</h2><small>${state.cardIndex+1} / ${state.data.phrases.length}</small></div>
     <div class="card-stage"><article class="flashcard">
-      <div class="label">${p.category}</div>
-      <div><h2>${p.english}</h2>${answer}</div>
+      <div class="label">${trCategory(p.category)}</div>
+      <div><h2>${getPhrasePrompt(p)}</h2>${answer}</div>
       <div>
         ${state.revealed?`<div class="row" style="justify-content:center">
-          <button class="btn secondary" data-action="speak" data-text="${encodeURIComponent(p.local)}">🔊 Listen</button>
-          <button class="btn ghost" data-action="save-current">${isSaved(p)?"♥ Saved":"♡ Save"}</button>
-        </div>`:`<button class="btn" data-action="reveal">Reveal</button>`}
+          <button class="btn secondary" data-action="speak" data-text="${encodeURIComponent(p.local)}">🔊 ${t("listen")}</button>
+          <button class="btn ghost" data-action="save-current">${isSaved(p)?`♥ ${t("saved")}`:`♡ ${t("save")}`}</button>
+        </div>`:`<button class="btn" data-action="reveal">${t("reveal")}</button>`}
       </div>
     </article></div>
-    ${state.revealed?`<div class="review-actions"><button class="btn secondary" data-action="again">Again</button><button class="btn" data-action="gotit">Got it</button></div>`:""}
+    ${state.revealed?`<div class="review-actions"><button class="btn secondary" data-action="again">${t("again")}</button><button class="btn" data-action="gotit">${t("gotIt")}</button></div>`:""}
   `,"learn");
 }
 
@@ -1111,11 +1287,11 @@ function categories(){
 function renderShow(){
   const filtered=state.category==="all"?state.data.phrases:state.data.phrases.filter(p=>p.category===state.category);
   app.innerHTML=shell(`
-    <div class="section-title"><h2>Show to Local</h2><small>Tap to speak</small></div>
-    <div class="quick"><button class="chip${state.category==="all"?" active":""}" data-category="all" ${state.category==="all"?'aria-current="true"':""}>All</button>${categories().map(c=>`<button class="chip${state.category===c?" active":""}" data-category="${c}" ${state.category===c?'aria-current="true"':""} >${c}</button>`).join("")}</div>
+    <div class="section-title"><h2>${t("showToLocal")}</h2><small>${t("tapToSpeak")}</small></div>
+    <div class="quick"><button class="chip${state.category==="all"?" active":""}" data-category="all" ${state.category==="all"?'aria-current="true"':""}>${t("all")}</button>${categories().map(c=>`<button class="chip${state.category===c?" active":""}" data-category="${c}" ${state.category===c?'aria-current="true"':""} >${trCategory(c)}</button>`).join("")}</div>
     <div class="list" style="margin-top:14px">${filtered.map(p=>`<article class="phrase">
-      <div class="en">${p.english}</div><div class="local">${p.local}</div><div class="roman">${p.roman}</div>
-      <div class="row"><button class="btn" data-speak="${encodeURIComponent(p.local)}">🔊 Play</button><button class="btn secondary" data-save="${p.id}">${isSaved(p)?"♥ Saved":"♡ Save"}</button></div>
+      <div class="en">${getPhrasePrompt(p)}</div><div class="local">${p.local}</div><div class="roman">${p.roman}</div>
+      <div class="row"><button class="btn" data-speak="${encodeURIComponent(p.local)}">🔊 ${t("play")}</button><button class="btn secondary" data-save="${p.id}">${isSaved(p)?`♥ ${t("saved")}`:`♡ ${t("save")}`}</button></div>
     </article>`).join("")}</div>
   `,"show");
   requestAnimationFrame(()=>{
@@ -1128,13 +1304,13 @@ function renderShow(){
 }
 function renderSituations(){
   const icons={General:"💬",Food:"🍜",Transport:"🚆",Hotel:"🏨",Shopping:"🛍️",Emergency:"🆘",Cafe:"☕"};
-  app.innerHTML=shell(`<div class="section-title"><h2>What are you about to do?</h2></div>
-  <div class="categories">${categories().map(c=>`<button class="category" data-situation="${c}"><span>${icons[c]||"✦"}</span><b>${c}</b></button>`).join("")}</div>`,"home");
+  app.innerHTML=shell(`<div class="section-title"><h2>${t("whatAboutToDo")}</h2></div>
+  <div class="categories">${categories().map(c=>`<button class="category" data-situation="${c}"><span>${icons[c]||"✦"}</span><b>${trCategory(c)}</b></button>`).join("")}</div>`,`home`);
 }
 function renderSaved(){
   const phrases=state.data.phrases.filter(isSaved);
-  app.innerHTML=shell(`<div class="section-title"><h2>Saved phrases</h2><small>${phrases.length}</small></div>
-  ${phrases.length?`<div class="list">${phrases.map(p=>`<article class="phrase"><div class="en">${p.english}</div><div class="local">${p.local}</div><div class="roman">${p.roman}</div><div class="row"><button class="btn" data-speak="${encodeURIComponent(p.local)}">🔊 Play</button><button class="btn secondary" data-save="${p.id}">Remove</button></div></article>`).join("")}</div>`:`<div class="empty">Your saved travel phrases will appear here.</div>`}`,"saved");
+  app.innerHTML=shell(`<div class="section-title"><h2>${t("navSaved")}</h2><small>${phrases.length}</small></div>
+  ${phrases.length?`<div class="list">${phrases.map(p=>`<article class="phrase"><div class="en">${getPhrasePrompt(p)}</div><div class="local">${p.local}</div><div class="roman">${p.roman}</div><div class="row"><button class="btn" data-speak="${encodeURIComponent(p.local)}">🔊 ${t("play")}</button><button class="btn secondary" data-save="${p.id}">${t("remove")}</button></div></article>`).join("")}</div>`:`<div class="empty">${t("savedEmpty")}</div>`}`,"saved");
 }
 
 function renderProgress(){
@@ -1144,17 +1320,17 @@ function renderProgress(){
   const savedCount=getSavedPhraseCount(state.country);
   app.innerHTML=shell(`
     <section class="progress-summary">
-      <div class="lesson-complete-kicker">Progress Summary</div>
-      ${renderReadinessRing(readiness.percent,{size:188,stroke:12,label:"Trip readiness"})}
+      <div class="lesson-complete-kicker">${t("progressSummaryTitle")}</div>
+      ${renderReadinessRing(readiness.percent,{size:188,stroke:12,label:t("tripReadiness")})}
       <h2>${readiness.label}</h2>
-      <p class="progress-summary-note">Trip Readiness is based on unique phrases marked Got it.</p>
+      <p class="progress-summary-note">${readiness.summary}</p>
       <div class="progress-metrics">
-        <div class="progress-metric"><span>Mastered phrases</span><b>${readiness.masteredCount} of ${readiness.totalPhraseCount}</b></div>
-        <div class="progress-metric"><span>Total XP</span><b>${state.xp}</b></div>
-        <div class="progress-metric"><span>Completed lessons</span><b>${lessonSummary.completedCount} of ${lessonSummary.totalLessons}</b></div>
-        ${lessonSummary.reviewedCount>0 ? `<div class="progress-metric"><span>Reviewed lessons</span><b>${lessonSummary.reviewedCount}</b></div>` : ""}
-        <div class="progress-metric"><span>Daily Review due</span><b>${dueCount}</b></div>
-        <div class="progress-metric"><span>Saved phrases</span><b>${savedCount}</b></div>
+        <div class="progress-metric"><span>${t("progressMasteredPhrases")}</span><b>${t("phraseSummary", { mastered: readiness.masteredCount, total: readiness.totalPhraseCount })}</b></div>
+        <div class="progress-metric"><span>${t("progressTotalXP")}</span><b>${state.xp}</b></div>
+        <div class="progress-metric"><span>${t("progressCompletedLessons")}</span><b>${t("completedOfTotal", { completed: lessonSummary.completedCount, total: lessonSummary.totalLessons })}</b></div>
+        ${lessonSummary.reviewedCount>0 ? `<div class="progress-metric"><span>${t("progressReviewedLessons")}</span><b>${lessonSummary.reviewedCount}</b></div>` : ""}
+        <div class="progress-metric"><span>${t("progressDue")}</span><b>${dueCount}</b></div>
+        <div class="progress-metric"><span>${t("progressSaved")}</span><b>${savedCount}</b></div>
       </div>
     </section>
   `,"home");
@@ -1169,41 +1345,41 @@ function renderBefore(){
   const reviewStatusText=getReviewStatusText(state.country);
   app.innerHTML=shell(`
     <div class="before-header">
-      <h2>Before Your Trip</h2>
-      <p>Build confidence before you arrive.</p>
+      <h2>${t("beforeTripTitle")}</h2>
+      <p>${t("homeSubtitle")}</p>
     </div>
     <section class="before-summary">
-      <button class="trip-readiness trip-readiness-button" data-action="open-progress-before" aria-label="Open progress summary. Trip readiness ${readiness.percent} percent.">
+      <button class="trip-readiness trip-readiness-button" data-action="open-progress-before" aria-label="${t("tripReadiness")} ${readiness.percent}%">
         <div class="trip-readiness-top">
           <div>
-            <div class="trip-readiness-label">Trip readiness</div>
+            <div class="trip-readiness-label">${t("tripReadiness")}</div>
             <div class="trip-readiness-percent">${readiness.percent}%</div>
           </div>
-          ${renderReadinessRing(readiness.percent,{size:84,stroke:8,compact:true,label:"Trip readiness"})}
+          ${renderReadinessRing(readiness.percent,{size:84,stroke:8,compact:true,label:t("tripReadiness")})}
           <div class="trip-readiness-label">${readiness.label}</div>
         </div>
         <p class="trip-readiness-copy">${readiness.summary}</p>
-        <progress class="trip-readiness-meter" value="${readiness.masteredCount}" max="${readiness.totalPhraseCount}" aria-label="Trip readiness ${readiness.percent} percent"></progress>
-        <div class="trip-readiness-meta">${readiness.masteredCount} mastered · ${readiness.label}</div>
+        <progress class="trip-readiness-meter" value="${readiness.masteredCount}" max="${readiness.totalPhraseCount}" aria-label="${t("tripReadiness")} ${readiness.percent}%"></progress>
+        <div class="trip-readiness-meta">${t("masteredWithLabel", { count: readiness.masteredCount, label: readiness.label })}</div>
       </button>
     </section>
     <div class="before-progress">
-      <p class="before-progress-main">You have ${d.phrases.length} phrases ready to practice.</p>
-      <p class="before-progress-meta">${state.xp} XP earned · ${savedCount} phrase${savedCount!==1?'s':''} saved</p>
+      <p class="before-progress-main">${t("beforeReadyCount", { count: d.phrases.length })}</p>
+      <p class="before-progress-meta">${t("beforeMetaProgress", { xp: state.xp, saved: savedCount, suffix: savedCount!==1?'s':'' })}</p>
     </div>
     <section class="before-learning">
       <button class="learning-featured continue-learning-card" data-action="continue-learning">
-        <div class="learning-label">CONTINUE LEARNING</div>
+        <div class="learning-label">${t("continueLearning")}</div>
         <h3>${continuePlan.label}</h3>
         <p>${continuePlan.description}</p>
         <div class="learning-meta">
-          <span>${continuePlan.action==="lesson" && continuePlan.lessonId ? "Resume your lesson" : "Open the full phrase deck"}</span>
+          <span>${continuePlan.action==="lesson" && continuePlan.lessonId ? t("resumeLessonHint") : t("openDeckHint")}</span>
           <span class="learning-arrow">→</span>
         </div>
       </button>
       <button class="learning-featured daily-review-card" data-action="daily-review">
-        <div class="learning-label">DAILY REVIEW</div>
-        <h3>Daily Review</h3>
+        <div class="learning-label">${t("dailyReviewLabel")}</div>
+        <h3>${t("dailyReviewTitleShort")}</h3>
         <p>${reviewStatusText}</p>
         <div class="learning-meta">
           <span>${reviewStatusText}</span>
@@ -1211,11 +1387,11 @@ function renderBefore(){
         </div>
       </button>
       <button class="learning-featured" data-screen="learn">
-        <div class="learning-label">FULL PHRASE DECK</div>
-        <h3>Must Know 50</h3>
-        <p>Review all 50 essential phrases.</p>
+        <div class="learning-label">${t("fullPhraseDeck")}</div>
+        <h3>${t("mustKnow50")}</h3>
+        <p>${t("mustKnowDesc")}</p>
         <div class="learning-meta">
-          <span>${d.phrases.length} phrases</span>
+          <span>${t("phrasesCountLabel", { count: d.phrases.length })}</span>
           <span class="learning-arrow">→</span>
         </div>
       </button>
@@ -1223,23 +1399,23 @@ function renderBefore(){
     <section class="before-actions">
       <button class="before-action-card before-action-quiz" data-action="start-quiz">
         <div class="action-content">
-          <h4>Quiz</h4>
-          <p>Test what you remember.</p>
-          <div class="before-action-meta">10 quick questions</div>
+          <h4>${t("quiz")}</h4>
+          <p>${t("quizTeaser")}</p>
+          <div class="before-action-meta">${t("quickQuestions")}</div>
         </div>
         <span class="action-arrow">→</span>
       </button>
       <button class="before-action-card before-action-saved" data-screen="saved">
         <div class="action-content">
-          <h4>Saved Phrases</h4>
-          <p>Review your personal collection.</p>
-          <div class="before-action-meta">${savedCount} saved phrase${savedCount!==1?'s':''}</div>
+          <h4>${t("savedPhrases")}</h4>
+          <p>${t("savedCollectionDesc")}</p>
+          <div class="before-action-meta">${t("savedCountLabel", { count: savedCount, suffix: savedCount!==1?'s':'' })}</div>
         </div>
         <span class="action-arrow">→</span>
       </button>
     </section>
     <section class="before-lessons">
-      <div class="section-title lesson-section-title"><h2>Your 10 Lessons</h2><small>5 phrases · 3 min each</small></div>
+      <div class="section-title lesson-section-title"><h2>${t("lessonListTitle")}</h2><small>${t("lessonListMeta")}</small></div>
       ${lessons.length?`<div class="lesson-list">
         ${lessons.map(lesson=>{
           const masteredCount=getLessonMasteryCount(state.country, lesson);
@@ -1249,19 +1425,19 @@ function renderBefore(){
           const canResume=!!lessonProgress?.startedAt && !lessonProgress?.completedAt;
           const resumeIndex=clampLessonIndex(lessonProgress?.lastCardIndex) + 1;
           const stateClass=mastered ? "is-mastered" : reviewed ? "is-reviewed" : "";
-          return `<button class="lesson-item ${stateClass}" data-action="open-lesson" data-lesson-id="${lesson.id}" aria-label="Open Lesson ${lesson.order}, ${lesson.title}">
+          return `<button class="lesson-item ${stateClass}" data-action="open-lesson" data-lesson-id="${lesson.id}" aria-label="${t("openLessonAria", { order: lesson.order, title: lesson.title })}">
           <div class="lesson-item-top">
-            <span class="lesson-number">Lesson ${lesson.order}</span>
-            <span class="lesson-time">${lesson.estimatedMinutes} min</span>
+            <span class="lesson-number">${t("lessonLabel", { order: lesson.order })}</span>
+            <span class="lesson-time">${t("lessonTime", { minutes: lesson.estimatedMinutes })}</span>
           </div>
           <h3>${lesson.title}</h3>
           <p>${lesson.description}</p>
-          <small class="lesson-item-progress">${masteredCount}/5 mastered</small>
-          ${reviewed || mastered ? `<span class="lesson-item-badge ${mastered ? "is-mastered" : "is-reviewed"}">${mastered ? "Mastered" : "Reviewed"}</span>` : ""}
-          ${canResume ? `<small class="lesson-item-progress">Resume at ${resumeIndex}/5</small>` : ""}
+          <small class="lesson-item-progress">${t("lessonMasteredCount", { count: masteredCount })}</small>
+          ${reviewed || mastered ? `<span class="lesson-item-badge ${mastered ? "is-mastered" : "is-reviewed"}">${mastered ? t("lessonMastered") : t("lessonReviewed")}</span>` : ""}
+          ${canResume ? `<small class="lesson-item-progress">${t("lessonResumeAt", { index: resumeIndex })}</small>` : ""}
         </button>`;
         }).join("")}
-      </div>`:`<div class="empty">Lessons are not available yet.</div>`}
+      </div>`:`<div class="empty">${t("lessonsUnavailable")}</div>`}
     </section>
   `,"before");
 }
@@ -1269,36 +1445,36 @@ function renderDuring(){
   const savedCount=Object.values(state.saved).filter(Boolean).length;
   app.innerHTML=shell(`
     <div class="during-header">
-      <h2>During Your Trip</h2>
-      <p>Find the right phrase, fast.</p>
+      <h2>${t("duringTripTitle")}</h2>
+      <p>${t("duringTripDesc")}</p>
     </div>
     <section class="during-featured">
       <button class="during-show-card" data-situation="all">
         <div class="during-show-content">
-          <div class="during-show-label">SHOW TO LOCAL</div>
-          <h3>Browse every phrase and show it clearly.</h3>
+          <div class="during-show-label">${t("showToLocal")}</div>
+          <h3>${t("tapToSpeak")}</h3>
         </div>
         <span class="during-show-arrow">→</span>
       </button>
     </section>
     <section class="during-categories">
-      <h4 class="during-section-heading">Browse by situation</h4>
+      <h4 class="during-section-heading">${t("browseBySituation")}</h4>
       <div class="during-cat-grid">
-        <button class="during-cat-btn" data-situation="Food">Food</button>
-        <button class="during-cat-btn" data-situation="Transport">Transport</button>
-        <button class="during-cat-btn" data-situation="Hotel">Hotel</button>
-        <button class="during-cat-btn" data-situation="Shopping">Shopping</button>
-        <button class="during-cat-btn" data-situation="Cafe">Cafe</button>
-        <button class="during-cat-btn" data-situation="Emergency">Emergency</button>
-        <button class="during-cat-btn" data-situation="General">General</button>
+        <button class="during-cat-btn" data-situation="Food">${trCategory("Food")}</button>
+        <button class="during-cat-btn" data-situation="Transport">${trCategory("Transport")}</button>
+        <button class="during-cat-btn" data-situation="Hotel">${trCategory("Hotel")}</button>
+        <button class="during-cat-btn" data-situation="Shopping">${trCategory("Shopping")}</button>
+        <button class="during-cat-btn" data-situation="Cafe">${trCategory("Cafe")}</button>
+        <button class="during-cat-btn" data-situation="Emergency">${trCategory("Emergency")}</button>
+        <button class="during-cat-btn" data-situation="General">${trCategory("General")}</button>
       </div>
     </section>
     <section class="during-support">
       <button class="during-support-card" data-screen="saved">
         <div class="during-support-content">
-          <h4>Saved Phrases</h4>
-          <p>Your personal phrase collection.</p>
-          <div class="during-support-meta">${savedCount} saved phrase${savedCount!==1?'s':''}</div>
+          <h4>${t("savedPhrases")}</h4>
+          <p>${t("personalCollection")}</p>
+          <div class="during-support-meta">${t("savedCountLabel", { count: savedCount, suffix: savedCount!==1?'s':'' })}</div>
         </div>
         <span class="during-support-arrow">→</span>
       </button>
@@ -1308,8 +1484,8 @@ function renderDuring(){
 function renderQuizResults(){
   const xpEarned=state.quizScore*5;
   const percent=Math.round((state.quizScore/state.quizQuestions.length)*100);
-  const message=percent===100?"Perfect! 🏆":percent>=80?"Excellent! 🎉":percent>=60?"Great job! 👍":percent>=40?"Good effort! 📚":"Keep practicing! 💪";
-  app.innerHTML=shell(`<div class="section-title"><h2>Quiz Complete</h2></div><div class="quiz-results"><div class="results-message">${message}</div><div class="results-score"><span class="score-label">Your Score</span><span class="score-value">${state.quizScore} / ${state.quizQuestions.length}</span></div><div class="results-xp">+${xpEarned} XP</div><button class="btn" data-action="quiz-again">Try Again</button><button class="btn secondary" data-action="back-to-before">Back to Learning</button></div>`,"before");
+  const message=percent===100?t("perfect"):percent>=80?t("excellent"):percent>=60?t("greatJob"):percent>=40?t("goodEffort"):t("keepPracticing");
+  app.innerHTML=shell(`<div class="section-title"><h2>${t("quizComplete")}</h2></div><div class="quiz-results"><div class="results-message">${message}</div><div class="results-score"><span class="score-label">${t("yourScore")}</span><span class="score-value">${state.quizScore} / ${state.quizQuestions.length}</span></div><div class="results-xp">${t("xpEarnedInline", { amount: xpEarned })}</div><button class="btn" data-action="quiz-again">${t("tryAgain")}</button><button class="btn secondary" data-action="back-to-before">${t("backToLearning")}</button></div>`,`before`);
 }
 function render(){
   if(!state.country||!state.data) return renderDestinations();
@@ -1363,6 +1539,18 @@ document.addEventListener("click",e=>{
   }
 
   const action=e.target.closest("[data-action]")?.dataset.action;
+
+  if(action==="toggle-language-panel"){
+    state.languagePanelOpen=!state.languagePanelOpen;
+    render();
+    return;
+  }
+  if(action==="set-language"){
+    const lang=e.target.closest("[data-lang]")?.dataset.lang || "en";
+    state.languagePanelOpen=false;
+    setUILanguage(lang);
+    return;
+  }
 
   // Back
   if(action==="back"){
@@ -1537,7 +1725,7 @@ document.addEventListener("click",e=>{
   if(sit){state.category=sit;navigate("show","during");}
   if(action==="start-quiz"){
     state.quizQuestions=generateQuizQuestions(state.data.phrases,10);
-    if(state.quizQuestions.length<1) return showToast("Not enough phrases for quiz");
+    if(state.quizQuestions.length<1) return showToast(t("quizNotEnough"));
     state.quizActive=true;
     state.quizIndex=0;
     state.quizScore=0;
@@ -1561,7 +1749,7 @@ document.addEventListener("click",e=>{
   }
   if(action==="quiz-again"){
     const questions=generateQuizQuestions(state.data.phrases,10);
-    if(questions.length<1) return showToast("Not enough phrases for quiz");
+    if(questions.length<1) return showToast(t("quizNotEnough"));
     resetQuizState();
     state.quizActive=true;
     state.quizQuestions=questions;
