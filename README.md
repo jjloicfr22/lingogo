@@ -4,6 +4,16 @@
 
 Offline-first travel language companion for South Korea and Japan.
 
+## Release Snapshot
+
+- Current release: v1.0.0
+- Public app URL: https://jjloicfr22.github.io/lingogo/
+- Supported destinations: Japan, South Korea
+- Interface languages: English, French, Spanish
+- Offline capability: Yes (PWA service worker)
+- Field-test template: [docs/field-test.md](docs/field-test.md)
+- v1.1 backlog: [docs/v1-1-backlog.md](docs/v1-1-backlog.md)
+
 ## Run locally
 
 Because the app loads JSON modules and uses a service worker, serve it through a local web server:
