@@ -158,33 +158,33 @@
       "local": "免税できますか？",
       "roman": "Menzei dekimasu ka?"
     },
-    {
-      "id": "ja-023",
-      "category": "Emergency",
-      "english": "Help!",
-      "local": "助けてください！",
-      "roman": "Tasukete kudasai!"
-    },
-    {
-      "id": "ja-024",
-      "category": "Emergency",
-      "english": "Please call the police.",
-      "local": "警察を呼んでください。",
-      "roman": "Keisatsu o yonde kudasai."
-    },
-    {
-      "id": "ja-025",
-      "category": "Emergency",
-      "english": "I need a doctor.",
-      "local": "医者が必要です。",
-      "roman": "Isha ga hitsuyou desu."
-    },
-    {
-      "id": "ja-026",
-      "category": "Emergency",
-      "english": "Where is the toilet?",
-      "local": "トイレはどこですか？",
-      "roman": "Toire wa doko desu ka?"
-    }
+    { "id": "ja-023", "category": "Emergency", "english": "Help!", "local": "助けてください！", "roman": "Tasukete kudasai!" },
+    { "id": "ja-024", "category": "Emergency", "english": "Please call the police.", "local": "警察を呼んでください。", "roman": "Keisatsu o yonde kudasai." },
+    { "id": "ja-025", "category": "Emergency", "english": "I need a doctor.", "local": "医者が必要です。", "roman": "Isha ga hitsuyou desu." },
+    { "id": "ja-026", "category": "General", "english": "Where is the toilet?", "local": "トイレはどこですか？", "roman": "Toire wa doko desu ka?" },
+    { "id": "ja-027", "category": "General", "english": "Hello.", "local": "こんにちは。", "roman": "Konnichiwa." },
+    { "id": "ja-028", "category": "General", "english": "Good morning.", "local": "おはようございます。", "roman": "Ohayou gozaimasu." },
+    { "id": "ja-029", "category": "General", "english": "Yes.", "local": "はい。", "roman": "Hai." },
+    { "id": "ja-030", "category": "General", "english": "No.", "local": "いいえ。", "roman": "Iie." },
+    { "id": "ja-031", "category": "General", "english": "I don't understand.", "local": "わかりません。", "roman": "Wakarimasen." },
+    { "id": "ja-032", "category": "General", "english": "Can you write it down?", "local": "書いてもらえますか？", "roman": "Kaite moraemasu ka?" },
+    { "id": "ja-033", "category": "General", "english": "Can you show me?", "local": "見せてもらえますか？", "roman": "Misete moraemasu ka?" },
+    { "id": "ja-034", "category": "Transport", "english": "Where is the airport?", "local": "空港はどこですか？", "roman": "Kuukou wa doko desu ka?" },
+    { "id": "ja-035", "category": "Transport", "english": "How do I get to...?", "local": "…はどうやって行けばいいですか？", "roman": "...wa douyatte ikeba ii desu ka?" },
+    { "id": "ja-036", "category": "Transport", "english": "Turn left.", "local": "左に曲がってください。", "roman": "Hidari ni magatte kudasai." },
+    { "id": "ja-037", "category": "Transport", "english": "Turn right.", "local": "右に曲がってください。", "roman": "Migi ni magatte kudasai." },
+    { "id": "ja-038", "category": "Transport", "english": "Go straight ahead.", "local": "まっすぐ行ってください。", "roman": "Massugu itte kudasai." },
+    { "id": "ja-039", "category": "Food", "english": "The bill, please.", "local": "お会計をお願いします。", "roman": "Okaikei o onegaishimasu." },
+    { "id": "ja-040", "category": "Food", "english": "I'm allergic to nuts.", "local": "ナッツアレルギーがあります。", "roman": "Nattsu arerugii ga arimasu." },
+    { "id": "ja-041", "category": "Food", "english": "I'm allergic to shellfish.", "local": "貝類アレルギーがあります。", "roman": "Kairui arerugii ga arimasu." },
+    { "id": "ja-042", "category": "Food", "english": "No dairy, please.", "local": "乳製品なしでお願いします。", "roman": "Nyuuseihin nashi de onegaishimasu." },
+    { "id": "ja-043", "category": "Cafe", "english": "To go, please.", "local": "テイクアウトでお願いします。", "roman": "Teikauto de onegaishimasu." },
+    { "id": "ja-044", "category": "Hotel", "english": "What is the WiFi password?", "local": "ワイファイのパスワードは何ですか？", "roman": "Waifai no pasuwaado wa nan desu ka?" },
+    { "id": "ja-045", "category": "Hotel", "english": "What time is checkout?", "local": "チェックアウトは何時ですか？", "roman": "Chekkuauto wa nanji desu ka?" },
+    { "id": "ja-046", "category": "Shopping", "english": "I'm just looking, thank you.", "local": "見ているだけです。ありがとうございます。", "roman": "Mite iru dake desu. Arigatou gozaimasu." },
+    { "id": "ja-047", "category": "Shopping", "english": "Do you have a smaller size?", "local": "もっと小さいサイズはありますか？", "roman": "Motto chiisai saizu wa arimasu ka?" },
+    { "id": "ja-048", "category": "Emergency", "english": "Please call an ambulance.", "local": "救急車を呼んでください。", "roman": "Kyuukyuusha o yonde kudasai." },
+    { "id": "ja-049", "category": "Emergency", "english": "Where is a pharmacy?", "local": "薬局はどこですか？", "roman": "Yakkyoku wa doko desu ka?" },
+    { "id": "ja-050", "category": "Emergency", "english": "I've lost my passport.", "local": "パスポートを失くしました。", "roman": "Pasupooto o nakushimashita." }
   ]
 }

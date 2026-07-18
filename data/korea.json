@@ -158,33 +158,33 @@
       "local": "택스 리펀드 돼요?",
       "roman": "Taekseu ripeondeu dwaeyo?"
     },
-    {
-      "id": "ko-023",
-      "category": "Emergency",
-      "english": "Help!",
-      "local": "도와주세요!",
-      "roman": "Dowajuseyo!"
-    },
-    {
-      "id": "ko-024",
-      "category": "Emergency",
-      "english": "Please call the police.",
-      "local": "경찰을 불러 주세요.",
-      "roman": "Gyeongchareul bulleo juseyo."
-    },
-    {
-      "id": "ko-025",
-      "category": "Emergency",
-      "english": "I need a doctor.",
-      "local": "의사가 필요해요.",
-      "roman": "Uisaga piryohaeyo."
-    },
-    {
-      "id": "ko-026",
-      "category": "Emergency",
-      "english": "Where is the toilet?",
-      "local": "화장실이 어디예요?",
-      "roman": "Hwajangsiri eodiyeyo?"
-    }
+    { "id": "ko-023", "category": "Emergency", "english": "Help!", "local": "도와주세요!", "roman": "Dowajuseyo!" },
+    { "id": "ko-024", "category": "Emergency", "english": "Please call the police.", "local": "경찰을 불러 주세요.", "roman": "Gyeongchareul bulleo juseyo." },
+    { "id": "ko-025", "category": "Emergency", "english": "I need a doctor.", "local": "의사가 필요해요.", "roman": "Uisaga piryohaeyo." },
+    { "id": "ko-026", "category": "General", "english": "Where is the toilet?", "local": "화장실이 어디예요?", "roman": "Hwajangsiri eodiyeyo?" },
+    { "id": "ko-027", "category": "General", "english": "Hello.", "local": "안녕하세요.", "roman": "Annyeonghaseyo." },
+    { "id": "ko-028", "category": "General", "english": "Goodbye.", "local": "안녕히 계세요.", "roman": "Annyeonghi gyeseyo." },
+    { "id": "ko-029", "category": "General", "english": "Yes.", "local": "네.", "roman": "Ne." },
+    { "id": "ko-030", "category": "General", "english": "No.", "local": "아니요.", "roman": "Aniyo." },
+    { "id": "ko-031", "category": "General", "english": "I don't understand.", "local": "잘 모르겠어요.", "roman": "Jal moreugesseoyo." },
+    { "id": "ko-032", "category": "General", "english": "Can you write it down?", "local": "써 주실 수 있어요?", "roman": "Sseo jusil su isseoyo?" },
+    { "id": "ko-033", "category": "General", "english": "Can you show me?", "local": "가리켜 주실 수 있어요?", "roman": "Garikyeo jusil su isseoyo?" },
+    { "id": "ko-034", "category": "Transport", "english": "Where is the airport?", "local": "공항이 어디예요?", "roman": "Gonghang-i eodiyeyo?" },
+    { "id": "ko-035", "category": "Transport", "english": "How do I get to...?", "local": "…에 어떻게 가요?", "roman": "...e eotteoke gayo?" },
+    { "id": "ko-036", "category": "Transport", "english": "Turn left.", "local": "좌회전해 주세요.", "roman": "Jwahoejeonhae juseyo." },
+    { "id": "ko-037", "category": "Transport", "english": "Turn right.", "local": "우회전해 주세요.", "roman": "Uhoejeonhae juseyo." },
+    { "id": "ko-038", "category": "Transport", "english": "Go straight ahead.", "local": "직진해 주세요.", "roman": "Jikjinhae juseyo." },
+    { "id": "ko-039", "category": "Food", "english": "The bill, please.", "local": "계산해 주세요.", "roman": "Gyesanhae juseyo." },
+    { "id": "ko-040", "category": "Food", "english": "I'm allergic to nuts.", "local": "견과류 알레르기가 있어요.", "roman": "Gyeongwaryu allereugi-ga isseoyo." },
+    { "id": "ko-041", "category": "Food", "english": "I'm allergic to shellfish.", "local": "조개류 알레르기가 있어요.", "roman": "Jogaeryu allereugi-ga isseoyo." },
+    { "id": "ko-042", "category": "Food", "english": "No dairy, please.", "local": "유제품 없이 해 주세요.", "roman": "Yujepum eopsi hae juseyo." },
+    { "id": "ko-043", "category": "Cafe", "english": "To go, please.", "local": "가져갈게요.", "roman": "Gajyeogalgeyo." },
+    { "id": "ko-044", "category": "Hotel", "english": "What is the WiFi password?", "local": "와이파이 비밀번호가 뭐예요?", "roman": "Waipai bimilbeonhoga mwoyeyo?" },
+    { "id": "ko-045", "category": "Hotel", "english": "What time is checkout?", "local": "체크아웃이 몇 시예요?", "roman": "Chekeuausi myeot siyeyo?" },
+    { "id": "ko-046", "category": "Shopping", "english": "I'm just looking, thank you.", "local": "그냥 구경하는 거예요. 감사해요.", "roman": "Geunyang gugyeonghaneun geoyeyo. Gamsahaeyo." },
+    { "id": "ko-047", "category": "Shopping", "english": "Do you have a smaller size?", "local": "더 작은 사이즈 있어요?", "roman": "Deo jageun saijeu isseoyo?" },
+    { "id": "ko-048", "category": "Emergency", "english": "Please call an ambulance.", "local": "구급차를 불러 주세요.", "roman": "Gugeupcareul bulleo juseyo." },
+    { "id": "ko-049", "category": "Emergency", "english": "Where is a pharmacy?", "local": "약국이 어디예요?", "roman": "Yakgugi eodiyeyo?" },
+    { "id": "ko-050", "category": "Emergency", "english": "I've lost my passport.", "local": "여권을 잃어버렸어요.", "roman": "Yeogwoneul ireobeoryeosseoyo." }
   ]
 }
