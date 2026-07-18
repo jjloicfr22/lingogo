@@ -1,6 +1,280 @@
 
 const app = document.querySelector("#app");
 const toast = document.querySelector("#toast");
+const learningProgressKey = "lingogo_learningProgress_v1";
+
+function isPlainObject(value){
+  return !!value && typeof value === "object" && !Array.isArray(value);
+}
+
+function toSafeCount(value){
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? Math.floor(number) : 0;
+}
+
+function clampLessonIndex(value){
+  const index = Number(value);
+  if(!Number.isFinite(index)) return 0;
+  return Math.min(4, Math.max(0, Math.floor(index)));
+}
+
+function createCountryProgress(){
+  return {
+    phrases: {},
+    lessons: {},
+    lastActiveLessonId: null
+  };
+}
+
+function normalizePhraseProgress(record){
+  if(!isPlainObject(record)) return null;
+  return {
+    seenCount: toSafeCount(record.seenCount),
+    gotItCount: toSafeCount(record.gotItCount),
+    againCount: toSafeCount(record.againCount),
+    mastered: record.mastered === true,
+    firstSeenAt: typeof record.firstSeenAt === "string" ? record.firstSeenAt : null,
+    lastSeenAt: typeof record.lastSeenAt === "string" ? record.lastSeenAt : null
+  };
+}
+
+function normalizeLessonProgress(record){
+  if(!isPlainObject(record)) return null;
+  return {
+    startedAt: typeof record.startedAt === "string" ? record.startedAt : null,
+    completedAt: typeof record.completedAt === "string" ? record.completedAt : null,
+    lastCardIndex: clampLessonIndex(record.lastCardIndex),
+    timesCompleted: toSafeCount(record.timesCompleted)
+  };
+}
+
+function normalizeCountryProgress(record){
+  const normalized = createCountryProgress();
+  if(!isPlainObject(record)) return normalized;
+  if(isPlainObject(record.phrases)){
+    for(const [phraseId, phraseRecord] of Object.entries(record.phrases)){
+      const normalizedPhrase = normalizePhraseProgress(phraseRecord);
+      if(normalizedPhrase) normalized.phrases[phraseId] = normalizedPhrase;
+    }
+  }
+  if(isPlainObject(record.lessons)){
+    for(const [lessonId, lessonRecord] of Object.entries(record.lessons)){
+      const normalizedLesson = normalizeLessonProgress(lessonRecord);
+      if(normalizedLesson) normalized.lessons[lessonId] = normalizedLesson;
+    }
+  }
+  normalized.lastActiveLessonId = typeof record.lastActiveLessonId === "string" ? record.lastActiveLessonId : null;
+  return normalized;
+}
+
+function normalizeLearningProgress(raw){
+  const normalized = { version: 1, countries: {} };
+  if(!isPlainObject(raw) || !isPlainObject(raw.countries)) return normalized;
+  for(const [country, countryRecord] of Object.entries(raw.countries)){
+    if(!isPlainObject(countryRecord)) continue;
+    normalized.countries[country] = normalizeCountryProgress(countryRecord);
+  }
+  return normalized;
+}
+
+function loadLearningProgress(){
+  try{
+    const parsed = JSON.parse(localStorage.getItem(learningProgressKey) || "null");
+    return normalizeLearningProgress(parsed);
+  }catch{
+    return { version: 1, countries: {} };
+  }
+}
+
+function saveLearningProgress(){
+  try{
+    localStorage.setItem(learningProgressKey, JSON.stringify(state.learningProgress));
+  }catch{
+    // Ignore storage failures.
+  }
+}
+
+function ensureCountryProgress(country = state.country){
+  if(!country) return null;
+
+  if(!isPlainObject(state.learningProgress.countries[country])){
+    state.learningProgress.countries[country] = createCountryProgress();
+  }
+
+  const countryProgress = state.learningProgress.countries[country];
+
+  if(!isPlainObject(countryProgress.phrases)){
+    countryProgress.phrases = {};
+  }
+
+  if(!isPlainObject(countryProgress.lessons)){
+    countryProgress.lessons = {};
+  }
+
+  if(
+    countryProgress.lastActiveLessonId !== null &&
+    typeof countryProgress.lastActiveLessonId !== "string"
+  ){
+    countryProgress.lastActiveLessonId = null;
+  }
+
+  return countryProgress;
+}
+
+function ensurePhraseProgress(country, phraseId){
+  const countryProgress = ensureCountryProgress(country);
+  if(!countryProgress || !phraseId) return null;
+  if(!isPlainObject(countryProgress.phrases[phraseId])){
+    countryProgress.phrases[phraseId] = {
+      seenCount: 0,
+      gotItCount: 0,
+      againCount: 0,
+      mastered: false,
+      firstSeenAt: null,
+      lastSeenAt: null
+    };
+  }
+  return countryProgress.phrases[phraseId];
+}
+
+function ensureLessonProgress(country, lessonId){
+  const countryProgress = ensureCountryProgress(country);
+  if(!countryProgress || !lessonId) return null;
+  if(!isPlainObject(countryProgress.lessons[lessonId])){
+    countryProgress.lessons[lessonId] = {
+      startedAt: null,
+      completedAt: null,
+      lastCardIndex: 0,
+      timesCompleted: 0
+    };
+  }
+  return countryProgress.lessons[lessonId];
+}
+
+function getCountryProgress(country = state.country){
+  return ensureCountryProgress(country);
+}
+
+function getPhraseProgress(country, phraseId){
+  return ensurePhraseProgress(country, phraseId);
+}
+
+function getLessonProgress(country, lessonId){
+  return ensureLessonProgress(country, lessonId);
+}
+
+function getMasteredPhraseCount(country = state.country){
+  const countryProgress = getCountryProgress(country);
+  if(!countryProgress) return 0;
+  const validPhraseIds = new Set((state.data?.phrases || []).map(phrase => phrase.id));
+  return Object.entries(countryProgress.phrases).reduce((count, [phraseId, record]) => {
+    return count + (validPhraseIds.has(phraseId) && isPlainObject(record) && record.mastered ? 1 : 0);
+  }, 0);
+}
+
+function getReadinessLabel(percent){
+  if(percent >= 100) return "Essential phrases complete";
+  if(percent >= 80) return "Almost ready";
+  if(percent >= 60) return "Travel ready";
+  if(percent >= 40) return "Finding your footing";
+  if(percent >= 20) return "Building the basics";
+  return "Getting started";
+}
+
+function getTripReadiness(country = state.country){
+  const totalPhraseCount = Array.isArray(state.data?.phrases) ? state.data.phrases.length : 0;
+  const masteredCount = getMasteredPhraseCount(country);
+  const percent = totalPhraseCount ? Math.round((masteredCount / totalPhraseCount) * 100) : 0;
+  return {
+    masteredCount,
+    totalPhraseCount,
+    percent,
+    label: getReadinessLabel(percent),
+    summary: `${masteredCount} of ${totalPhraseCount} essential phrases learned`
+  };
+}
+
+function getLessonMasteryCount(country, lesson){
+  const countryProgress = getCountryProgress(country);
+  if(!countryProgress || !lesson) return 0;
+  const validPhraseIds = new Set((lesson.phraseIds || []).filter(phraseId => !!getPhraseById(phraseId)));
+  return Object.entries(countryProgress.phrases).reduce((count, [phraseId, record]) => {
+    return count + (validPhraseIds.has(phraseId) && isPlainObject(record) && record.mastered ? 1 : 0);
+  }, 0);
+}
+
+function isLessonMastered(country, lesson){
+  return getLessonMasteryCount(country, lesson) === 5;
+}
+
+function isLessonReviewed(country, lesson){
+  const lessonProgress = getLessonProgress(country, lesson?.id);
+  return !!lessonProgress?.completedAt && !isLessonMastered(country, lesson);
+}
+
+function getContinueLearningPlan(country = state.country){
+  const lessons = getLessons();
+  if(!lessons.length){
+    return {
+      label: "Must Know 50",
+      description: "Continue the full phrase deck.",
+      action: "learn",
+      lessonId: null,
+      resume: false
+    };
+  }
+  const countryProgress = getCountryProgress(country);
+  const lastActiveLessonId = countryProgress?.lastActiveLessonId;
+  const activeLesson = lastActiveLessonId ? getLessonById(lastActiveLessonId) : null;
+  const activeProgress = activeLesson ? getLessonProgress(country, activeLesson.id) : null;
+  if(activeLesson && activeProgress?.startedAt && !activeProgress.completedAt){
+    const masteredCount = getLessonMasteryCount(country, activeLesson);
+    return {
+      label: `Continue Lesson ${activeLesson.order}`,
+      description: `${masteredCount}/5 mastered · resume at card ${clampLessonIndex(activeProgress.lastCardIndex) + 1}`,
+      action: "lesson",
+      lessonId: activeLesson.id,
+      resume: true
+    };
+  }
+  const firstIncomplete = lessons.find(lesson => !isLessonReviewed(country, lesson) && !isLessonMastered(country, lesson));
+  if(firstIncomplete){
+    const firstProgress = getLessonProgress(country, firstIncomplete.id);
+    const started = !!firstProgress?.startedAt && !firstProgress?.completedAt;
+    const masteredCount = getLessonMasteryCount(country, firstIncomplete);
+    return {
+      label: started ? `Continue Lesson ${firstIncomplete.order}` : `Start Lesson ${firstIncomplete.order}`,
+      description: started
+        ? `${masteredCount}/5 mastered · resume at card ${clampLessonIndex(firstProgress.lastCardIndex) + 1}`
+        : `${masteredCount}/5 mastered · begin the lesson`,
+      action: "lesson",
+      lessonId: firstIncomplete.id,
+      resume: started
+    };
+  }
+  return {
+    label: "All lessons reviewed",
+    description: "Review Lesson 1 or revisit Must Know 50.",
+    action: "lesson",
+    lessonId: lessons[0].id,
+    resume: false
+  };
+}
+
+function recordPhraseSeenOnce(flow, phrase){
+  if(!state.country || !phrase?.id) return;
+  const trackerKey = flow === "lesson" ? "lessonSeenRecordedPhraseId" : flow === "learn" ? "learnSeenRecordedPhraseId" : null;
+  if(!trackerKey) return;
+  if(state[trackerKey] === phrase.id) return;
+  const progress = getPhraseProgress(state.country, phrase.id);
+  if(!progress) return;
+  state[trackerKey] = phrase.id;
+  const now = new Date().toISOString();
+  progress.seenCount = toSafeCount(progress.seenCount) + 1;
+  if(!progress.firstSeenAt) progress.firstSeenAt = now;
+  progress.lastSeenAt = now;
+  saveLearningProgress();
+}
 const state = {
   country: localStorage.getItem("lingogo_country") || null,
   screen: "home",
@@ -11,6 +285,7 @@ const state = {
   saved: JSON.parse(localStorage.getItem("lingogo_saved") || "{}"),
   xp: Number(localStorage.getItem("lingogo_xp") || 0),
   backTarget: "home",
+  learningProgress: loadLearningProgress(),
   quizActive: false,
   quizIndex: 0,
   quizScore: 0,
@@ -23,7 +298,10 @@ const state = {
   lessonRevealed: false,
   lessonCompleted: false,
   lessonXpEarned: 0,
-  lessonAnswering: false
+  lessonAnswering: false,
+  learnSeenRecordedPhraseId: null,
+  lessonSeenRecordedPhraseId: null,
+  learnAnswering: false
 };
 
 const countryFiles = { japan:"data/japan.json", korea:"data/korea.json" };
@@ -38,6 +316,8 @@ async function loadCountry(country){
   const res = await fetch(countryFiles[country]);
   state.data = await res.json();
   state.country = country;
+  ensureCountryProgress(country);
+  saveLearningProgress();
   localStorage.setItem("lingogo_country", country);
   state.screen = "home";
   state.cardIndex = 0;
@@ -128,6 +408,7 @@ function resetLessonState(){
   state.lessonCompleted=false;
   state.lessonXpEarned=0;
   state.lessonAnswering=false;
+  state.lessonSeenRecordedPhraseId=null;
 }
 
 function getCurrentLesson(){
@@ -150,7 +431,33 @@ function returnToBeforeWithLessonUnavailable(){
   showToast("Lesson unavailable.");
 }
 
-function startLesson(lessonId){
+function persistCurrentLessonPosition(){
+  const lesson = getCurrentLesson();
+  if(!lesson || !state.country) return;
+  const lessonProgress = getLessonProgress(state.country, lesson.id);
+  const countryProgress = getCountryProgress(state.country);
+  if(!lessonProgress || !countryProgress) return;
+  if(!lessonProgress.startedAt) lessonProgress.startedAt = new Date().toISOString();
+  lessonProgress.lastCardIndex = clampLessonIndex(state.lessonCardIndex);
+  countryProgress.lastActiveLessonId = lesson.id;
+  saveLearningProgress();
+}
+
+function completeLessonProgress(){
+  const lesson = getCurrentLesson();
+  if(!lesson || !state.country) return;
+  const lessonProgress = getLessonProgress(state.country, lesson.id);
+  const countryProgress = getCountryProgress(state.country);
+  if(!lessonProgress || !countryProgress) return;
+  const now = new Date().toISOString();
+  lessonProgress.completedAt = lessonProgress.completedAt || now;
+  lessonProgress.timesCompleted = toSafeCount(lessonProgress.timesCompleted) + 1;
+  lessonProgress.lastCardIndex = 4;
+  countryProgress.lastActiveLessonId = lesson.id;
+  saveLearningProgress();
+}
+
+function startLesson(lessonId, { resume = false } = {}){
   const lesson=getLessonById(lessonId);
   if(!lesson){
     returnToBeforeWithLessonUnavailable();
@@ -162,40 +469,90 @@ function startLesson(lessonId){
     return;
   }
   resetLessonState();
-  state.activeLessonId=lessonId;
+  state.activeLessonId=lesson.id;
+  state.lessonXpEarned=0;
   state.backTarget="before";
+  const lessonProgress = getLessonProgress(state.country, lesson.id);
+  const canResume = resume && !!lessonProgress?.startedAt && !lessonProgress?.completedAt;
+  state.lessonCardIndex = canResume ? clampLessonIndex(lessonProgress.lastCardIndex) : 0;
+  if(lessonProgress && !lessonProgress.startedAt) lessonProgress.startedAt = new Date().toISOString();
+  const countryProgress = getCountryProgress(state.country);
+  if(countryProgress) countryProgress.lastActiveLessonId = lesson.id;
+  saveLearningProgress();
   state.screen="lesson";
   render();
 }
 
-function advanceLesson(xpAmount){
+function advanceLesson(outcome){
   if(state.lessonCompleted || state.lessonAnswering || !state.lessonRevealed) return;
+  if(outcome!=="again" && outcome!=="gotit") return;
   const phrases=getCurrentLessonPhrases();
   if(phrases.length!==5){
     returnToBeforeWithLessonUnavailable();
     return;
   }
+  const lesson = getCurrentLesson();
+  const phrase = getCurrentLessonPhrase();
+  if(!lesson || !phrase) return;
   state.lessonAnswering=true;
-  if(xpAmount){
-    addXP(xpAmount);
-    state.lessonXpEarned += xpAmount;
+  const phraseProgress = getPhraseProgress(state.country, phrase.id);
+  if(!phraseProgress){
+    state.lessonAnswering=false;
+    return;
   }
+  const now = new Date().toISOString();
+  if(outcome==="again"){
+    phraseProgress.againCount = toSafeCount(phraseProgress.againCount) + 1;
+  }else{
+    phraseProgress.gotItCount = toSafeCount(phraseProgress.gotItCount) + 1;
+    phraseProgress.mastered = true;
+    addXP(10);
+    state.lessonXpEarned += 10;
+  }
+  if(!phraseProgress.firstSeenAt) phraseProgress.firstSeenAt = now;
+  phraseProgress.lastSeenAt = now;
+  saveLearningProgress();
   const nextIndex=state.lessonCardIndex+1;
   if(nextIndex>=phrases.length){
-    completeLesson();
+    completeLessonProgress();
+    state.lessonCompleted=true;
+    state.lessonRevealed=false;
+    state.lessonAnswering=false;
+    state.screen="lesson-complete";
+    render();
     return;
   }
   state.lessonCardIndex=nextIndex;
   state.lessonRevealed=false;
+  state.lessonSeenRecordedPhraseId=null;
   state.lessonAnswering=false;
+  persistCurrentLessonPosition();
   render();
 }
 
-function completeLesson(){
-  state.lessonCompleted=true;
-  state.lessonAnswering=false;
-  state.lessonRevealed=false;
-  state.screen="lesson-complete";
+function answerLearnCard(outcome){
+  if(state.learnAnswering || !state.revealed) return;
+  if(outcome!=="again" && outcome!=="gotit") return;
+  const phrase=state.data.phrases[state.cardIndex % state.data.phrases.length];
+  if(!phrase) return;
+  const phraseProgress = getPhraseProgress(state.country, phrase.id);
+  if(!phraseProgress) return;
+  state.learnAnswering=true;
+  const now = new Date().toISOString();
+  if(outcome==="again"){
+    phraseProgress.againCount = toSafeCount(phraseProgress.againCount) + 1;
+  }else{
+    phraseProgress.gotItCount = toSafeCount(phraseProgress.gotItCount) + 1;
+    phraseProgress.mastered = true;
+    addXP(10);
+  }
+  if(!phraseProgress.firstSeenAt) phraseProgress.firstSeenAt = now;
+  phraseProgress.lastSeenAt = now;
+  saveLearningProgress();
+  state.revealed=false;
+  state.cardIndex=(state.cardIndex+1)%state.data.phrases.length;
+  state.learnSeenRecordedPhraseId=null;
+  state.learnAnswering=false;
   render();
 }
 
@@ -300,11 +657,13 @@ function renderLessonComplete(){
     returnToBeforeWithLessonUnavailable();
     return;
   }
+  const masteredCount=getLessonMasteryCount(state.country, lesson);
+  const completionLabel=masteredCount===5 ? "Mastered" : "Reviewed";
   app.innerHTML=shell(`
     <div class="lesson-complete">
-      <div class="lesson-complete-kicker">Lesson ${lesson.order}</div>
+      <div class="lesson-complete-kicker">${completionLabel}</div>
       <h2>${lesson.title}</h2>
-      <p>5 phrases reviewed</p>
+      <p>${masteredCount}/5 mastered · ${completionLabel}</p>
       ${state.lessonXpEarned?`<div class="lesson-complete-xp">+${state.lessonXpEarned} XP earned</div>`:""}
       <div class="lesson-complete-actions">
         <button class="btn" data-action="lesson-replay">Replay Lesson</button>
@@ -377,20 +736,45 @@ function renderSaved(){
   const d=state.data;
   const savedCount=Object.values(state.saved).filter(Boolean).length;
   const lessons=getLessons();
+  const readiness=getTripReadiness(state.country);
+  const continuePlan=getContinueLearningPlan(state.country);
   app.innerHTML=shell(`
     <div class="before-header">
       <h2>Before Your Trip</h2>
       <p>Build confidence before you arrive.</p>
     </div>
+    <section class="before-summary">
+      <div class="trip-readiness">
+        <div class="trip-readiness-top">
+          <div>
+            <div class="trip-readiness-label">Trip readiness</div>
+            <div class="trip-readiness-percent">${readiness.percent}%</div>
+          </div>
+          <div class="trip-readiness-label">${readiness.label}</div>
+        </div>
+        <p class="trip-readiness-copy">${readiness.summary}</p>
+        <progress class="trip-readiness-meter" value="${readiness.masteredCount}" max="${readiness.totalPhraseCount}" aria-label="Trip readiness ${readiness.percent} percent"></progress>
+        <div class="trip-readiness-meta">${readiness.masteredCount} mastered · ${readiness.label}</div>
+      </div>
+    </section>
     <div class="before-progress">
       <p class="before-progress-main">You have ${d.phrases.length} phrases ready to practice.</p>
       <p class="before-progress-meta">${state.xp} XP earned · ${savedCount} phrase${savedCount!==1?'s':''} saved</p>
     </div>
     <section class="before-learning">
-      <button class="learning-featured" data-screen="learn">
+      <button class="learning-featured continue-learning-card" data-action="continue-learning">
         <div class="learning-label">CONTINUE LEARNING</div>
+        <h3>${continuePlan.label}</h3>
+        <p>${continuePlan.description}</p>
+        <div class="learning-meta">
+          <span>${continuePlan.action==="lesson" && continuePlan.lessonId ? "Resume your lesson" : "Open the full phrase deck"}</span>
+          <span class="learning-arrow">→</span>
+        </div>
+      </button>
+      <button class="learning-featured" data-screen="learn">
+        <div class="learning-label">FULL PHRASE DECK</div>
         <h3>Must Know 50</h3>
-        <p>Build your essential travel vocabulary.</p>
+        <p>Review all 50 essential phrases.</p>
         <div class="learning-meta">
           <span>${d.phrases.length} phrases</span>
           <span class="learning-arrow">→</span>
@@ -418,15 +802,26 @@ function renderSaved(){
     <section class="before-lessons">
       <div class="section-title lesson-section-title"><h2>Your 10 Lessons</h2><small>5 phrases · 3 min each</small></div>
       ${lessons.length?`<div class="lesson-list">
-        ${lessons.map(lesson=>`<button class="lesson-item" data-action="open-lesson" data-lesson-id="${lesson.id}" aria-label="Open Lesson ${lesson.order}, ${lesson.title}">
+        ${lessons.map(lesson=>{
+          const masteredCount=getLessonMasteryCount(state.country, lesson);
+          const lessonProgress=getLessonProgress(state.country, lesson.id);
+          const mastered=masteredCount===5;
+          const reviewed=!!lessonProgress?.completedAt && !mastered;
+          const canResume=!!lessonProgress?.startedAt && !lessonProgress?.completedAt;
+          const resumeIndex=clampLessonIndex(lessonProgress?.lastCardIndex) + 1;
+          const stateClass=mastered ? "is-mastered" : reviewed ? "is-reviewed" : "";
+          return `<button class="lesson-item ${stateClass}" data-action="open-lesson" data-lesson-id="${lesson.id}" aria-label="Open Lesson ${lesson.order}, ${lesson.title}">
           <div class="lesson-item-top">
             <span class="lesson-number">Lesson ${lesson.order}</span>
             <span class="lesson-time">${lesson.estimatedMinutes} min</span>
           </div>
           <h3>${lesson.title}</h3>
           <p>${lesson.description}</p>
-          <small>5 phrases · ${lesson.estimatedMinutes} min</small>
-        </button>`).join("")}
+          <small class="lesson-item-progress">${masteredCount}/5 mastered</small>
+          ${reviewed || mastered ? `<span class="lesson-item-badge ${mastered ? "is-mastered" : "is-reviewed"}">${mastered ? "Mastered" : "Reviewed"}</span>` : ""}
+          ${canResume ? `<small class="lesson-item-progress">Resume at ${resumeIndex}/5</small>` : ""}
+        </button>`;
+        }).join("")}
       </div>`:`<div class="empty">Lessons are not available yet.</div>`}
     </section>
   `,"before");
@@ -519,7 +914,8 @@ document.addEventListener("click",e=>{
 
   const lessonBtn=e.target.closest("[data-action='open-lesson']");
   if(lessonBtn){
-    startLesson(lessonBtn.dataset.lessonId);
+    const lessonProgress=getLessonProgress(state.country, lessonBtn.dataset.lessonId);
+    startLesson(lessonBtn.dataset.lessonId, { resume: !!lessonProgress?.startedAt && !lessonProgress?.completedAt });
     return;
   }
 
@@ -553,17 +949,33 @@ document.addEventListener("click",e=>{
   }
 
   if(action==="destinations"){state.country=null;state.data=null;localStorage.removeItem("lingogo_country");return render()}
-  if(action==="lesson-reveal"){state.lessonRevealed=true;render();return}
+  if(action==="continue-learning"){
+    const plan=getContinueLearningPlan(state.country);
+    if(plan.action==="lesson" && plan.lessonId){
+      startLesson(plan.lessonId, { resume: plan.resume });
+      return;
+    }
+    state.screen="learn";
+    render();
+    return;
+  }
+  if(action==="lesson-reveal"){
+    const phrase=getCurrentLessonPhrase();
+    if(phrase) recordPhraseSeenOnce("lesson", phrase);
+    state.lessonRevealed=true;
+    render();
+    return;
+  }
   if(action==="lesson-speak"){
     const text=e.target.closest("[data-text]")?.dataset.text;
     if(text)speak(decodeURIComponent(text),state.data.lang);
     return;
   }
   if(action==="lesson-save-current"){const phrase=getCurrentLessonPhrase();if(phrase)toggleSaved(phrase);return}
-  if(action==="lesson-again"){advanceLesson(0);return}
-  if(action==="lesson-gotit"){advanceLesson(10);return}
-  if(action==="lesson-replay"){const lessonId=state.activeLessonId;if(lessonId)startLesson(lessonId);return}
-  if(action==="lesson-back-to-list"){resetLessonState();state.backTarget="home";state.screen="before";render();return}
+  if(action==="lesson-again"){advanceLesson("again");return}
+  if(action==="lesson-gotit"){advanceLesson("gotit");return}
+  if(action==="lesson-replay"){const lessonId=state.activeLessonId;if(lessonId)startLesson(lessonId, { resume: false });return}
+  if(action==="lesson-back-to-list"){persistCurrentLessonPosition();resetLessonState();state.backTarget="home";state.screen="before";render();return}
   if(action==="speak-quiz-option"){
     const answerId=e.target.closest("[data-answer-id]").dataset.answerId;
     const q=state.quizQuestions[state.quizIndex];
@@ -580,9 +992,15 @@ document.addEventListener("click",e=>{
     if(state.quizAnswerCorrect) addXP(5),state.quizScore++;
     render();
   }
-  if(action==="reveal"){state.revealed=true;render();const p=state.data.phrases[state.cardIndex%state.data.phrases.length];setTimeout(()=>speak(p.local,state.data.lang),100)}
-  if(action==="again"){state.revealed=false;state.cardIndex=(state.cardIndex+1)%state.data.phrases.length;render()}
-  if(action==="gotit"){addXP(10);state.revealed=false;state.cardIndex=(state.cardIndex+1)%state.data.phrases.length;render()}
+  if(action==="reveal"){
+    const p=state.data.phrases[state.cardIndex%state.data.phrases.length];
+    if(p) recordPhraseSeenOnce("learn", p);
+    state.revealed=true;
+    render();
+    if(p) setTimeout(()=>speak(p.local,state.data.lang),100);
+  }
+  if(action==="again"){answerLearnCard("again");return}
+  if(action==="gotit"){answerLearnCard("gotit");return}
   if(action==="save-current"){toggleSaved(state.data.phrases[state.cardIndex%state.data.phrases.length])}
   if(action==="speak"){speak(decodeURIComponent(e.target.closest("[data-text]").dataset.text),state.data.lang)}
   const speech=e.target.closest("[data-speak]")?.dataset.speak;
