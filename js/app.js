@@ -2,6 +2,8 @@
 const app = document.querySelector("#app");
 const toast = document.querySelector("#toast");
 const learningProgressKey = "lingogo_learningProgress_v1";
+const publicShareUrl = "https://jjloicfr22.github.io/lingogo/";
+const publicShareText = "Practice essential Japanese and Korean travel phrases, even offline.";
 
 function getCurrentTimestampIso(){
   return new Date().toISOString();
@@ -344,6 +346,121 @@ function getTripReadiness(country = state.country){
   };
 }
 
+function getSavedPhraseCount(country = state.country){
+  if(!country) return 0;
+  return Object.entries(state.saved).reduce((count, [key, value]) => {
+    return count + (value && key.startsWith(`${country}:`) ? 1 : 0);
+  }, 0);
+}
+
+function getLessonProgressSummary(country = state.country){
+  const lessons = getLessons();
+  let completedCount = 0;
+  let reviewedCount = 0;
+  for(const lesson of lessons){
+    const progress = getLessonProgress(country, lesson.id);
+    if(progress?.completedAt) completedCount += 1;
+    if(isLessonReviewed(country, lesson)) reviewedCount += 1;
+  }
+  return {
+    totalLessons: lessons.length,
+    completedCount,
+    reviewedCount
+  };
+}
+
+function renderReadinessRing(percent, { size = 168, stroke = 12, compact = false, label = "Trip readiness" } = {}){
+  const safePercent = Math.max(0, Math.min(100, Math.round(percent)));
+  const radius = Math.max(1, (size - stroke) / 2);
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference * (1 - (safePercent / 100));
+  return `<div class="readiness-ring ${compact ? "is-compact" : ""}" role="img" aria-label="${label}: ${safePercent}%">
+    <svg class="readiness-ring-svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true" focusable="false">
+      <circle class="readiness-ring-track" cx="${size / 2}" cy="${size / 2}" r="${radius}" stroke-width="${stroke}"></circle>
+      <circle class="readiness-ring-fill" cx="${size / 2}" cy="${size / 2}" r="${radius}" stroke-width="${stroke}" data-ring-offset="${offset.toFixed(2)}" style="stroke-dasharray:${circumference.toFixed(2)};stroke-dashoffset:${circumference.toFixed(2)}"></circle>
+    </svg>
+    <div class="readiness-ring-center"><b>${safePercent}%</b></div>
+  </div>`;
+}
+
+function primeReadinessRings(){
+  const circles = app.querySelectorAll(".readiness-ring-fill[data-ring-offset]");
+  circles.forEach(circle => {
+    if(circle.dataset.ringAnimated === "true") return;
+    const targetOffset = Number(circle.dataset.ringOffset);
+    if(!Number.isFinite(targetOffset)) return;
+    circle.dataset.ringAnimated = "true";
+    requestAnimationFrame(() => {
+      circle.style.strokeDashoffset = String(targetOffset);
+    });
+  });
+}
+
+function openProgressSummary(fromScreen){
+  state.progressBackTarget = fromScreen === "before" ? "before" : "home";
+  state.screen = "progress";
+  render();
+}
+
+async function copyShareLink(){
+  try{
+    if(navigator.clipboard?.writeText){
+      await navigator.clipboard.writeText(publicShareUrl);
+      showToast("Link copied");
+      state.shareFallbackVisible = false;
+      render();
+      return true;
+    }
+  }catch{
+    // Continue to legacy fallback.
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = publicShareUrl;
+  textarea.setAttribute("readonly", "true");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  textarea.style.pointerEvents = "none";
+  textarea.style.left = "-9999px";
+  document.body.appendChild(textarea);
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+  let didCopy = false;
+  try{
+    didCopy = document.execCommand("copy");
+  }catch{
+    didCopy = false;
+  }
+  document.body.removeChild(textarea);
+  if(didCopy){
+    showToast("Link copied");
+    state.shareFallbackVisible = false;
+    render();
+    return true;
+  }
+  return false;
+}
+
+async function shareLingoGo(){
+  if(navigator.share){
+    try{
+      await navigator.share({
+        title: "LingoGo",
+        text: publicShareText,
+        url: publicShareUrl
+      });
+      return;
+    }catch(error){
+      if(error?.name === "AbortError") return;
+    }
+  }
+  const copied = await copyShareLink();
+  if(!copied){
+    state.shareFallbackVisible = true;
+    render();
+  }
+}
+
 function getLessonMasteryCount(country, lesson){
   const countryProgress = getCountryProgress(country);
   if(!countryProgress || !lesson) return 0;
@@ -460,7 +577,9 @@ const state = {
   reviewSessionXp: 0,
   reviewEncounterCount: 0,
   reviewEncounteredIds: new Set(),
-  reviewRequeuedIds: new Set()
+  reviewRequeuedIds: new Set(),
+  progressBackTarget: "home",
+  shareFallbackVisible: false
 };
 
 const countryFiles = { japan:"data/japan.json", korea:"data/korea.json" };
@@ -506,6 +625,14 @@ function addXP(amount){
   state.xp += amount;
   localStorage.setItem("lingogo_xp", state.xp);
   showToast(`+${amount} XP`);
+}
+
+function triggerSuccessPulse(button){
+  if(!button) return;
+  button.classList.remove("success-pulse");
+  void button.offsetWidth;
+  button.classList.add("success-pulse");
+  setTimeout(() => button.classList.remove("success-pulse"), 260);
 }
 
 function generateQuizQuestions(phrases, count=10){
@@ -757,14 +884,21 @@ function answerLearnCard(outcome){
   render();
 }
 
+function getCountryTheme(country){
+  if(country==="japan") return "japan";
+  if(country==="korea") return "korea";
+  return "default";
+}
+
 function shell(content, active="home"){
   const d=state.data;
-  return `<main class="shell">
+  const countryTheme=getCountryTheme(state.country);
+  return `<main class="shell" data-country-theme="${countryTheme}" data-screen="${state.screen}">
     <div class="topbar">
       <button class="icon-btn" data-action="back">←</button>
       <div class="country-title"><h1>${d.flag} ${d.name}</h1><p>${d.subtitle}</p></div>
     </div>
-    ${content}
+    <div class="screen-content">${content}</div>
   </main>
   <nav class="bottom-nav"><div class="bottom-inner">
     ${navButton("home","⌂","Home",active,true)}
@@ -793,12 +927,13 @@ function destinationCard(id,flag,name,desc){
 
 function renderHome(){
   const d=state.data;
+  const savedCount=getSavedPhraseCount(state.country);
   app.innerHTML=shell(`
     <section class="hero"><h1>Ready when you are.</h1><p>Learn before you go. Speak when it matters.</p></section>
     <section class="stats">
-      <div class="stat"><b>${state.xp}</b><span>XP</span></div>
-      <div class="stat"><b>${Object.values(state.saved).filter(Boolean).length}</b><span>Saved</span></div>
-      <div class="stat"><b>${d.phrases.length}</b><span>Phrases</span></div>
+      <button class="stat stat-pill" data-action="open-progress-home" aria-label="Open progress summary. ${state.xp} total XP."><b>${state.xp}</b><span>XP</span></button>
+      <button class="stat stat-pill" data-action="home-open-saved" aria-label="Open saved phrases. ${savedCount} saved."><b>${savedCount}</b><span>Saved</span></button>
+      <button class="stat stat-pill" data-action="home-open-learn" aria-label="Open Must Know 50 with ${d.phrases.length} phrases."><b>${d.phrases.length}</b><span>Phrases</span></button>
     </section>
     <section class="trip-phases">
       <button class="trip-card before-trip" data-screen="before">
@@ -814,6 +949,16 @@ function renderHome(){
     </section>
     <section class="additional-options">
       <button class="situation-button" data-screen="situations"><div class="emoji">🧭</div><h3>Situation Mode</h3><p>Eat, travel, shop, stay.</p></button>
+      <button class="share-lingogo" data-action="share-lingogo" aria-label="Share LingoGo with a public link">
+        <div class="emoji">🔗</div>
+        <h3>Share LingoGo</h3>
+        <p>Send the public app link.</p>
+      </button>
+      ${state.shareFallbackVisible ? `<div class="share-fallback" role="status" aria-live="polite">
+        <p>Public URL</p>
+        <input type="text" readonly value="${publicShareUrl}" aria-label="Public LingoGo URL" />
+        <button class="btn secondary" data-action="copy-share-url">Copy Link</button>
+      </div>` : ""}
     </section>
   `,"home");
 }
@@ -990,9 +1135,34 @@ function renderSaved(){
   const phrases=state.data.phrases.filter(isSaved);
   app.innerHTML=shell(`<div class="section-title"><h2>Saved phrases</h2><small>${phrases.length}</small></div>
   ${phrases.length?`<div class="list">${phrases.map(p=>`<article class="phrase"><div class="en">${p.english}</div><div class="local">${p.local}</div><div class="roman">${p.roman}</div><div class="row"><button class="btn" data-speak="${encodeURIComponent(p.local)}">🔊 Play</button><button class="btn secondary" data-save="${p.id}">Remove</button></div></article>`).join("")}</div>`:`<div class="empty">Your saved travel phrases will appear here.</div>`}`,"saved");
-}function renderBefore(){
+}
+
+function renderProgress(){
+  const readiness=getTripReadiness(state.country);
+  const lessonSummary=getLessonProgressSummary(state.country);
+  const dueCount=getDuePhraseCount(state.country);
+  const savedCount=getSavedPhraseCount(state.country);
+  app.innerHTML=shell(`
+    <section class="progress-summary">
+      <div class="lesson-complete-kicker">Progress Summary</div>
+      ${renderReadinessRing(readiness.percent,{size:188,stroke:12,label:"Trip readiness"})}
+      <h2>${readiness.label}</h2>
+      <p class="progress-summary-note">Trip Readiness is based on unique phrases marked Got it.</p>
+      <div class="progress-metrics">
+        <div class="progress-metric"><span>Mastered phrases</span><b>${readiness.masteredCount} of ${readiness.totalPhraseCount}</b></div>
+        <div class="progress-metric"><span>Total XP</span><b>${state.xp}</b></div>
+        <div class="progress-metric"><span>Completed lessons</span><b>${lessonSummary.completedCount} of ${lessonSummary.totalLessons}</b></div>
+        ${lessonSummary.reviewedCount>0 ? `<div class="progress-metric"><span>Reviewed lessons</span><b>${lessonSummary.reviewedCount}</b></div>` : ""}
+        <div class="progress-metric"><span>Daily Review due</span><b>${dueCount}</b></div>
+        <div class="progress-metric"><span>Saved phrases</span><b>${savedCount}</b></div>
+      </div>
+    </section>
+  `,"home");
+}
+
+function renderBefore(){
   const d=state.data;
-  const savedCount=Object.values(state.saved).filter(Boolean).length;
+  const savedCount=getSavedPhraseCount(state.country);
   const lessons=getLessons();
   const readiness=getTripReadiness(state.country);
   const continuePlan=getContinueLearningPlan(state.country);
@@ -1003,18 +1173,19 @@ function renderSaved(){
       <p>Build confidence before you arrive.</p>
     </div>
     <section class="before-summary">
-      <div class="trip-readiness">
+      <button class="trip-readiness trip-readiness-button" data-action="open-progress-before" aria-label="Open progress summary. Trip readiness ${readiness.percent} percent.">
         <div class="trip-readiness-top">
           <div>
             <div class="trip-readiness-label">Trip readiness</div>
             <div class="trip-readiness-percent">${readiness.percent}%</div>
           </div>
+          ${renderReadinessRing(readiness.percent,{size:84,stroke:8,compact:true,label:"Trip readiness"})}
           <div class="trip-readiness-label">${readiness.label}</div>
         </div>
         <p class="trip-readiness-copy">${readiness.summary}</p>
         <progress class="trip-readiness-meter" value="${readiness.masteredCount}" max="${readiness.totalPhraseCount}" aria-label="Trip readiness ${readiness.percent} percent"></progress>
         <div class="trip-readiness-meta">${readiness.masteredCount} mastered · ${readiness.label}</div>
-      </div>
+      </button>
     </section>
     <div class="before-progress">
       <p class="before-progress-main">You have ${d.phrases.length} phrases ready to practice.</p>
@@ -1142,7 +1313,8 @@ function renderQuizResults(){
 }
 function render(){
   if(!state.country||!state.data) return renderDestinations();
-  ({home:renderHome,before:renderBefore,during:renderDuring,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved,quiz:renderQuiz,"quiz-results":renderQuizResults,lesson:renderLesson,"lesson-complete":renderLessonComplete,review:renderReview,"review-empty":renderReviewEmpty,"review-complete":renderReviewComplete}[state.screen]||renderHome)();
+  ({home:renderHome,before:renderBefore,during:renderDuring,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved,progress:renderProgress,quiz:renderQuiz,"quiz-results":renderQuizResults,lesson:renderLesson,"lesson-complete":renderLessonComplete,review:renderReview,"review-empty":renderReviewEmpty,"review-complete":renderReviewComplete}[state.screen]||renderHome)();
+  primeReadinessRings();
 }
 
 document.addEventListener("click",e=>{
@@ -1164,7 +1336,7 @@ document.addEventListener("click",e=>{
 
   // Hub/screen buttons — explicit hierarchy
   const screenBtn=e.target.closest("[data-screen]");
-  if(screenBtn){
+  if(screenBtn && !screenBtn.classList.contains("shell")){
     const to=screenBtn.dataset.screen;
     if(state.screen==="quiz"||state.screen==="quiz-results") resetQuizState();
     if(state.screen==="review"||state.screen==="review-empty"||state.screen==="review-complete") resetReviewState();
@@ -1194,6 +1366,13 @@ document.addEventListener("click",e=>{
 
   // Back
   if(action==="back"){
+    if(state.screen==="progress"){
+      const target=state.progressBackTarget==="before" ? "before" : "home";
+      state.progressBackTarget="home";
+      state.screen=target;
+      render();
+      return;
+    }
     if(state.screen==="review"||state.screen==="review-empty"||state.screen==="review-complete"){
       resetReviewState();
       state.backTarget="home";
@@ -1228,6 +1407,30 @@ document.addEventListener("click",e=>{
   }
 
   if(action==="destinations"){state.country=null;state.data=null;resetReviewState();localStorage.removeItem("lingogo_country");return render()}
+  if(action==="open-progress-home"){
+    openProgressSummary("home");
+    return;
+  }
+  if(action==="open-progress-before"){
+    openProgressSummary("before");
+    return;
+  }
+  if(action==="home-open-saved"){
+    navigate("saved","home");
+    return;
+  }
+  if(action==="home-open-learn"){
+    navigate("learn","home");
+    return;
+  }
+  if(action==="share-lingogo"){
+    void shareLingoGo();
+    return;
+  }
+  if(action==="copy-share-url"){
+    void copyShareLink();
+    return;
+  }
   if(action==="continue-learning"){
     const plan=getContinueLearningPlan(state.country);
     if(plan.action==="lesson" && plan.lessonId){
@@ -1286,7 +1489,7 @@ document.addEventListener("click",e=>{
   }
   if(action==="review-save-current"){const phrase=getCurrentReviewPhrase();if(phrase)toggleSaved(phrase);return}
   if(action==="review-again"){advanceReviewCard("again");return}
-  if(action==="review-gotit"){advanceReviewCard("gotit");return}
+  if(action==="review-gotit"){triggerSuccessPulse(e.target.closest("button"));advanceReviewCard("gotit");return}
   if(action==="lesson-speak"){
     const text=e.target.closest("[data-text]")?.dataset.text;
     if(text)speak(decodeURIComponent(text),state.data.lang);
@@ -1294,7 +1497,7 @@ document.addEventListener("click",e=>{
   }
   if(action==="lesson-save-current"){const phrase=getCurrentLessonPhrase();if(phrase)toggleSaved(phrase);return}
   if(action==="lesson-again"){advanceLesson("again");return}
-  if(action==="lesson-gotit"){advanceLesson("gotit");return}
+  if(action==="lesson-gotit"){triggerSuccessPulse(e.target.closest("button"));advanceLesson("gotit");return}
   if(action==="lesson-replay"){const lessonId=state.activeLessonId;if(lessonId)startLesson(lessonId, { resume: false });return}
   if(action==="lesson-back-to-list"){persistCurrentLessonPosition();resetLessonState();state.backTarget="home";state.screen="before";render();return}
   if(action==="speak-quiz-option"){
@@ -1321,7 +1524,7 @@ document.addEventListener("click",e=>{
     if(p) setTimeout(()=>speak(p.local,state.data.lang),100);
   }
   if(action==="again"){answerLearnCard("again");return}
-  if(action==="gotit"){answerLearnCard("gotit");return}
+  if(action==="gotit"){triggerSuccessPulse(e.target.closest("button"));answerLearnCard("gotit");return}
   if(action==="save-current"){toggleSaved(state.data.phrases[state.cardIndex%state.data.phrases.length])}
   if(action==="speak"){speak(decodeURIComponent(e.target.closest("[data-text]").dataset.text),state.data.lang)}
   const speech=e.target.closest("[data-speak]")?.dataset.speak;
