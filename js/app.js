@@ -17,7 +17,13 @@ const state = {
   quizQuestions: [],
   quizAnswered: false,
   quizAnswerCorrect: null,
-  quizSelectedAnswer: null
+  quizSelectedAnswer: null,
+  activeLessonId: null,
+  lessonCardIndex: 0,
+  lessonRevealed: false,
+  lessonCompleted: false,
+  lessonXpEarned: 0,
+  lessonAnswering: false
 };
 
 const countryFiles = { japan:"data/japan.json", korea:"data/korea.json" };
@@ -94,6 +100,105 @@ function resetQuizState(){
   state.quizSelectedAnswer=null;
 }
 
+function getLessons(){
+  return Array.isArray(state.data?.lessons) ? state.data.lessons : [];
+}
+
+function getLessonById(lessonId){
+  return getLessons().find(lesson=>lesson.id===lessonId) || null;
+}
+
+function getPhraseById(phraseId){
+  return state.data?.phrases?.find(phrase=>phrase.id===phraseId) || null;
+}
+
+function getLessonPhrases(lesson){
+  if(!lesson) return [];
+  const phrases=(lesson.phraseIds || []).map(getPhraseById).filter(Boolean);
+  if(lesson.phraseIds && phrases.length!==lesson.phraseIds.length){
+    console.warn(`Missing phrase IDs for lesson ${lesson.id}`);
+  }
+  return phrases;
+}
+
+function resetLessonState(){
+  state.activeLessonId=null;
+  state.lessonCardIndex=0;
+  state.lessonRevealed=false;
+  state.lessonCompleted=false;
+  state.lessonXpEarned=0;
+  state.lessonAnswering=false;
+}
+
+function getCurrentLesson(){
+  return getLessonById(state.activeLessonId);
+}
+
+function getCurrentLessonPhrases(){
+  return getLessonPhrases(getCurrentLesson());
+}
+
+function getCurrentLessonPhrase(){
+  return getCurrentLessonPhrases()[state.lessonCardIndex] || null;
+}
+
+function returnToBeforeWithLessonUnavailable(){
+  resetLessonState();
+  state.backTarget="home";
+  state.screen="before";
+  render();
+  showToast("Lesson unavailable.");
+}
+
+function startLesson(lessonId){
+  const lesson=getLessonById(lessonId);
+  if(!lesson){
+    returnToBeforeWithLessonUnavailable();
+    return;
+  }
+  const phrases=getLessonPhrases(lesson);
+  if(phrases.length!==5){
+    returnToBeforeWithLessonUnavailable();
+    return;
+  }
+  resetLessonState();
+  state.activeLessonId=lessonId;
+  state.backTarget="before";
+  state.screen="lesson";
+  render();
+}
+
+function advanceLesson(xpAmount){
+  if(state.lessonCompleted || state.lessonAnswering || !state.lessonRevealed) return;
+  const phrases=getCurrentLessonPhrases();
+  if(phrases.length!==5){
+    returnToBeforeWithLessonUnavailable();
+    return;
+  }
+  state.lessonAnswering=true;
+  if(xpAmount){
+    addXP(xpAmount);
+    state.lessonXpEarned += xpAmount;
+  }
+  const nextIndex=state.lessonCardIndex+1;
+  if(nextIndex>=phrases.length){
+    completeLesson();
+    return;
+  }
+  state.lessonCardIndex=nextIndex;
+  state.lessonRevealed=false;
+  state.lessonAnswering=false;
+  render();
+}
+
+function completeLesson(){
+  state.lessonCompleted=true;
+  state.lessonAnswering=false;
+  state.lessonRevealed=false;
+  state.screen="lesson-complete";
+  render();
+}
+
 function shell(content, active="home"){
   const d=state.data;
   return `<main class="shell">
@@ -153,6 +258,60 @@ function renderHome(){
       <button class="situation-button" data-screen="situations"><div class="emoji">🧭</div><h3>Situation Mode</h3><p>Eat, travel, shop, stay.</p></button>
     </section>
   `,"home");
+}
+
+function renderLesson(){
+  const lesson=getCurrentLesson();
+  if(!lesson){
+    returnToBeforeWithLessonUnavailable();
+    return;
+  }
+  const phrases=getCurrentLessonPhrases();
+  if(phrases.length!==5){
+    returnToBeforeWithLessonUnavailable();
+    return;
+  }
+  const phrase=phrases[state.lessonCardIndex];
+  if(!phrase){
+    returnToBeforeWithLessonUnavailable();
+    return;
+  }
+  const answer=state.lessonRevealed?`<div class="answer"><div class="local">${phrase.local}</div><div class="roman">${phrase.roman}</div></div>`:"";
+  app.innerHTML=shell(`
+    <div class="section-title lesson-title"><h2>${lesson.title}</h2><small>${state.lessonCardIndex+1} / ${phrases.length}</small></div>
+    <p class="lesson-progress">${state.lessonCardIndex+1} of ${phrases.length}</p>
+    <div class="card-stage lesson-screen"><article class="flashcard">
+      <div class="label">Lesson ${lesson.order}</div>
+      <div><h2>${phrase.english}</h2>${answer}</div>
+      <div>
+        ${state.lessonRevealed?`<div class="row" style="justify-content:center">
+          <button class="btn secondary" data-action="lesson-speak" data-text="${encodeURIComponent(phrase.local)}" aria-label="Listen to this phrase">🔊 Listen</button>
+          <button class="btn ghost" data-action="lesson-save-current">${isSaved(phrase)?"♥ Saved":"♡ Save"}</button>
+        </div>`:`<button class="btn" data-action="lesson-reveal">Reveal</button>`}
+      </div>
+    </article></div>
+    ${state.lessonRevealed?`<div class="review-actions"><button class="btn secondary" data-action="lesson-again">Again</button><button class="btn" data-action="lesson-gotit">Got it</button></div>`:""}
+  `,"learn");
+}
+
+function renderLessonComplete(){
+  const lesson=getCurrentLesson();
+  if(!lesson){
+    returnToBeforeWithLessonUnavailable();
+    return;
+  }
+  app.innerHTML=shell(`
+    <div class="lesson-complete">
+      <div class="lesson-complete-kicker">Lesson ${lesson.order}</div>
+      <h2>${lesson.title}</h2>
+      <p>5 phrases reviewed</p>
+      ${state.lessonXpEarned?`<div class="lesson-complete-xp">+${state.lessonXpEarned} XP earned</div>`:""}
+      <div class="lesson-complete-actions">
+        <button class="btn" data-action="lesson-replay">Replay Lesson</button>
+        <button class="btn secondary" data-action="lesson-back-to-list">Back to Lessons</button>
+      </div>
+    </div>
+  `,"learn");
 }
 
 function renderQuiz(){
@@ -217,6 +376,7 @@ function renderSaved(){
 }function renderBefore(){
   const d=state.data;
   const savedCount=Object.values(state.saved).filter(Boolean).length;
+  const lessons=getLessons();
   app.innerHTML=shell(`
     <div class="before-header">
       <h2>Before Your Trip</h2>
@@ -254,6 +414,20 @@ function renderSaved(){
         </div>
         <span class="action-arrow">→</span>
       </button>
+    </section>
+    <section class="before-lessons">
+      <div class="section-title lesson-section-title"><h2>Your 10 Lessons</h2><small>5 phrases · 3 min each</small></div>
+      ${lessons.length?`<div class="lesson-list">
+        ${lessons.map(lesson=>`<button class="lesson-item" data-action="open-lesson" data-lesson-id="${lesson.id}" aria-label="Open Lesson ${lesson.order}, ${lesson.title}">
+          <div class="lesson-item-top">
+            <span class="lesson-number">Lesson ${lesson.order}</span>
+            <span class="lesson-time">${lesson.estimatedMinutes} min</span>
+          </div>
+          <h3>${lesson.title}</h3>
+          <p>${lesson.description}</p>
+          <small>5 phrases · ${lesson.estimatedMinutes} min</small>
+        </button>`).join("")}
+      </div>`:`<div class="empty">Lessons are not available yet.</div>`}
     </section>
   `,"before");
 }
@@ -305,7 +479,7 @@ function renderQuizResults(){
 }
 function render(){
   if(!state.country||!state.data) return renderDestinations();
-  ({home:renderHome,before:renderBefore,during:renderDuring,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved,quiz:renderQuiz,"quiz-results":renderQuizResults}[state.screen]||renderHome)();
+  ({home:renderHome,before:renderBefore,during:renderDuring,learn:renderLearn,show:renderShow,situations:renderSituations,saved:renderSaved,quiz:renderQuiz,"quiz-results":renderQuizResults,lesson:renderLesson,"lesson-complete":renderLessonComplete}[state.screen]||renderHome)();
 }
 
 document.addEventListener("click",e=>{
@@ -343,14 +517,28 @@ document.addEventListener("click",e=>{
     state.screen=to; render(); return;
   }
 
+  const lessonBtn=e.target.closest("[data-action='open-lesson']");
+  if(lessonBtn){
+    startLesson(lessonBtn.dataset.lessonId);
+    return;
+  }
+
   const action=e.target.closest("[data-action]")?.dataset.action;
 
   // Back
   if(action==="back"){
     if(state.screen==="home"){
       state.country=null;state.data=null;
+      resetLessonState();
       localStorage.removeItem("lingogo_country");
       return render();
+    }
+    if(state.screen==="lesson"||state.screen==="lesson-complete"){
+      resetLessonState();
+      state.backTarget="home";
+      state.screen="before";
+      render();
+      return;
     }
     if(state.screen==="quiz"||state.screen==="quiz-results"){
       resetQuizState();
@@ -365,6 +553,17 @@ document.addEventListener("click",e=>{
   }
 
   if(action==="destinations"){state.country=null;state.data=null;localStorage.removeItem("lingogo_country");return render()}
+  if(action==="lesson-reveal"){state.lessonRevealed=true;render();return}
+  if(action==="lesson-speak"){
+    const text=e.target.closest("[data-text]")?.dataset.text;
+    if(text)speak(decodeURIComponent(text),state.data.lang);
+    return;
+  }
+  if(action==="lesson-save-current"){const phrase=getCurrentLessonPhrase();if(phrase)toggleSaved(phrase);return}
+  if(action==="lesson-again"){advanceLesson(0);return}
+  if(action==="lesson-gotit"){advanceLesson(10);return}
+  if(action==="lesson-replay"){const lessonId=state.activeLessonId;if(lessonId)startLesson(lessonId);return}
+  if(action==="lesson-back-to-list"){resetLessonState();state.backTarget="home";state.screen="before";render();return}
   if(action==="speak-quiz-option"){
     const answerId=e.target.closest("[data-answer-id]").dataset.answerId;
     const q=state.quizQuestions[state.quizIndex];
