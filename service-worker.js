@@ -1,7 +1,6 @@
 
-const CACHE = "lingogo-v2";
+const CACHE = "lingogo-v3";
 const ASSETS = [
-  "./",
   "./index.html",
   "./css/main.css",
   "./js/app.js",
