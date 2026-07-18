@@ -100,7 +100,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .country-title h1{font-size:24px;margin:0}
 .country-title p{font-size:13px;margin:3px 0 0;color:var(--muted)}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:14px}
+.stat{background:var(--card);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-1);padding:14px}
 .stat b{display:block;font-size:20px}.stat span{font-size:12px;color:var(--muted)}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .action{min-height:145px;border:0;border-radius:var(--radius-xl);background:var(--card);padding:20px;text-align:left;box-shadow:var(--shadow)}
@@ -208,7 +208,6 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .before-action-card:active{transform:scale(0.98)}
 @media(hover:hover){.before-action-card:hover{border-color:var(--text);box-shadow:var(--shadow-1)}}
 .before-action-quiz{background:rgba(140,170,150,.04);border-color:rgba(140,170,150,.12)}
-.before-action-quiz:hover{background:rgba(140,170,150,.08);border-color:rgba(140,170,150,.2)}
 .before-action-saved{background:rgba(200,190,180,.04);border-color:rgba(200,190,180,.12)}
 .before-action-saved:hover{background:rgba(200,190,180,.08);border-color:rgba(200,190,180,.2)}
 .action-content{min-width:0}
