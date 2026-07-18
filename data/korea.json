@@ -3,6 +3,88 @@
   "flag": "🇰🇷",
   "subtitle": "Your Korean travel companion",
   "lang": "ko-KR",
+  "lessons": [
+    {
+      "id": "ko-l01",
+      "order": 1,
+      "title": "Greetings & Politeness",
+      "description": "Essential greetings and courteous expressions.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-027", "ko-028", "ko-003", "ko-004", "ko-005"]
+    },
+    {
+      "id": "ko-l02",
+      "order": 2,
+      "title": "Basic Conversation",
+      "description": "Simple replies for everyday back-and-forth.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-001", "ko-002", "ko-029", "ko-030", "ko-031"]
+    },
+    {
+      "id": "ko-l03",
+      "order": 3,
+      "title": "Everyday Essentials",
+      "description": "Helpful phrases for toilets, writing, showing, and simple requests.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-026", "ko-032", "ko-033", "ko-006", "ko-007"]
+    },
+    {
+      "id": "ko-l04",
+      "order": 4,
+      "title": "Getting Around & Finding Places",
+      "description": "Ask for stations, directions, and exact destinations.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-013", "ko-034", "ko-035", "ko-016", "ko-049"]
+    },
+    {
+      "id": "ko-l05",
+      "order": 5,
+      "title": "Trains, Taxis & Directions",
+      "description": "Move smoothly by rail, taxi, and street directions.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-014", "ko-015", "ko-036", "ko-037", "ko-038"]
+    },
+    {
+      "id": "ko-l06",
+      "order": 6,
+      "title": "Restaurants & Cafés",
+      "description": "Order food and drinks with confidence.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-011", "ko-012", "ko-043", "ko-039", "ko-008"]
+    },
+    {
+      "id": "ko-l07",
+      "order": 7,
+      "title": "Dietary Needs",
+      "description": "Clearly explain allergies and food restrictions.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-009", "ko-010", "ko-040", "ko-041", "ko-042"]
+    },
+    {
+      "id": "ko-l08",
+      "order": 8,
+      "title": "Hotels",
+      "description": "Handle check-in, requests, and checkout details.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-017", "ko-018", "ko-019", "ko-044", "ko-045"]
+    },
+    {
+      "id": "ko-l09",
+      "order": 9,
+      "title": "Shopping & Payments",
+      "description": "Ask prices, sizes, and payment questions while shopping.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-020", "ko-021", "ko-022", "ko-046", "ko-047"]
+    },
+    {
+      "id": "ko-l10",
+      "order": 10,
+      "title": "Emergencies & Essential Help",
+      "description": "Get urgent help and ask for critical assistance fast.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ko-023", "ko-024", "ko-025", "ko-048", "ko-050"]
+    }
+  ],
   "phrases": [
     {
       "id": "ko-001",

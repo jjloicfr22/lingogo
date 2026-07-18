@@ -3,6 +3,88 @@
   "flag": "🇯🇵",
   "subtitle": "Your Japanese travel companion",
   "lang": "ja-JP",
+  "lessons": [
+    {
+      "id": "ja-l01",
+      "order": 1,
+      "title": "Greetings & Politeness",
+      "description": "Essential greetings and courteous expressions.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-027", "ja-028", "ja-003", "ja-004", "ja-005"]
+    },
+    {
+      "id": "ja-l02",
+      "order": 2,
+      "title": "Basic Conversation",
+      "description": "Simple replies for everyday back-and-forth.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-001", "ja-002", "ja-029", "ja-030", "ja-031"]
+    },
+    {
+      "id": "ja-l03",
+      "order": 3,
+      "title": "Everyday Essentials",
+      "description": "Helpful phrases for toilets, writing, showing, and simple requests.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-026", "ja-032", "ja-033", "ja-006", "ja-007"]
+    },
+    {
+      "id": "ja-l04",
+      "order": 4,
+      "title": "Getting Around & Finding Places",
+      "description": "Ask for stations, directions, and exact destinations.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-013", "ja-034", "ja-035", "ja-016", "ja-049"]
+    },
+    {
+      "id": "ja-l05",
+      "order": 5,
+      "title": "Trains, Taxis & Directions",
+      "description": "Move smoothly by rail, taxi, and street directions.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-014", "ja-015", "ja-036", "ja-037", "ja-038"]
+    },
+    {
+      "id": "ja-l06",
+      "order": 6,
+      "title": "Restaurants & Cafés",
+      "description": "Order food and drinks with confidence.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-011", "ja-012", "ja-043", "ja-039", "ja-008"]
+    },
+    {
+      "id": "ja-l07",
+      "order": 7,
+      "title": "Dietary Needs",
+      "description": "Clearly explain allergies and food restrictions.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-009", "ja-010", "ja-040", "ja-041", "ja-042"]
+    },
+    {
+      "id": "ja-l08",
+      "order": 8,
+      "title": "Hotels",
+      "description": "Handle check-in, requests, and checkout details.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-017", "ja-018", "ja-019", "ja-044", "ja-045"]
+    },
+    {
+      "id": "ja-l09",
+      "order": 9,
+      "title": "Shopping & Payments",
+      "description": "Ask prices, sizes, and payment questions while shopping.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-020", "ja-021", "ja-022", "ja-046", "ja-047"]
+    },
+    {
+      "id": "ja-l10",
+      "order": 10,
+      "title": "Emergencies & Essential Help",
+      "description": "Get urgent help and ask for critical assistance fast.",
+      "estimatedMinutes": 3,
+      "phraseIds": ["ja-023", "ja-024", "ja-025", "ja-048", "ja-050"]
+    }
+  ],
   "phrases": [
     {
       "id": "ja-001",
